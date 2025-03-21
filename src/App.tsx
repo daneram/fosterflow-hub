@@ -7,16 +7,16 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
-// Import all page components
-import TeamChat from "./components/chat/TeamChat";
-import EmailClient from "./components/email/EmailClient";
-import CalendarView from "./components/calendar/Calendar";
-import TaskManager from "./components/tasks/TaskManager";
-import RecordsExplorer from "./components/records/RecordsExplorer";
-import TrainingPlatform from "./components/training/TrainingPlatform";
-import PolicyLibrary from "./components/policy/PolicyLibrary";
-import ComplianceTracker from "./components/compliance/ComplianceTracker";
-import AIAssistant from "./components/ai/AIAssistant";
+// Import components
+import TeamChat from "@/components/chat/TeamChat";
+import EmailClient from "@/components/email/EmailClient";
+import CalendarView from "@/components/calendar/Calendar";
+import TaskManager from "@/components/tasks/TaskManager";
+import RecordsExplorer from "@/components/records/RecordsExplorer";
+import TrainingPlatform from "@/components/training/TrainingPlatform";
+import PolicyLibrary from "@/components/policy/PolicyLibrary";
+import ComplianceTracker from "@/components/compliance/ComplianceTracker";
+import AIAssistant from "@/components/ai/AIAssistant";
 
 const queryClient = new QueryClient();
 

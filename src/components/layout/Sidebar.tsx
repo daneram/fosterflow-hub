@@ -12,7 +12,9 @@ import {
   GraduationCap, 
   FileText, 
   ShieldCheck, 
-  Bot
+  Bot,
+  GitBranch,
+  FileEdit
 } from 'lucide-react';
 
 interface NavItemProps {
@@ -57,6 +59,8 @@ const Sidebar: React.FC = () => {
           <NavItem to="/email" icon={Mail} label="Email" />
           <NavItem to="/calendar" icon={Calendar} label="Calendar" />
           <NavItem to="/tasks" icon={CheckSquare} label="Tasks" />
+          <NavItem to="/workflow" icon={GitBranch} label="Workflow Manager" />
+          <NavItem to="/forms" icon={FileEdit} label="Form Creator" />
         </nav>
       </div>
 

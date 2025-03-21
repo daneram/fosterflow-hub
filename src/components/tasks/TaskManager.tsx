@@ -26,6 +26,16 @@ interface Task {
   completedAt?: Date;
 }
 
+// Helper function to check if a date is overdue
+const isOverdue = (dueDate?: Date): boolean => {
+  if (!dueDate) return false;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const dueDateCopy = new Date(dueDate);
+  dueDateCopy.setHours(0, 0, 0, 0);
+  return dueDateCopy < today;
+};
+
 const TaskManager: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([
     {

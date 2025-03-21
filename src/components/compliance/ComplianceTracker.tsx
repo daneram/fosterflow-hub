@@ -1,172 +1,93 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import Layout from '@/components/layout/Layout';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Search, Calendar, AlertCircle, CheckCircle, ShieldCheck, Clock, BarChart, Filter, ArrowUpDown } from 'lucide-react';
+import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { ShieldCheck, Calendar, AlertCircle, CheckCircle2, Clock, FileText, BarChart } from 'lucide-react';
 
 interface ComplianceItem {
   id: string;
   title: string;
-  description: string;
   category: string;
   dueDate: Date;
-  status: 'completed' | 'pending' | 'overdue';
+  status: 'completed' | 'overdue' | 'pending' | 'in-progress';
+  priority: 'high' | 'medium' | 'low';
   completedDate?: Date;
-  priority: 'low' | 'medium' | 'high' | 'critical';
-  assignedTo: string;
+  description: string;
 }
 
 const MOCK_COMPLIANCE_ITEMS: ComplianceItem[] = [
   {
-    id: 'CMP-001',
-    title: 'Annual Report Submission',
-    description: 'Submit annual child welfare statistics report to state regulatory agency.',
-    category: 'Reporting',
-    dueDate: new Date('2023-06-30'),
+    id: 'COMP-001',
+    title: 'Annual Background Check Renewal',
+    category: 'Personnel',
+    dueDate: new Date('2023-09-30'),
     status: 'pending',
     priority: 'high',
-    assignedTo: 'Jane Smith'
+    description: 'Complete annual background check for all staff members.'
   },
   {
-    id: 'CMP-002',
-    title: 'Staff Certification Renewal',
-    description: 'Ensure all case workers have updated certifications.',
-    category: 'Certification',
-    dueDate: new Date('2023-05-15'),
+    id: 'COMP-002',
+    title: 'Quarterly Case Review Audit',
+    category: 'Case Management',
+    dueDate: new Date('2023-08-15'),
     status: 'overdue',
-    priority: 'critical',
-    assignedTo: 'Michael Johnson'
-  },
-  {
-    id: 'CMP-003',
-    title: 'Privacy Policy Review',
-    description: 'Annual review of privacy and data handling policies.',
-    category: 'Policy',
-    dueDate: new Date('2023-07-15'),
-    status: 'pending',
-    priority: 'medium',
-    assignedTo: 'Sarah Williams'
-  },
-  {
-    id: 'CMP-004',
-    title: 'Case Documentation Audit',
-    description: 'Quarterly audit of case documentation compliance.',
-    category: 'Audit',
-    dueDate: new Date('2023-04-30'),
-    status: 'completed',
-    completedDate: new Date('2023-04-28'),
     priority: 'high',
-    assignedTo: 'Robert Davis'
+    description: 'Conduct quarterly audit of randomly selected case files.'
   },
   {
-    id: 'CMP-005',
-    title: 'Security Training Completion',
-    description: 'Ensure all staff complete security and data protection training.',
+    id: 'COMP-003',
+    title: 'HIPAA Training Certification',
     category: 'Training',
-    dueDate: new Date('2023-06-15'),
-    status: 'pending',
-    priority: 'high',
-    assignedTo: 'Jennifer Lee'
-  },
-  {
-    id: 'CMP-006',
-    title: 'Facility Safety Inspection',
-    description: 'Quarterly safety inspection of all office facilities.',
-    category: 'Safety',
-    dueDate: new Date('2023-06-30'),
-    status: 'pending',
+    dueDate: new Date('2023-11-01'),
+    status: 'in-progress',
     priority: 'medium',
-    assignedTo: 'Thomas Brown'
+    description: 'Complete annual HIPAA compliance training for all staff.'
   },
   {
-    id: 'CMP-007',
-    title: 'Client Rights Documentation',
-    description: 'Verify all active cases have proper client rights documentation.',
-    category: 'Documentation',
-    dueDate: new Date('2023-05-20'),
-    status: 'overdue',
-    priority: 'critical',
-    assignedTo: 'Amanda Miller'
-  },
-  {
-    id: 'CMP-008',
-    title: 'Budget Compliance Review',
-    description: 'Review program budgets for compliance with funding requirements.',
-    category: 'Financial',
-    dueDate: new Date('2023-07-31'),
-    status: 'pending',
-    priority: 'high',
-    assignedTo: 'David Wilson'
-  },
-  {
-    id: 'CMP-009',
-    title: 'Software License Renewal',
-    description: 'Renew licenses for case management software.',
-    category: 'Administrative',
-    dueDate: new Date('2023-03-31'),
+    id: 'COMP-004',
+    title: 'Fire Safety Inspection',
+    category: 'Facility',
+    dueDate: new Date('2023-07-15'),
     status: 'completed',
-    completedDate: new Date('2023-03-25'),
+    completedDate: new Date('2023-07-12'),
     priority: 'medium',
-    assignedTo: 'Lisa Taylor'
+    description: 'Schedule and complete annual fire safety inspection.'
+  },
+  {
+    id: 'COMP-005',
+    title: 'State Licensing Renewal',
+    category: 'Licensing',
+    dueDate: new Date('2023-12-31'),
+    status: 'pending',
+    priority: 'high',
+    description: 'Submit documentation for annual state licensing renewal.'
+  },
+  {
+    id: 'COMP-006',
+    title: 'Data Security Assessment',
+    category: 'IT',
+    dueDate: new Date('2023-10-15'),
+    status: 'in-progress',
+    priority: 'medium',
+    description: 'Complete annual data security assessment and vulnerability testing.'
   }
 ];
 
 const ComplianceTracker: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
-  const [selectedPriority, setSelectedPriority] = useState<string | null>(null);
-  const [sortField, setSortField] = useState<string>('dueDate');
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
-
-  const categories = Array.from(new Set(MOCK_COMPLIANCE_ITEMS.map(item => item.category)));
-  const statuses = ['completed', 'pending', 'overdue'];
-  const priorities = ['low', 'medium', 'high', 'critical'];
-
-  const handleSort = (field: string) => {
-    if (sortField === field) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-    } else {
-      setSortField(field);
-      setSortDirection('asc');
-    }
-  };
-
-  const filteredItems = MOCK_COMPLIANCE_ITEMS.filter(item => {
-    const matchesSearch = searchQuery === '' || 
-      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.assignedTo.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    const matchesCategory = selectedCategory === null || item.category === selectedCategory;
-    const matchesStatus = selectedStatus === null || item.status === selectedStatus;
-    const matchesPriority = selectedPriority === null || item.priority === selectedPriority;
-    
-    return matchesSearch && matchesCategory && matchesStatus && matchesPriority;
-  }).sort((a, b) => {
-    if (sortField === 'title') {
-      return sortDirection === 'asc' 
-        ? a.title.localeCompare(b.title)
-        : b.title.localeCompare(a.title);
-    }
-    if (sortField === 'dueDate') {
-      return sortDirection === 'asc' 
-        ? a.dueDate.getTime() - b.dueDate.getTime()
-        : b.dueDate.getTime() - a.dueDate.getTime();
-    }
-    if (sortField === 'priority') {
-      const priorityOrder = { low: 0, medium: 1, high: 2, critical: 3 };
-      return sortDirection === 'asc' 
-        ? priorityOrder[a.priority] - priorityOrder[b.priority]
-        : priorityOrder[b.priority] - priorityOrder[a.priority];
-    }
-    return 0;
-  });
+  const today = new Date();
+  
+  const completedItems = MOCK_COMPLIANCE_ITEMS.filter(item => item.status === 'completed');
+  const overdueItems = MOCK_COMPLIANCE_ITEMS.filter(item => item.status === 'overdue');
+  const pendingItems = MOCK_COMPLIANCE_ITEMS.filter(item => 
+    item.status === 'pending' || item.status === 'in-progress'
+  );
+  
+  const compliancePercentage = Math.round((completedItems.length / MOCK_COMPLIANCE_ITEMS.length) * 100);
 
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat('en-US', {
@@ -176,399 +97,210 @@ const ComplianceTracker: React.FC = () => {
     }).format(date);
   };
 
+  const getDaysUntilDue = (dueDate: Date) => {
+    const diffTime = dueDate.getTime() - today.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
+
   const getStatusBadge = (status: string) => {
     switch(status) {
       case 'completed':
         return <Badge className="bg-green-500">Completed</Badge>;
-      case 'pending':
-        return <Badge className="bg-amber-500">Pending</Badge>;
       case 'overdue':
-        return <Badge className="bg-destructive">Overdue</Badge>;
+        return <Badge className="bg-red-500">Overdue</Badge>;
+      case 'pending':
+        return <Badge variant="outline">Pending</Badge>;
+      case 'in-progress':
+        return <Badge className="bg-blue-500">In Progress</Badge>;
       default:
         return <Badge>{status}</Badge>;
     }
   };
-
+  
   const getPriorityBadge = (priority: string) => {
     switch(priority) {
-      case 'low':
-        return <Badge variant="outline" className="text-blue-500 border-blue-200 bg-blue-50">Low</Badge>;
-      case 'medium':
-        return <Badge variant="outline" className="text-amber-500 border-amber-200 bg-amber-50">Medium</Badge>;
       case 'high':
-        return <Badge variant="outline" className="text-orange-500 border-orange-200 bg-orange-50">High</Badge>;
-      case 'critical':
-        return <Badge variant="outline" className="text-red-500 border-red-200 bg-red-50">Critical</Badge>;
+        return <Badge className="bg-red-500">High</Badge>;
+      case 'medium':
+        return <Badge className="bg-amber-500">Medium</Badge>;
+      case 'low':
+        return <Badge className="bg-green-500">Low</Badge>;
       default:
-        return <Badge variant="outline">{priority}</Badge>;
+        return <Badge>{priority}</Badge>;
     }
   };
-
-  // Calculate compliance metrics
-  const overdueCount = MOCK_COMPLIANCE_ITEMS.filter(item => item.status === 'overdue').length;
-  const pendingCount = MOCK_COMPLIANCE_ITEMS.filter(item => item.status === 'pending').length;
-  const completedCount = MOCK_COMPLIANCE_ITEMS.filter(item => item.status === 'completed').length;
-  const totalCount = MOCK_COMPLIANCE_ITEMS.length;
-  
-  const complianceRate = Math.round((completedCount / totalCount) * 100);
-
-  // Find upcoming deadlines (due in next 7 days)
-  const today = new Date();
-  const nextWeek = new Date(today);
-  nextWeek.setDate(today.getDate() + 7);
-  
-  const upcomingDeadlines = MOCK_COMPLIANCE_ITEMS.filter(item => 
-    item.status !== 'completed' && 
-    item.dueDate >= today && 
-    item.dueDate <= nextWeek
-  );
 
   return (
     <Layout>
       <div className="space-y-4">
         <h1 className="text-3xl font-bold tracking-tight">Compliance Tracker</h1>
-        
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card>
+
+        <div className="flex flex-col md:flex-row gap-4">
+          <Card className="md:w-1/3">
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Compliance Rate</CardTitle>
+              <CardTitle className="text-lg">Overall Compliance</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center justify-center">
-                <div className="relative h-28 w-28">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-2xl font-bold">{complianceRate}%</span>
+              <div className="text-center">
+                <div className="text-4xl font-bold">{compliancePercentage}%</div>
+                <Progress value={compliancePercentage} className="h-2 mt-2" />
+                <div className="flex justify-center mt-4 space-x-4 text-sm">
+                  <div className="flex flex-col items-center">
+                    <div className="text-green-500 font-bold">{completedItems.length}</div>
+                    <div className="text-muted-foreground">Completed</div>
                   </div>
-                  <svg className="h-full w-full" viewBox="0 0 100 100">
-                    <circle
-                      className="text-muted stroke-current"
-                      strokeWidth="10"
-                      fill="transparent"
-                      r="40"
-                      cx="50"
-                      cy="50"
-                    />
-                    <circle
-                      className={`${complianceRate >= 70 ? 'text-green-500' : complianceRate >= 50 ? 'text-amber-500' : 'text-red-500'} stroke-current`}
-                      strokeWidth="10"
-                      strokeLinecap="round"
-                      fill="transparent"
-                      r="40"
-                      cx="50"
-                      cy="50"
-                      strokeDasharray={`${complianceRate * 2.51} 251`}
-                      strokeDashoffset="0"
-                      transform="rotate(-90 50 50)"
-                    />
-                  </svg>
-                </div>
-              </div>
-              
-              <div className="mt-2 text-center text-sm text-muted-foreground">
-                {completedCount} of {totalCount} requirements completed
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Status</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center">
-                    <div className="h-3 w-3 rounded-full bg-green-500 mr-2"></div>
-                    <span className="text-sm">Completed</span>
+                  <div className="flex flex-col items-center">
+                    <div className="text-red-500 font-bold">{overdueItems.length}</div>
+                    <div className="text-muted-foreground">Overdue</div>
                   </div>
-                  <span className="font-medium">{completedCount}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center">
-                    <div className="h-3 w-3 rounded-full bg-amber-500 mr-2"></div>
-                    <span className="text-sm">Pending</span>
+                  <div className="flex flex-col items-center">
+                    <div className="text-blue-500 font-bold">{pendingItems.length}</div>
+                    <div className="text-muted-foreground">Pending</div>
                   </div>
-                  <span className="font-medium">{pendingCount}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center">
-                    <div className="h-3 w-3 rounded-full bg-red-500 mr-2"></div>
-                    <span className="text-sm">Overdue</span>
-                  </div>
-                  <span className="font-medium">{overdueCount}</span>
                 </div>
               </div>
             </CardContent>
           </Card>
-          
-          <Card className="md:col-span-2">
+
+          <Card className="md:w-2/3">
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Upcoming Deadlines</CardTitle>
-              <CardDescription>
-                Items due in the next 7 days
-              </CardDescription>
+              <CardTitle className="text-lg">Key Metrics</CardTitle>
             </CardHeader>
             <CardContent>
-              {upcomingDeadlines.length === 0 ? (
-                <div className="flex items-center justify-center p-4 text-muted-foreground">
-                  <div className="text-center">
-                    <Calendar className="mx-auto h-8 w-8 mb-2" />
-                    <p>No upcoming deadlines this week</p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-muted/50 p-4 rounded-lg flex flex-col items-center">
+                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-red-100 mb-2">
+                    <AlertCircle className="h-5 w-5 text-red-500" />
                   </div>
+                  <div className="text-2xl font-bold">{overdueItems.length}</div>
+                  <div className="text-sm text-muted-foreground">Overdue Items</div>
                 </div>
-              ) : (
-                <div className="space-y-2">
-                  {upcomingDeadlines.map(item => (
-                    <div key={item.id} className="flex items-start justify-between border-b pb-2">
-                      <div>
-                        <div className="font-medium">{item.title}</div>
-                        <div className="text-sm text-muted-foreground">
-                          Due: {formatDate(item.dueDate)}
-                        </div>
-                      </div>
-                      {getPriorityBadge(item.priority)}
-                    </div>
-                  ))}
+                
+                <div className="bg-muted/50 p-4 rounded-lg flex flex-col items-center">
+                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-amber-100 mb-2">
+                    <Calendar className="h-5 w-5 text-amber-500" />
+                  </div>
+                  <div className="text-2xl font-bold">
+                    {pendingItems.length > 0 
+                      ? `${getDaysUntilDue(pendingItems.sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime())[0].dueDate)} days`
+                      : 'N/A'
+                    }
+                  </div>
+                  <div className="text-sm text-muted-foreground">Until Next Due</div>
                 </div>
-              )}
+                
+                <div className="bg-muted/50 p-4 rounded-lg flex flex-col items-center">
+                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-100 mb-2">
+                    <CheckCircle2 className="h-5 w-5 text-green-500" />
+                  </div>
+                  <div className="text-2xl font-bold">{completedItems.length}</div>
+                  <div className="text-sm text-muted-foreground">Completed This Month</div>
+                </div>
+              </div>
             </CardContent>
-            <CardFooter>
-              <Button variant="outline" className="w-full">
-                <Calendar className="h-4 w-4 mr-2" />
-                View All Deadlines
-              </Button>
-            </CardFooter>
           </Card>
         </div>
-        
+
         <Card>
-          <CardHeader className="pb-2">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <CardHeader>
+            <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="text-lg">Compliance Requirements</CardTitle>
-                <CardDescription>
-                  {filteredItems.length} {filteredItems.length === 1 ? 'item' : 'items'} found
-                </CardDescription>
+                <CardTitle>Compliance Requirements</CardTitle>
+                <CardDescription>Track and manage agency compliance requirements</CardDescription>
               </div>
-              
-              <div className="flex items-center space-x-2">
-                <div className="relative">
-                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    type="search"
-                    placeholder="Search..."
-                    className="pl-8 w-full md:w-64"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                  />
-                </div>
-                
-                <Button variant="outline" size="sm">
-                  <Filter className="h-4 w-4 mr-2" />
-                  Filters
-                </Button>
-                
-                <Button variant="outline" size="sm">
-                  <BarChart className="h-4 w-4 mr-2" />
-                  Reports
-                </Button>
-              </div>
+              <Button>
+                <FileText className="h-4 w-4 mr-2" />
+                Export Report
+              </Button>
             </div>
           </CardHeader>
-          
           <CardContent>
-            <div className="mb-4 flex flex-col md:flex-row gap-4 pb-2 border-b">
-              <div className="space-y-1">
-                <div className="text-xs font-medium">Category</div>
-                <div className="flex flex-wrap gap-2">
-                  <Button 
-                    variant={selectedCategory === null ? 'default' : 'outline'} 
-                    size="sm"
-                    onClick={() => setSelectedCategory(null)}
-                  >
-                    All
-                  </Button>
-                  {categories.map(category => (
-                    <Button 
-                      key={category}
-                      variant={selectedCategory === category ? 'default' : 'outline'} 
-                      size="sm"
-                      onClick={() => setSelectedCategory(category)}
-                    >
-                      {category}
-                    </Button>
-                  ))}
-                </div>
-              </div>
+            <Tabs defaultValue="all">
+              <TabsList className="mb-4">
+                <TabsTrigger value="all">All Requirements</TabsTrigger>
+                <TabsTrigger value="overdue">Overdue</TabsTrigger>
+                <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
+                <TabsTrigger value="completed">Completed</TabsTrigger>
+              </TabsList>
               
-              <div className="space-y-1">
-                <div className="text-xs font-medium">Status</div>
-                <div className="flex flex-wrap gap-2">
-                  <Button 
-                    variant={selectedStatus === null ? 'default' : 'outline'} 
-                    size="sm"
-                    onClick={() => setSelectedStatus(null)}
-                  >
-                    All
-                  </Button>
-                  {statuses.map(status => (
-                    <Button 
-                      key={status}
-                      variant={selectedStatus === status ? 'default' : 'outline'} 
-                      size="sm"
-                      onClick={() => setSelectedStatus(status)}
-                    >
-                      {status.charAt(0).toUpperCase() + status.slice(1)}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-              
-              <div className="space-y-1">
-                <div className="text-xs font-medium">Priority</div>
-                <div className="flex flex-wrap gap-2">
-                  <Button 
-                    variant={selectedPriority === null ? 'default' : 'outline'} 
-                    size="sm"
-                    onClick={() => setSelectedPriority(null)}
-                  >
-                    All
-                  </Button>
-                  {priorities.map(priority => (
-                    <Button 
-                      key={priority}
-                      variant={selectedPriority === priority ? 'default' : 'outline'} 
-                      size="sm"
-                      onClick={() => setSelectedPriority(priority)}
-                    >
-                      {priority.charAt(0).toUpperCase() + priority.slice(1)}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-            </div>
-            
-            {overdueCount > 0 && selectedStatus !== 'completed' && selectedStatus !== 'pending' && (
-              <Alert className="mb-4 border-red-200 bg-red-50">
-                <AlertCircle className="h-4 w-4 text-red-500" />
-                <AlertDescription className="ml-2 text-red-700">
-                  There {overdueCount === 1 ? 'is' : 'are'} {overdueCount} overdue compliance {overdueCount === 1 ? 'item' : 'items'} that require immediate attention.
-                </AlertDescription>
-              </Alert>
-            )}
-            
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr className="border-b">
-                    <th className="text-left py-3 px-4 font-medium text-sm">
-                      <button 
-                        className="flex items-center"
-                        onClick={() => handleSort('title')}
-                      >
-                        Title
-                        {sortField === 'title' && (
-                          <ArrowUpDown className="h-4 w-4 ml-1" />
-                        )}
-                      </button>
-                    </th>
-                    <th className="text-left py-3 px-4 font-medium text-sm">Category</th>
-                    <th className="text-left py-3 px-4 font-medium text-sm">
-                      <button 
-                        className="flex items-center"
-                        onClick={() => handleSort('priority')}
-                      >
-                        Priority
-                        {sortField === 'priority' && (
-                          <ArrowUpDown className="h-4 w-4 ml-1" />
-                        )}
-                      </button>
-                    </th>
-                    <th className="text-left py-3 px-4 font-medium text-sm">
-                      <button 
-                        className="flex items-center"
-                        onClick={() => handleSort('dueDate')}
-                      >
-                        Due Date
-                        {sortField === 'dueDate' && (
-                          <ArrowUpDown className="h-4 w-4 ml-1" />
-                        )}
-                      </button>
-                    </th>
-                    <th className="text-left py-3 px-4 font-medium text-sm">Assigned To</th>
-                    <th className="text-left py-3 px-4 font-medium text-sm">Status</th>
-                    <th className="text-left py-3 px-4 font-medium text-sm">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredItems.length === 0 ? (
-                    <tr>
-                      <td colSpan={7} className="py-10 text-center text-muted-foreground">
-                        <ShieldCheck className="h-8 w-8 mx-auto mb-2" />
-                        <p>No compliance items found</p>
-                      </td>
-                    </tr>
-                  ) : (
-                    filteredItems.map((item) => (
-                      <tr key={item.id} className={`border-b hover:bg-muted/50 ${item.status === 'overdue' ? 'bg-red-50/50' : ''}`}>
-                        <td className="py-3 px-4">
-                          <div>
-                            <div className="font-medium">{item.title}</div>
-                            <div className="text-xs text-muted-foreground mt-1">
-                              {item.id}
+              <div className="rounded-md border">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Compliance Item</TableHead>
+                      <TableHead>Category</TableHead>
+                      <TableHead>Priority</TableHead>
+                      <TableHead>Due Date</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead className="text-right">Action</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {MOCK_COMPLIANCE_ITEMS.map((item) => (
+                      <TableRow key={item.id}>
+                        <TableCell className="font-medium">
+                          <div className="flex flex-col">
+                            <div>{item.title}</div>
+                            <div className="text-xs text-muted-foreground">{item.id}</div>
+                          </div>
+                        </TableCell>
+                        <TableCell>{item.category}</TableCell>
+                        <TableCell>{getPriorityBadge(item.priority)}</TableCell>
+                        <TableCell>
+                          <div className="flex flex-col">
+                            <div className="flex items-center">
+                              <Calendar className="h-4 w-4 mr-1 text-muted-foreground" />
+                              {formatDate(item.dueDate)}
                             </div>
-                          </div>
-                        </td>
-                        <td className="py-3 px-4">
-                          <Badge variant="secondary">{item.category}</Badge>
-                        </td>
-                        <td className="py-3 px-4">
-                          {getPriorityBadge(item.priority)}
-                        </td>
-                        <td className="py-3 px-4 text-sm">
-                          <div className="flex items-center">
-                            <Calendar className="h-4 w-4 mr-1 text-muted-foreground" />
-                            {formatDate(item.dueDate)}
-                          </div>
-                        </td>
-                        <td className="py-3 px-4 text-sm">
-                          {item.assignedTo}
-                        </td>
-                        <td className="py-3 px-4">
-                          {getStatusBadge(item.status)}
-                        </td>
-                        <td className="py-3 px-4">
-                          <div className="flex space-x-2">
-                            {item.status !== 'completed' ? (
-                              <Button variant="outline" size="sm">
-                                <CheckCircle className="h-4 w-4 mr-1" />
-                                Mark Complete
-                              </Button>
-                            ) : (
-                              <Button variant="outline" size="sm" disabled>
-                                <CheckCircle className="h-4 w-4 mr-1" />
-                                Completed
-                              </Button>
+                            {item.status === 'overdue' && (
+                              <div className="text-xs text-red-500 mt-1">
+                                {Math.abs(getDaysUntilDue(item.dueDate))} days overdue
+                              </div>
+                            )}
+                            {item.status === 'pending' && getDaysUntilDue(item.dueDate) <= 7 && (
+                              <div className="text-xs text-amber-500 mt-1">
+                                Due soon
+                              </div>
                             )}
                           </div>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </CardContent>
-          <CardFooter className="border-t">
-            <div className="flex justify-between items-center w-full">
-              <Button variant="outline" size="sm">
-                Previous
-              </Button>
-              <div className="text-sm text-muted-foreground">
-                Page 1 of 1
+                        </TableCell>
+                        <TableCell>{getStatusBadge(item.status)}</TableCell>
+                        <TableCell className="text-right">
+                          <Button variant="outline" size="sm">
+                            {item.status === 'completed' ? (
+                              <>
+                                <FileText className="h-4 w-4 mr-1" />
+                                View
+                              </>
+                            ) : (
+                              <>
+                                <CheckCircle2 className="h-4 w-4 mr-1" />
+                                {item.status === 'in-progress' ? 'Update' : 'Mark Complete'}
+                              </>
+                            )}
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
               </div>
-              <Button variant="outline" size="sm">
-                Next
+            </Tabs>
+          </CardContent>
+          <CardFooter className="flex justify-between border-t pt-4">
+            <div className="flex items-center space-x-2">
+              <ShieldCheck className="h-5 w-5 text-primary" />
+              <span className="text-sm">Next compliance audit: {formatDate(new Date('2023-12-15'))}</span>
+            </div>
+            <div className="flex items-center space-x-4">
+              <Button variant="outline">
+                <BarChart className="h-4 w-4 mr-2" />
+                Analytics
+              </Button>
+              <Button>
+                <Clock className="h-4 w-4 mr-2" />
+                Schedule Review
               </Button>
             </div>
           </CardFooter>

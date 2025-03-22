@@ -194,24 +194,28 @@ const TeamChat: React.FC = () => {
 
   return (
     <Layout>
-      <div className="flex flex-col h-[calc(100vh-90px)]">
-        <div className="flex justify-between items-center mb-3">
-          <h1 className="text-2xl font-semibold">Team Chat</h1>
+      <div className="space-y-4 animate-fade-in">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Team Chat</h1>
+          <p className="text-muted-foreground text-sm">Communicate with your team members and clients</p>
+        </div>
+        
+        <div className="flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="icon" className="h-8 w-8">
+            <Button variant="outline" size="sm" className="h-8 w-8">
               <Phone className="h-4 w-4" />
             </Button>
-            <Button variant="outline" size="icon" className="h-8 w-8">
+            <Button variant="outline" size="sm" className="h-8 w-8">
               <Video className="h-4 w-4" />
             </Button>
-            <Button size="sm">
-              <UserPlus className="h-4 w-4 mr-1" />
-              New Chat
-            </Button>
           </div>
+          <Button size="sm" className="h-8">
+            <UserPlus className="h-4 w-4 mr-1" />
+            New Chat
+          </Button>
         </div>
 
-        <div className="flex flex-1 gap-3 overflow-hidden">
+        <div className="flex flex-1 gap-3 h-[calc(100vh-220px)]">
           <div className="w-72 shrink-0 border rounded-md bg-card overflow-hidden flex flex-col">
             <div className="p-2 border-b">
               <div className="relative">

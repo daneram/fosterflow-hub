@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Layout from '@/components/layout/Layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -353,22 +352,23 @@ const CalendarView: React.FC = () => {
 
   return (
     <Layout>
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold tracking-tight">Calendar</h1>
-          <div className="flex space-x-2">
-            <Button onClick={moveToday}>Today</Button>
-            <Button variant="outline" size="icon" onClick={movePrevious}>
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-            <Button variant="outline" size="icon" onClick={moveNext}>
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          </div>
+      <div className="space-y-4 animate-fade-in">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Calendar</h1>
+          <p className="text-muted-foreground text-sm">Manage your schedule and appointments</p>
         </div>
 
         <div className="flex items-center justify-between">
-          <div className="text-xl font-medium">
+          <div className="flex space-x-2">
+            <Button size="sm" onClick={moveToday} className="h-8">Today</Button>
+            <Button variant="outline" size="icon" onClick={movePrevious} className="h-8 w-8">
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button variant="outline" size="icon" onClick={moveNext} className="h-8 w-8">
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+          <div className="text-sm font-medium">
             {viewMode === 'month' 
               ? `${months[currentDate.getMonth()]} ${currentDate.getFullYear()}`
               : viewMode === 'week'
@@ -376,73 +376,76 @@ const CalendarView: React.FC = () => {
                 : `${daysOfWeek[currentDate.getDay()]}, ${months[currentDate.getMonth()]} ${currentDate.getDate()}, ${currentDate.getFullYear()}`
             }
           </div>
-          <div className="flex space-x-2">
-            <Tabs defaultValue="week" onValueChange={(value) => setViewMode(value as any)}>
-              <TabsList>
-                <TabsTrigger value="month">Month</TabsTrigger>
-                <TabsTrigger value="week">Week</TabsTrigger>
-                <TabsTrigger value="day">Day</TabsTrigger>
-              </TabsList>
-            </Tabs>
-            <Dialog open={isNewEventDialogOpen} onOpenChange={setIsNewEventDialogOpen}>
-              <DialogTrigger asChild>
-                <Button>
-                  <Plus className="h-4 w-4 mr-2" />
-                  New Event
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[525px]">
-                <DialogHeader>
-                  <DialogTitle>New Event</DialogTitle>
-                  <DialogDescription>
-                    Add a new event to your calendar
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="grid gap-4 py-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="event-title">Title</Label>
-                    <Input id="event-title" placeholder="Enter event title..." />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="grid gap-2">
-                      <Label htmlFor="event-start">Start Time</Label>
-                      <Input id="event-start" type="datetime-local" />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="event-end">End Time</Label>
-                      <Input id="event-end" type="datetime-local" />
-                    </div>
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="event-type">Event Type</Label>
-                    <select className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm" id="event-type">
-                      <option value="visit">Home Visit</option>
-                      <option value="meeting">Meeting</option>
-                      <option value="appointment">Appointment</option>
-                      <option value="court">Court</option>
-                      <option value="deadline">Deadline</option>
-                    </select>
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="event-location">Location</Label>
-                    <Input id="event-location" placeholder="Enter location..." />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="event-description">Description</Label>
-                    <Textarea id="event-description" placeholder="Enter event details..." />
-                  </div>
-                </div>
-                <DialogFooter>
-                  <Button type="submit">Save Event</Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-          </div>
         </div>
 
-        {viewMode === 'month' && renderMonthView()}
-        {viewMode === 'week' && renderWeekView()}
-        {viewMode === 'day' && renderDayView()}
+        <div className="flex items-center justify-between">
+          <Tabs defaultValue="week" onValueChange={(value) => setViewMode(value as any)}>
+            <TabsList className="h-8">
+              <TabsTrigger value="month">Month</TabsTrigger>
+              <TabsTrigger value="week">Week</TabsTrigger>
+              <TabsTrigger value="day">Day</TabsTrigger>
+            </TabsList>
+          </Tabs>
+          <Dialog open={isNewEventDialogOpen} onOpenChange={setIsNewEventDialogOpen}>
+            <DialogTrigger asChild>
+              <Button size="sm" className="h-8">
+                <Plus className="h-4 w-4 mr-1" />
+                New Event
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[525px]">
+              <DialogHeader>
+                <DialogTitle>New Event</DialogTitle>
+                <DialogDescription>
+                  Add a new event to your calendar
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="event-title">Title</Label>
+                  <Input id="event-title" placeholder="Enter event title..." />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="event-start">Start Time</Label>
+                    <Input id="event-start" type="datetime-local" />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="event-end">End Time</Label>
+                    <Input id="event-end" type="datetime-local" />
+                  </div>
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="event-type">Event Type</Label>
+                  <select className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm" id="event-type">
+                    <option value="visit">Home Visit</option>
+                    <option value="meeting">Meeting</option>
+                    <option value="appointment">Appointment</option>
+                    <option value="court">Court</option>
+                    <option value="deadline">Deadline</option>
+                  </select>
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="event-location">Location</Label>
+                  <Input id="event-location" placeholder="Enter location..." />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="event-description">Description</Label>
+                  <Textarea id="event-description" placeholder="Enter event details..." />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button type="submit">Save Event</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </div>
+
+        <Card className="overflow-hidden">
+          {viewMode === 'month' && renderMonthView()}
+          {viewMode === 'week' && renderWeekView()}
+          {viewMode === 'day' && renderDayView()}
+        </Card>
 
         <Dialog open={!!selectedEvent} onOpenChange={() => setSelectedEvent(null)}>
           <DialogContent className="sm:max-w-[525px]">

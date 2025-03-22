@@ -3,18 +3,23 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { 
-  Home, 
-  MessageSquare, 
-  Mail, 
-  Calendar, 
-  CheckSquare, 
+  LayoutDashboard, 
   FolderOpen, 
-  GraduationCap, 
-  FileText, 
+  Activity, 
   ShieldCheck, 
-  Bot,
+  BarChart2, 
+  FileCheck, 
+  Baby, 
+  Users, 
+  UsersRound, 
+  FileText, 
+  GraduationCap, 
+  UserPlus, 
+  DollarSign, 
+  FileSpreadsheet, 
   GitBranch,
-  FileEdit,
+  Settings,
+  Contact,
   ChevronRight
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -100,41 +105,44 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onNavItemClick }) =
       </div>
 
       <div className={cn(
-        "mt-4 px-2",
+        "mt-4 px-2 flex-1 overflow-y-auto",
         !isOpen && "px-0"
       )}>
-        {isOpen && <div className="text-xs font-medium text-muted-foreground mb-1.5">MAIN</div>}
+        {isOpen && <div className="text-xs font-medium text-muted-foreground mb-1.5">DASHBOARD</div>}
         <nav className="space-y-0.5">
-          <NavItem to="/" icon={Home} label="Dashboard" isOpen={isOpen} onClick={onNavItemClick} />
-          <NavItem to="/chat" icon={MessageSquare} label="Team Chat" isOpen={isOpen} onClick={onNavItemClick} />
-          <NavItem to="/email" icon={Mail} label="Email" isOpen={isOpen} onClick={onNavItemClick} />
-          <NavItem to="/calendar" icon={Calendar} label="Calendar" isOpen={isOpen} onClick={onNavItemClick} />
-          <NavItem to="/tasks" icon={CheckSquare} label="Tasks" isOpen={isOpen} onClick={onNavItemClick} />
-          <NavItem to="/workflow" icon={GitBranch} label="Workflow Manager" isOpen={isOpen} onClick={onNavItemClick} />
-          <NavItem to="/forms" icon={FileEdit} label="Form Creator" isOpen={isOpen} onClick={onNavItemClick} />
+          <NavItem to="/" icon={LayoutDashboard} label="Dashboard" isOpen={isOpen} onClick={onNavItemClick} />
         </nav>
-      </div>
-
-      <div className={cn(
-        "mt-4 px-2",
-        !isOpen && "px-0"
-      )}>
-        {isOpen && <div className="text-xs font-medium text-muted-foreground mb-1.5">RECORDS & RESOURCES</div>}
+        
+        {isOpen && <div className="text-xs font-medium text-muted-foreground mt-4 mb-1.5">CORE</div>}
         <nav className="space-y-0.5">
-          <NavItem to="/records" icon={FolderOpen} label="Records Explorer" isOpen={isOpen} onClick={onNavItemClick} />
-          <NavItem to="/training" icon={GraduationCap} label="Training" isOpen={isOpen} onClick={onNavItemClick} />
-          <NavItem to="/policies" icon={FileText} label="Policy Library" isOpen={isOpen} onClick={onNavItemClick} />
+          <NavItem to="/records" icon={FolderOpen} label="Records" isOpen={isOpen} onClick={onNavItemClick} />
+          <NavItem to="/activity" icon={Activity} label="Activity" isOpen={isOpen} onClick={onNavItemClick} />
           <NavItem to="/compliance" icon={ShieldCheck} label="Compliance" isOpen={isOpen} onClick={onNavItemClick} />
+          <NavItem to="/insights" icon={BarChart2} label="Insights" isOpen={isOpen} onClick={onNavItemClick} />
         </nav>
-      </div>
-
-      <div className={cn(
-        "mt-4 px-2",
-        !isOpen && "px-0"
-      )}>
-        {isOpen && <div className="text-xs font-medium text-muted-foreground mb-1.5">ASSISTANTS</div>}
+        
+        {isOpen && <div className="text-xs font-medium text-muted-foreground mt-4 mb-1.5">FOSTERING</div>}
         <nav className="space-y-0.5">
-          <NavItem to="/assistant" icon={Bot} label="AI Assistant" isOpen={isOpen} onClick={onNavItemClick} />
+          <NavItem to="/form-f" icon={FileCheck} label="Form F" isOpen={isOpen} onClick={onNavItemClick} />
+          <NavItem to="/children" icon={Baby} label="Children" isOpen={isOpen} onClick={onNavItemClick} />
+          <NavItem to="/carers" icon={Users} label="Carers" isOpen={isOpen} onClick={onNavItemClick} />
+        </nav>
+        
+        {isOpen && <div className="text-xs font-medium text-muted-foreground mt-4 mb-1.5">ORGANIZATION</div>}
+        <nav className="space-y-0.5">
+          <NavItem to="/team" icon={UsersRound} label="Team" isOpen={isOpen} onClick={onNavItemClick} />
+          <NavItem to="/policies" icon={FileText} label="Policies" isOpen={isOpen} onClick={onNavItemClick} />
+          <NavItem to="/training" icon={GraduationCap} label="Training" isOpen={isOpen} onClick={onNavItemClick} />
+          <NavItem to="/recruitment" icon={UserPlus} label="Recruitment" isOpen={isOpen} onClick={onNavItemClick} />
+          <NavItem to="/finance" icon={DollarSign} label="Finance" isOpen={isOpen} onClick={onNavItemClick} />
+        </nav>
+        
+        {isOpen && <div className="text-xs font-medium text-muted-foreground mt-4 mb-1.5">TOOLS</div>}
+        <nav className="space-y-0.5">
+          <NavItem to="/forms" icon={FileSpreadsheet} label="Forms" isOpen={isOpen} onClick={onNavItemClick} />
+          <NavItem to="/workflow" icon={GitBranch} label="Workflows" isOpen={isOpen} onClick={onNavItemClick} />
+          <NavItem to="/contacts" icon={Contact} label="Contacts" isOpen={isOpen} onClick={onNavItemClick} />
+          <NavItem to="/settings" icon={Settings} label="Settings" isOpen={isOpen} onClick={onNavItemClick} />
         </nav>
       </div>
 

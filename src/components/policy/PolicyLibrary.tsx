@@ -18,7 +18,7 @@ const PolicyLibrary: React.FC = () => {
 
   return (
     <Layout>
-      <div className="space-y-4 animate-fade-in">
+      <div className="space-y-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Policy Library</h1>
           <p className="text-muted-foreground text-sm">Access current agency policies and procedures</p>
@@ -28,7 +28,7 @@ const PolicyLibrary: React.FC = () => {
 
         <Card>
           <Tabs defaultValue="all" onValueChange={setActiveTab} className="w-full">
-            <div className="p-4 pb-0">
+            <div className="px-6 pt-4">
               <TabsList className="grid w-full max-w-md grid-cols-4 h-9">
                 <TabsTrigger value="all">All Policies</TabsTrigger>
                 <TabsTrigger value="active">Active</TabsTrigger>

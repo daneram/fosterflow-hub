@@ -8,17 +8,22 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
 // Import components
-import TeamChat from "./components/chat/TeamChat";
-import EmailClient from "./components/email/EmailClient";
-import CalendarView from "./components/calendar/Calendar";
-import TaskManager from "./components/tasks/TaskManager";
 import RecordsExplorer from "./components/records/RecordsExplorer";
-import TrainingPlatform from "./components/training/TrainingPlatform";
-import PolicyLibrary from "./components/policy/PolicyLibrary";
+import ActivityLog from "./components/activity/ActivityLog";
 import ComplianceTracker from "./components/compliance/ComplianceTracker";
-import AIAssistant from "./components/ai/AIAssistant";
+import InsightsDashboard from "./components/insights/InsightsDashboard";
+import FormFAssessment from "./components/formf/FormFAssessment";
+import ChildrenProfiles from "./components/children/ChildrenProfiles";
+import CarersDirectory from "./components/carers/CarersDirectory";
+import TeamDirectory from "./components/team/TeamDirectory";
+import PolicyLibrary from "./components/policy/PolicyLibrary";
+import TrainingPlatform from "./components/training/TrainingPlatform";
+import RecruitmentPipeline from "./components/recruitment/RecruitmentPipeline";
+import FinanceManager from "./components/finance/FinanceManager";
+import FormsLibrary from "./components/forms/FormsLibrary";
 import WorkflowManager from "./components/workflow/WorkflowManager";
-import FormCreator from "./components/forms/FormCreator";
+import ContactsDirectory from "./components/contacts/ContactsDirectory";
+import SettingsPanel from "./components/settings/SettingsPanel";
 
 const queryClient = new QueryClient();
 
@@ -30,17 +35,22 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/chat" element={<TeamChat />} />
-          <Route path="/email" element={<EmailClient />} />
-          <Route path="/calendar" element={<CalendarView />} />
-          <Route path="/tasks" element={<TaskManager />} />
           <Route path="/records" element={<RecordsExplorer />} />
-          <Route path="/training" element={<TrainingPlatform />} />
-          <Route path="/policies" element={<PolicyLibrary />} />
+          <Route path="/activity" element={<ActivityLog />} />
           <Route path="/compliance" element={<ComplianceTracker />} />
-          <Route path="/assistant" element={<AIAssistant />} />
+          <Route path="/insights" element={<InsightsDashboard />} />
+          <Route path="/form-f" element={<FormFAssessment />} />
+          <Route path="/children" element={<ChildrenProfiles />} />
+          <Route path="/carers" element={<CarersDirectory />} />
+          <Route path="/team" element={<TeamDirectory />} />
+          <Route path="/policies" element={<PolicyLibrary />} />
+          <Route path="/training" element={<TrainingPlatform />} />
+          <Route path="/recruitment" element={<RecruitmentPipeline />} />
+          <Route path="/finance" element={<FinanceManager />} />
+          <Route path="/forms" element={<FormsLibrary />} />
           <Route path="/workflow" element={<WorkflowManager />} />
-          <Route path="/forms" element={<FormCreator />} />
+          <Route path="/contacts" element={<ContactsDirectory />} />
+          <Route path="/settings" element={<SettingsPanel />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -10,11 +10,11 @@ interface PolicyHeaderProps {
 
 const PolicyHeader: React.FC<PolicyHeaderProps> = ({ searchQuery, setSearchQuery }) => {
   return (
-    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+    <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
       <div className="flex items-center space-x-2 text-sm font-medium">
         <span>Filter policies by keyword</span>
       </div>
-      <div className="relative max-w-xs">
+      <div className="relative max-w-xs w-full">
         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
         <Input
           type="search"

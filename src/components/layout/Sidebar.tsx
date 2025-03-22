@@ -53,12 +53,7 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
           : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground",
         !isOpen && "justify-center px-0"
       )}
-      onClick={(e) => {
-        // Ensure the onClick callback is called if provided
-        if (onClick) {
-          onClick();
-        }
-      }}
+      onClick={onClick} // Call the function directly
       title={!isOpen ? label : undefined}
     >
       <Icon className="h-4 w-4" />

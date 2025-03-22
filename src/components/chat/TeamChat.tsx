@@ -1,13 +1,12 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import Layout from '@/components/layout/Layout';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Avatar } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
-import { MessageSquare, Send, PaperclipIcon, User, Phone, Video, Search, UserPlus } from 'lucide-react';
+import { MessageSquare, Send, PaperclipIcon, Phone, Video, Search, UserPlus } from 'lucide-react';
 
 interface ChatMessage {
   id: string;
@@ -195,38 +194,37 @@ const TeamChat: React.FC = () => {
 
   return (
     <Layout>
-      <div className="h-[calc(100vh-120px)] flex flex-col">
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-3xl font-bold tracking-tight">Team Chat</h1>
+      <div className="flex flex-col h-[calc(100vh-90px)]">
+        <div className="flex justify-between items-center mb-3">
+          <h1 className="text-2xl font-semibold">Team Chat</h1>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="icon">
-              <Phone className="h-5 w-5" />
+            <Button variant="outline" size="icon" className="h-8 w-8">
+              <Phone className="h-4 w-4" />
             </Button>
-            <Button variant="outline" size="icon">
-              <Video className="h-5 w-5" />
+            <Button variant="outline" size="icon" className="h-8 w-8">
+              <Video className="h-4 w-4" />
             </Button>
-            <Button>
-              <UserPlus className="h-5 w-5 mr-2" />
+            <Button size="sm">
+              <UserPlus className="h-4 w-4 mr-1" />
               New Chat
             </Button>
           </div>
         </div>
 
-        <div className="flex flex-1 gap-4 overflow-hidden">
-          {/* Sidebar */}
-          <div className="w-80 shrink-0 border rounded-lg bg-card overflow-hidden flex flex-col">
-            <div className="p-3 border-b">
+        <div className="flex flex-1 gap-3 overflow-hidden">
+          <div className="w-72 shrink-0 border rounded-md bg-card overflow-hidden flex flex-col">
+            <div className="p-2 border-b">
               <div className="relative">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Search conversations..."
-                  className="w-full pl-8"
+                  className="w-full pl-8 h-9"
                 />
               </div>
             </div>
 
             <Tabs defaultValue="all" className="w-full">
-              <div className="px-3 pt-3">
+              <div className="px-2 pt-2">
                 <TabsList className="w-full grid grid-cols-3">
                   <TabsTrigger value="all">All</TabsTrigger>
                   <TabsTrigger value="direct">Direct</TabsTrigger>
@@ -235,37 +233,37 @@ const TeamChat: React.FC = () => {
               </div>
 
               <TabsContent value="all" className="m-0 overflow-auto">
-                <div className="space-y-1 p-2">
+                <div className="space-y-0.5 p-2">
                   {chatContacts.map(contact => (
                     <button
                       key={contact.id}
-                      className={`w-full flex items-start gap-3 p-2 rounded-md text-left transition-colors ${
+                      className={`w-full flex items-start gap-2 p-2 rounded-md text-left transition-colors ${
                         activeChat === contact.id ? 'bg-accent' : 'hover:bg-accent/50'
                       }`}
                       onClick={() => setActiveChat(contact.id)}
                     >
-                      <div className="relative">
-                        <Avatar>
+                      <div className="relative flex-shrink-0">
+                        <Avatar className="h-8 w-8">
                           <div className="bg-primary/10 w-full h-full flex items-center justify-center">
-                            <span className="text-primary font-medium">
+                            <span className="text-primary font-medium text-xs">
                               {contact.name.split(' ').map(n => n[0]).join('')}
                             </span>
                           </div>
                         </Avatar>
-                        <span className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-background ${getStatusColor(contact.status)}`} />
+                        <span className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-background ${getStatusColor(contact.status)}`} />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex justify-between items-start">
-                          <span className="font-medium truncate">{contact.name}</span>
+                          <span className="font-medium truncate text-sm">{contact.name}</span>
                           {contact.unread && (
-                            <span className="ml-2 inline-flex items-center justify-center w-5 h-5 text-xs bg-primary text-primary-foreground rounded-full">
+                            <span className="ml-1 inline-flex items-center justify-center w-4 h-4 text-xs bg-primary text-primary-foreground rounded-full">
                               {contact.unread}
                             </span>
                           )}
                         </div>
                         <p className="text-xs text-muted-foreground">{contact.position}</p>
                         {contact.lastMessage && (
-                          <p className="text-sm truncate text-muted-foreground">
+                          <p className="text-xs truncate text-muted-foreground">
                             {contact.lastMessage}
                           </p>
                         )}
@@ -276,39 +274,39 @@ const TeamChat: React.FC = () => {
               </TabsContent>
 
               <TabsContent value="direct" className="m-0 overflow-auto">
-                <div className="space-y-1 p-2">
+                <div className="space-y-0.5 p-2">
                   {chatContacts
                     .filter(contact => !contact.id.startsWith('team-'))
                     .map(contact => (
                       <button
                         key={contact.id}
-                        className={`w-full flex items-start gap-3 p-2 rounded-md text-left transition-colors ${
+                        className={`w-full flex items-start gap-2 p-2 rounded-md text-left transition-colors ${
                           activeChat === contact.id ? 'bg-accent' : 'hover:bg-accent/50'
                         }`}
                         onClick={() => setActiveChat(contact.id)}
                       >
-                        <div className="relative">
-                          <Avatar>
+                        <div className="relative flex-shrink-0">
+                          <Avatar className="h-8 w-8">
                             <div className="bg-primary/10 w-full h-full flex items-center justify-center">
-                              <span className="text-primary font-medium">
+                              <span className="text-primary font-medium text-xs">
                                 {contact.name.split(' ').map(n => n[0]).join('')}
                               </span>
                             </div>
                           </Avatar>
-                          <span className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-background ${getStatusColor(contact.status)}`} />
+                          <span className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-background ${getStatusColor(contact.status)}`} />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex justify-between items-start">
-                            <span className="font-medium truncate">{contact.name}</span>
+                            <span className="font-medium truncate text-sm">{contact.name}</span>
                             {contact.unread && (
-                              <span className="ml-2 inline-flex items-center justify-center w-5 h-5 text-xs bg-primary text-primary-foreground rounded-full">
+                              <span className="ml-1 inline-flex items-center justify-center w-4 h-4 text-xs bg-primary text-primary-foreground rounded-full">
                                 {contact.unread}
                               </span>
                             )}
                           </div>
                           <p className="text-xs text-muted-foreground">{contact.position}</p>
                           {contact.lastMessage && (
-                            <p className="text-sm truncate text-muted-foreground">
+                            <p className="text-xs truncate text-muted-foreground">
                               {contact.lastMessage}
                             </p>
                           )}
@@ -319,39 +317,39 @@ const TeamChat: React.FC = () => {
               </TabsContent>
 
               <TabsContent value="groups" className="m-0 overflow-auto">
-                <div className="space-y-1 p-2">
+                <div className="space-y-0.5 p-2">
                   {chatContacts
                     .filter(contact => contact.id.startsWith('team-'))
                     .map(contact => (
                       <button
                         key={contact.id}
-                        className={`w-full flex items-start gap-3 p-2 rounded-md text-left transition-colors ${
+                        className={`w-full flex items-start gap-2 p-2 rounded-md text-left transition-colors ${
                           activeChat === contact.id ? 'bg-accent' : 'hover:bg-accent/50'
                         }`}
                         onClick={() => setActiveChat(contact.id)}
                       >
-                        <div className="relative">
-                          <Avatar>
+                        <div className="relative flex-shrink-0">
+                          <Avatar className="h-8 w-8">
                             <div className="bg-primary/10 w-full h-full flex items-center justify-center">
-                              <span className="text-primary font-medium">
+                              <span className="text-primary font-medium text-xs">
                                 {contact.name.split(' ').map(n => n[0]).join('')}
                               </span>
                             </div>
                           </Avatar>
-                          <span className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-background ${getStatusColor(contact.status)}`} />
+                          <span className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-background ${getStatusColor(contact.status)}`} />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex justify-between items-start">
-                            <span className="font-medium truncate">{contact.name}</span>
+                            <span className="font-medium truncate text-sm">{contact.name}</span>
                             {contact.unread && (
-                              <span className="ml-2 inline-flex items-center justify-center w-5 h-5 text-xs bg-primary text-primary-foreground rounded-full">
+                              <span className="ml-1 inline-flex items-center justify-center w-4 h-4 text-xs bg-primary text-primary-foreground rounded-full">
                                 {contact.unread}
                               </span>
                             )}
                           </div>
                           <p className="text-xs text-muted-foreground">{contact.position}</p>
                           {contact.lastMessage && (
-                            <p className="text-sm truncate text-muted-foreground">
+                            <p className="text-xs truncate text-muted-foreground">
                               {contact.lastMessage}
                             </p>
                           )}
@@ -363,50 +361,49 @@ const TeamChat: React.FC = () => {
             </Tabs>
           </div>
 
-          {/* Chat Area */}
-          <div className="flex-1 border rounded-lg overflow-hidden flex flex-col bg-card">
+          <div className="flex-1 border rounded-md overflow-hidden flex flex-col bg-card">
             {activeChat ? (
               <>
-                <div className="p-3 border-b flex justify-between items-center">
-                  <div className="flex items-center gap-3">
-                    <Avatar>
+                <div className="p-2 border-b flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <Avatar className="h-8 w-8">
                       <div className="bg-primary/10 w-full h-full flex items-center justify-center">
-                        <span className="text-primary font-medium">
+                        <span className="text-primary font-medium text-xs">
                           {chatContacts.find(c => c.id === activeChat)?.name.split(' ').map(n => n[0]).join('')}
                         </span>
                       </div>
                     </Avatar>
                     <div>
-                      <h3 className="font-medium">{chatContacts.find(c => c.id === activeChat)?.name}</h3>
+                      <h3 className="font-medium text-sm">{chatContacts.find(c => c.id === activeChat)?.name}</h3>
                       <p className="text-xs text-muted-foreground">
                         {chatContacts.find(c => c.id === activeChat)?.position} • {chatContacts.find(c => c.id === activeChat)?.status}
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Button variant="outline" size="icon">
-                      <Phone className="h-4 w-4" />
+                  <div className="flex items-center gap-1">
+                    <Button variant="outline" size="icon" className="h-7 w-7">
+                      <Phone className="h-3 w-3" />
                     </Button>
-                    <Button variant="outline" size="icon">
-                      <Video className="h-4 w-4" />
+                    <Button variant="outline" size="icon" className="h-7 w-7">
+                      <Video className="h-3 w-3" />
                     </Button>
                   </div>
                 </div>
 
-                <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                <div className="flex-1 overflow-y-auto p-3 space-y-3">
                   {chats[activeChat]?.map((msg, index) => (
                     <div
                       key={msg.id}
                       className={`flex ${msg.isCurrentUser ? 'justify-end' : 'justify-start'}`}
                     >
                       <div className={`max-w-[80%] ${msg.isCurrentUser ? 'order-2' : 'order-1'}`}>
-                        {!msg.isCurrentUser && index === 0 && <div className="ml-10 mb-1 text-sm font-medium">{msg.sender}</div>}
+                        {!msg.isCurrentUser && index === 0 && <div className="ml-9 mb-1 text-xs font-medium">{msg.sender}</div>}
                         {!msg.isCurrentUser && index > 0 && chats[activeChat][index - 1].sender !== msg.sender && (
-                          <div className="ml-10 mb-1 text-sm font-medium">{msg.sender}</div>
+                          <div className="ml-9 mb-1 text-xs font-medium">{msg.sender}</div>
                         )}
-                        <div className="flex items-start gap-2">
+                        <div className="flex items-start gap-1">
                           {!msg.isCurrentUser && (
-                            <Avatar className="mt-1 w-8 h-8">
+                            <Avatar className="mt-1 w-7 h-7">
                               <div className="bg-primary/10 w-full h-full flex items-center justify-center">
                                 <span className="text-primary font-medium text-xs">
                                   {msg.sender.split(' ').map(n => n[0]).join('')}
@@ -421,7 +418,7 @@ const TeamChat: React.FC = () => {
                                 : 'bg-muted'
                             }`}
                           >
-                            <p className="break-words">{msg.content}</p>
+                            <p className="break-words text-sm">{msg.content}</p>
                             <p className={`text-xs mt-1 ${msg.isCurrentUser ? 'text-primary-foreground/80' : 'text-muted-foreground'}`}>
                               {formatTime(msg.timestamp)}
                             </p>
@@ -433,27 +430,27 @@ const TeamChat: React.FC = () => {
                   <div ref={messagesEndRef} />
                 </div>
 
-                <form onSubmit={handleSendMessage} className="border-t p-3 flex gap-2">
-                  <Button type="button" variant="outline" size="icon">
-                    <PaperclipIcon className="h-5 w-5" />
+                <form onSubmit={handleSendMessage} className="border-t p-2 flex gap-2">
+                  <Button type="button" variant="outline" size="icon" className="h-8 w-8 flex-shrink-0">
+                    <PaperclipIcon className="h-4 w-4" />
                   </Button>
                   <Input
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="Type a message..."
-                    className="flex-1"
+                    className="flex-1 h-8"
                   />
-                  <Button type="submit" disabled={!message.trim()}>
-                    <Send className="h-5 w-5" />
+                  <Button type="submit" disabled={!message.trim()} size="sm" className="h-8">
+                    <Send className="h-4 w-4" />
                   </Button>
                 </form>
               </>
             ) : (
               <div className="h-full flex items-center justify-center">
                 <div className="text-center">
-                  <MessageSquare className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-xl font-medium mb-2">No conversation selected</h3>
-                  <p className="text-muted-foreground">
+                  <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
+                  <h3 className="text-lg font-medium mb-1">No conversation selected</h3>
+                  <p className="text-sm text-muted-foreground">
                     Choose a contact from the sidebar to start chatting
                   </p>
                 </div>

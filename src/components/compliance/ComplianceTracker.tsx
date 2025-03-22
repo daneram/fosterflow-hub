@@ -133,19 +133,19 @@ const ComplianceTracker: React.FC = () => {
 
   return (
     <Layout>
-      <div className="space-y-4">
-        <h1 className="text-3xl font-bold tracking-tight">Compliance Tracker</h1>
+      <div className="space-y-3">
+        <h1 className="text-2xl font-semibold">Compliance Tracker</h1>
 
-        <div className="flex flex-col md:flex-row gap-4">
+        <div className="flex flex-col md:flex-row gap-3">
           <Card className="md:w-1/3">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Overall Compliance</CardTitle>
+            <CardHeader className="py-3">
+              <CardTitle className="text-base">Overall Compliance</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="pt-0">
               <div className="text-center">
-                <div className="text-4xl font-bold">{compliancePercentage}%</div>
-                <Progress value={compliancePercentage} className="h-2 mt-2" />
-                <div className="flex justify-center mt-4 space-x-4 text-sm">
+                <div className="text-3xl font-bold">{compliancePercentage}%</div>
+                <Progress value={compliancePercentage} className="h-2 mt-1" />
+                <div className="flex justify-center mt-3 space-x-4 text-xs">
                   <div className="flex flex-col items-center">
                     <div className="text-green-500 font-bold">{completedItems.length}</div>
                     <div className="text-muted-foreground">Completed</div>
@@ -164,38 +164,38 @@ const ComplianceTracker: React.FC = () => {
           </Card>
 
           <Card className="md:w-2/3">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Key Metrics</CardTitle>
+            <CardHeader className="py-3">
+              <CardTitle className="text-base">Key Metrics</CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-muted/50 p-4 rounded-lg flex flex-col items-center">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-red-100 mb-2">
-                    <AlertCircle className="h-5 w-5 text-red-500" />
+            <CardContent className="pt-0">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div className="bg-muted/50 p-3 rounded-lg flex flex-col items-center">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-red-100 mb-1">
+                    <AlertCircle className="h-4 w-4 text-red-500" />
                   </div>
-                  <div className="text-2xl font-bold">{overdueItems.length}</div>
-                  <div className="text-sm text-muted-foreground">Overdue Items</div>
+                  <div className="text-xl font-bold">{overdueItems.length}</div>
+                  <div className="text-xs text-muted-foreground">Overdue Items</div>
                 </div>
                 
-                <div className="bg-muted/50 p-4 rounded-lg flex flex-col items-center">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-amber-100 mb-2">
-                    <Calendar className="h-5 w-5 text-amber-500" />
+                <div className="bg-muted/50 p-3 rounded-lg flex flex-col items-center">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 mb-1">
+                    <Calendar className="h-4 w-4 text-amber-500" />
                   </div>
-                  <div className="text-2xl font-bold">
+                  <div className="text-xl font-bold">
                     {pendingItems.length > 0 
                       ? `${getDaysUntilDue(pendingItems.sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime())[0].dueDate)} days`
                       : 'N/A'
                     }
                   </div>
-                  <div className="text-sm text-muted-foreground">Until Next Due</div>
+                  <div className="text-xs text-muted-foreground">Until Next Due</div>
                 </div>
                 
-                <div className="bg-muted/50 p-4 rounded-lg flex flex-col items-center">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green-100 mb-2">
-                    <CheckCircle2 className="h-5 w-5 text-green-500" />
+                <div className="bg-muted/50 p-3 rounded-lg flex flex-col items-center">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-green-100 mb-1">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
                   </div>
-                  <div className="text-2xl font-bold">{completedItems.length}</div>
-                  <div className="text-sm text-muted-foreground">Completed This Month</div>
+                  <div className="text-xl font-bold">{completedItems.length}</div>
+                  <div className="text-xs text-muted-foreground">Completed This Month</div>
                 </div>
               </div>
             </CardContent>
@@ -203,26 +203,28 @@ const ComplianceTracker: React.FC = () => {
         </div>
 
         <Card>
-          <CardHeader>
+          <CardHeader className="py-3">
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle>Compliance Requirements</CardTitle>
-                <CardDescription>Track and manage agency compliance requirements</CardDescription>
+                <CardTitle className="text-base">Compliance Requirements</CardTitle>
+                <CardDescription className="text-xs">Track and manage agency compliance requirements</CardDescription>
               </div>
-              <Button>
-                <FileText className="h-4 w-4 mr-2" />
+              <Button size="sm">
+                <FileText className="h-3 w-3 mr-1" />
                 Export Report
               </Button>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-0">
             <Tabs defaultValue="all">
-              <TabsList className="mb-4">
-                <TabsTrigger value="all">All Requirements</TabsTrigger>
-                <TabsTrigger value="overdue">Overdue</TabsTrigger>
-                <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
-                <TabsTrigger value="completed">Completed</TabsTrigger>
-              </TabsList>
+              <div className="px-4 pt-2">
+                <TabsList className="mb-3">
+                  <TabsTrigger value="all">All Requirements</TabsTrigger>
+                  <TabsTrigger value="overdue">Overdue</TabsTrigger>
+                  <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
+                  <TabsTrigger value="completed">Completed</TabsTrigger>
+                </TabsList>
+              </div>
               
               <div className="rounded-md border">
                 <Table>
@@ -288,18 +290,18 @@ const ComplianceTracker: React.FC = () => {
               </div>
             </Tabs>
           </CardContent>
-          <CardFooter className="flex justify-between border-t pt-4">
-            <div className="flex items-center space-x-2">
-              <ShieldCheck className="h-5 w-5 text-primary" />
-              <span className="text-sm">Next compliance audit: {formatDate(new Date('2023-12-15'))}</span>
+          <CardFooter className="flex justify-between border-t py-2 text-xs">
+            <div className="flex items-center space-x-1">
+              <ShieldCheck className="h-4 w-4 text-primary" />
+              <span>Next compliance audit: {formatDate(new Date('2023-12-15'))}</span>
             </div>
-            <div className="flex items-center space-x-4">
-              <Button variant="outline">
-                <BarChart className="h-4 w-4 mr-2" />
+            <div className="flex items-center space-x-2">
+              <Button variant="outline" size="sm">
+                <BarChart className="h-3 w-3 mr-1" />
                 Analytics
               </Button>
-              <Button>
-                <Clock className="h-4 w-4 mr-2" />
+              <Button size="sm">
+                <Clock className="h-3 w-3 mr-1" />
                 Schedule Review
               </Button>
             </div>

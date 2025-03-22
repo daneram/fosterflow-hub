@@ -32,18 +32,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className="min-h-screen flex bg-background">
-      {/* Mobile AI chat toggle */}
-      <Button
-        variant="ghost"
-        size="icon"
-        className="lg:hidden fixed right-4 top-4 z-50"
-        onClick={toggleAiChat}
-      >
-        <Bot className="h-5 w-5" />
-      </Button>
-
-      {/* Sidebar - always visible but in different states (collapsed/expanded) */}
-      <div className="fixed inset-y-0 left-0 z-40 transition-all duration-300 ease-in-out">
+      {/* Sidebar - visible on the left without absolute positioning */}
+      <div className={cn(
+        "h-screen transition-all duration-300 ease-in-out flex-shrink-0",
+        sidebarOpen ? "w-64" : "w-16"
+      )}>
         <Sidebar 
           isOpen={sidebarOpen} 
           onToggle={toggleSidebar} 
@@ -51,26 +44,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         />
       </div>
 
-      {/* Overlay for mobile sidebar - removed the blur effect */}
-      {sidebarOpen && isMobile && (
-        <div
-          className="fixed inset-0 z-30 bg-background/80 lg:hidden"
-          onClick={toggleSidebar}
-        />
-      )}
-
-      {/* Main content and AI assistant using ResizablePanelGroup */}
-      <div className={cn(
-        "flex-1 transition-all duration-300 ease-in-out",
-        sidebarOpen ? "lg:ml-64" : "lg:ml-16"
-      )}>
+      {/* Main content and AI assistant */}
+      <div className="flex-1 flex overflow-hidden h-screen">
         <ResizablePanelGroup
           direction="horizontal"
-          className="min-h-screen"
+          className="min-h-screen w-full"
         >
           {/* Main content panel */}
           <ResizablePanel defaultSize={70} minSize={40}>
-            <div className="min-h-screen p-4 sm:p-6 md:p-8">{children}</div>
+            <div className="min-h-screen p-4 sm:p-6 md:p-8 overflow-auto">{children}</div>
           </ResizablePanel>
           
           {/* Resizable handle - only visible on desktop when AI chat is open */}
@@ -83,6 +65,16 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             </ResizablePanel>
           )}
         </ResizablePanelGroup>
+        
+        {/* Mobile AI Chat toggle button */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="lg:hidden fixed right-4 top-4 z-50"
+          onClick={toggleAiChat}
+        >
+          <Bot className="h-5 w-5" />
+        </Button>
         
         {/* Mobile AI Chat overlay - only rendered on mobile when open */}
         {isMobile && aiChatOpen && (

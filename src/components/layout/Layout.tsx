@@ -1,11 +1,12 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import { cn } from '@/lib/utils';
 import { MenuIcon, X, Bot } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import AIChat from '@/components/ai/AIChat';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -13,7 +14,13 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [aiChatOpen, setAiChatOpen] = useState(true);
+  const [aiChatOpen, setAiChatOpen] = useState(false);
+  const isMobile = useIsMobile();
+
+  // Set initial AI chat state based on screen size
+  useEffect(() => {
+    setAiChatOpen(!isMobile);
+  }, [isMobile]);
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -77,25 +84,20 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <div className="min-h-screen p-4 sm:p-6 md:p-8">{children}</div>
           </ResizablePanel>
           
-          {/* Resizable handle */}
-          <ResizableHandle withHandle />
+          {/* Resizable handle - only visible on desktop when AI chat is open */}
+          {!isMobile && aiChatOpen && <ResizableHandle withHandle />}
           
-          {/* AI Assistant panel - hidden on mobile, shown with toggle */}
-          <ResizablePanel 
-            defaultSize={30} 
-            minSize={20} 
-            className={cn(
-              "hidden lg:block",
-              aiChatOpen ? "block" : "hidden"
-            )}
-          >
-            <AIChat />
-          </ResizablePanel>
+          {/* AI Assistant panel - only rendered on desktop when open */}
+          {!isMobile && aiChatOpen && (
+            <ResizablePanel defaultSize={30} minSize={20}>
+              <AIChat />
+            </ResizablePanel>
+          )}
         </ResizablePanelGroup>
         
-        {/* Mobile AI Chat overlay */}
-        {aiChatOpen && (
-          <div className="lg:hidden fixed inset-0 z-40 bg-background">
+        {/* Mobile AI Chat overlay - only rendered on mobile when open */}
+        {isMobile && aiChatOpen && (
+          <div className="fixed inset-0 z-40 bg-background">
             <div className="absolute top-4 right-4">
               <Button variant="ghost" size="icon" onClick={toggleAiChat}>
                 <X className="h-5 w-5" />

@@ -20,7 +20,8 @@ import {
   GitBranch,
   Settings,
   Contact,
-  ChevronRight
+  ChevronRight,
+  Bot
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -33,10 +34,19 @@ interface NavItemProps {
   onClick?: () => void;
 }
 
+interface BotItemProps {
+  icon: React.ElementType;
+  label: string;
+  isOpen: boolean;
+  onClick: () => void;
+}
+
 interface SidebarProps {
   isOpen: boolean;
   onToggle: () => void;
   onNavItemClick?: () => void;
+  toggleAiChat?: () => void;
+  isMobile?: boolean;
 }
 
 const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClick }) => {
@@ -62,9 +72,24 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
   );
 };
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onNavItemClick }) => {
-  const isMobile = useIsMobile();
+const BotItem: React.FC<BotItemProps> = ({ icon: Icon, label, isOpen, onClick }) => {
+  return (
+    <button
+      className={cn(
+        "flex items-center gap-2 px-2 py-1.5 rounded-md text-sm font-medium transition-all duration-200",
+        "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground",
+        !isOpen && "justify-center px-0"
+      )}
+      onClick={onClick}
+      title={!isOpen ? label : undefined}
+    >
+      <Icon className="h-4 w-4" />
+      {isOpen && <span>{label}</span>}
+    </button>
+  );
+};
 
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onNavItemClick, toggleAiChat, isMobile }) => {
   return (
     <div className={cn(
       "h-full flex flex-col bg-sidebar py-3 transition-all duration-300 ease-in-out",
@@ -107,6 +132,16 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onNavItemClick }) =
         "mt-4 px-2 flex-1 overflow-y-auto",
         !isOpen && "px-0"
       )}>
+        {/* AI Assistant button for mobile only */}
+        {isMobile && (
+          <>
+            {isOpen && <div className="text-xs font-medium text-muted-foreground mb-1.5">AI ASSISTANT</div>}
+            <nav className="space-y-0.5 mb-4">
+              <BotItem icon={Bot} label="AI Assistant" isOpen={isOpen} onClick={toggleAiChat || (() => {})} />
+            </nav>
+          </>
+        )}
+        
         {isOpen && <div className="text-xs font-medium text-muted-foreground mb-1.5">DASHBOARD</div>}
         <nav className="space-y-0.5">
           <NavItem to="/" icon={LayoutDashboard} label="Dashboard" isOpen={isOpen} onClick={onNavItemClick} />

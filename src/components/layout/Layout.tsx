@@ -51,11 +51,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className="min-h-screen flex bg-background overflow-hidden">
-      {/* User button for toggling sidebar */}
+      {/* User button for toggling sidebar - only visible on desktop */}
       <Button
         variant="ghost"
         size="icon"
-        className="fixed left-3 top-3 z-50"
+        className="hidden md:flex fixed left-3 top-3 z-50"
         onClick={toggleSidebar}
       >
         <User className="h-5 w-5" />
@@ -69,7 +69,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <Sidebar 
           isOpen={sidebarOpen} 
           onToggle={toggleSidebar} 
-          onNavItemClick={closeSidebarOnMobile} 
+          onNavItemClick={closeSidebarOnMobile}
+          toggleAiChat={toggleAiChat} 
+          isMobile={isMobile}
         />
       </div>
 
@@ -95,11 +97,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           )}
         </ResizablePanelGroup>
         
-        {/* Mobile AI Chat toggle button */}
+        {/* Mobile AI Chat toggle button - now hidden on mobile */}
         <Button
           variant="ghost"
           size="icon"
-          className="lg:hidden fixed right-3 top-3 z-50"
+          className="hidden lg:hidden fixed right-3 top-3 z-50"
           onClick={toggleAiChat}
         >
           <Bot className="h-5 w-5" />

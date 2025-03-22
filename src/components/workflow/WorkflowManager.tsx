@@ -12,7 +12,7 @@ const WorkflowManager: React.FC = () => {
 
   return (
     <Layout>
-      <div className="space-y-6">
+      <div className="space-y-4">
         <WorkflowHeader />
         <WorkflowTabs workflows={workflows} />
         <WorkflowTemplates />

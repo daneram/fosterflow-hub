@@ -78,7 +78,9 @@ const BotItem: React.FC<BotItemProps> = ({ icon: Icon, label, isOpen, onClick })
       className={cn(
         "flex items-center gap-2 px-2 py-1.5 rounded-md text-sm font-medium transition-all duration-200",
         "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground",
-        !isOpen && "justify-center px-0"
+        !isOpen && "justify-center px-0",
+        // Add centered styles when sidebar is closed to match NavItem
+        !isOpen && "w-full flex justify-center"
       )}
       onClick={onClick}
       title={!isOpen ? label : undefined}

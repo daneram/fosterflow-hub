@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -18,7 +17,8 @@ import {
   Clock,
   Users,
   CheckCircle2,
-  ArrowUpDown
+  ArrowUpDown,
+  PlusCircle
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import {
@@ -568,7 +568,7 @@ const FinanceManager: React.FC = () => {
                     </div>
                     
                     <Button size="sm" variant="default" className="w-full">
-                      <Plus className="h-4 w-4 mr-1" />
+                      <PlusCircle className="h-4 w-4 mr-1" />
                       Create Custom Report
                     </Button>
                   </div>

@@ -19,7 +19,8 @@ import {
   FileText, 
   Plus, 
   Clock,
-  ChevronDown 
+  ChevronDown,
+  Download
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -102,7 +103,7 @@ const MOCK_EMAILS: Email[] = [
     },
     recipients: ['social.worker@agency.gov'],
     subject: 'Medical Update - Smith Children',
-    preview: 'I'm writing to provide an update on the medical examination conducted for the Smith children yesterday. The results indicate...',
+    preview: "I'm writing to provide an update on the medical examination conducted for the Smith children yesterday. The results indicate...",
     body: `<p>Hello,</p>
            <p>I'm writing to provide an update on the medical examination conducted for the Smith children yesterday.</p>
            <p>The results indicate that both children are in good health overall, but James will need follow-up dental work. I've attached the full medical report for your records.</p>

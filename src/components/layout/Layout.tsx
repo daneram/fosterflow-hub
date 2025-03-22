@@ -59,13 +59,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
-        <Sidebar />
+        <Sidebar onNavItemClick={() => isMobile && setSidebarOpen(false)} />
       </div>
 
-      {/* Overlay for mobile sidebar */}
+      {/* Overlay for mobile sidebar - removed the blur effect */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-30 bg-background/80 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-30 bg-background/80 lg:hidden"
           onClick={toggleSidebar}
         />
       )}

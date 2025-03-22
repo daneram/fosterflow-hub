@@ -21,11 +21,20 @@ interface NavItemProps {
   to: string;
   icon: React.ElementType;
   label: string;
+  onClick?: () => void;
 }
 
-const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label }) => {
+interface SidebarProps {
+  onNavItemClick?: () => void;
+}
+
+const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, onClick }) => {
   const location = useLocation();
   const isActive = location.pathname === to;
+
+  const handleClick = () => {
+    if (onClick) onClick();
+  };
 
   return (
     <Link
@@ -36,6 +45,7 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label }) => {
           ? "bg-primary text-primary-foreground" 
           : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground"
       )}
+      onClick={handleClick}
     >
       <Icon className="h-5 w-5" />
       <span>{label}</span>
@@ -43,7 +53,7 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label }) => {
   );
 };
 
-const Sidebar: React.FC = () => {
+const Sidebar: React.FC<SidebarProps> = ({ onNavItemClick }) => {
   return (
     <div className="h-full flex flex-col bg-sidebar py-4">
       <div className="px-3 py-2">
@@ -54,30 +64,30 @@ const Sidebar: React.FC = () => {
       <div className="mt-6 px-3">
         <div className="text-xs font-medium text-muted-foreground mb-2">MAIN</div>
         <nav className="space-y-1">
-          <NavItem to="/" icon={Home} label="Dashboard" />
-          <NavItem to="/chat" icon={MessageSquare} label="Team Chat" />
-          <NavItem to="/email" icon={Mail} label="Email" />
-          <NavItem to="/calendar" icon={Calendar} label="Calendar" />
-          <NavItem to="/tasks" icon={CheckSquare} label="Tasks" />
-          <NavItem to="/workflow" icon={GitBranch} label="Workflow Manager" />
-          <NavItem to="/forms" icon={FileEdit} label="Form Creator" />
+          <NavItem to="/" icon={Home} label="Dashboard" onClick={onNavItemClick} />
+          <NavItem to="/chat" icon={MessageSquare} label="Team Chat" onClick={onNavItemClick} />
+          <NavItem to="/email" icon={Mail} label="Email" onClick={onNavItemClick} />
+          <NavItem to="/calendar" icon={Calendar} label="Calendar" onClick={onNavItemClick} />
+          <NavItem to="/tasks" icon={CheckSquare} label="Tasks" onClick={onNavItemClick} />
+          <NavItem to="/workflow" icon={GitBranch} label="Workflow Manager" onClick={onNavItemClick} />
+          <NavItem to="/forms" icon={FileEdit} label="Form Creator" onClick={onNavItemClick} />
         </nav>
       </div>
 
       <div className="mt-6 px-3">
         <div className="text-xs font-medium text-muted-foreground mb-2">RECORDS & RESOURCES</div>
         <nav className="space-y-1">
-          <NavItem to="/records" icon={FolderOpen} label="Records Explorer" />
-          <NavItem to="/training" icon={GraduationCap} label="Training" />
-          <NavItem to="/policies" icon={FileText} label="Policy Library" />
-          <NavItem to="/compliance" icon={ShieldCheck} label="Compliance" />
+          <NavItem to="/records" icon={FolderOpen} label="Records Explorer" onClick={onNavItemClick} />
+          <NavItem to="/training" icon={GraduationCap} label="Training" onClick={onNavItemClick} />
+          <NavItem to="/policies" icon={FileText} label="Policy Library" onClick={onNavItemClick} />
+          <NavItem to="/compliance" icon={ShieldCheck} label="Compliance" onClick={onNavItemClick} />
         </nav>
       </div>
 
       <div className="mt-6 px-3">
         <div className="text-xs font-medium text-muted-foreground mb-2">ASSISTANTS</div>
         <nav className="space-y-1">
-          <NavItem to="/assistant" icon={Bot} label="AI Assistant" />
+          <NavItem to="/assistant" icon={Bot} label="AI Assistant" onClick={onNavItemClick} />
         </nav>
       </div>
 

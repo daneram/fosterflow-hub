@@ -1,8 +1,6 @@
 
 import { FileText, AlertTriangle } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 import { Policy } from './types';
-import React from 'react';
 
 export const formatDate = (date: Date) => {
   return new Intl.DateTimeFormat('en-US', {
@@ -12,23 +10,25 @@ export const formatDate = (date: Date) => {
   }).format(date);
 };
 
-export const getStatusBadge = (status: string) => {
+// Return status badge configuration object instead of JSX
+export const getStatusConfig = (status: string) => {
   switch(status) {
     case 'active':
-      return <Badge className="bg-green-500">Active</Badge>;
+      return { text: 'Active', className: "bg-green-500", variant: 'default' };
     case 'draft':
-      return <Badge className="bg-amber-500">Draft</Badge>;
+      return { text: 'Draft', className: "bg-amber-500", variant: 'default' };
     case 'archived':
-      return <Badge variant="outline">Archived</Badge>;
+      return { text: 'Archived', className: "", variant: 'outline' };
     case 'under-review':
-      return <Badge className="bg-blue-500">Under Review</Badge>;
+      return { text: 'Under Review', className: "bg-blue-500", variant: 'default' };
     default:
-      return <Badge>{status}</Badge>;
+      return { text: status, className: "", variant: 'default' };
   }
 };
 
-export const getFileIcon = (fileType: string) => {
-  return <FileText className="h-4 w-4 text-primary" />;
+// Return file icon configuration instead of JSX
+export const getFileIconConfig = () => {
+  return { className: "h-4 w-4 text-primary" };
 };
 
 export const filterPolicies = (policies: Policy[], searchQuery: string, activeTab: string) => {

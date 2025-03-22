@@ -5,13 +5,16 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Eye, Download, Bookmark, Calendar, FileText, AlertTriangle } from 'lucide-react';
 import { Policy } from './types';
-import { formatDate, getStatusBadge, getFileIcon } from './policyUtils';
+import { formatDate, getStatusConfig, getFileIconConfig } from './policyUtils';
 
 interface PolicyCardProps {
   policy: Policy;
 }
 
 const PolicyCard: React.FC<PolicyCardProps> = ({ policy }) => {
+  const statusConfig = getStatusConfig(policy.status);
+  const fileIconConfig = getFileIconConfig();
+
   return (
     <Card key={policy.id} className="overflow-hidden">
       <div className="flex flex-col md:flex-row">
@@ -19,7 +22,7 @@ const PolicyCard: React.FC<PolicyCardProps> = ({ policy }) => {
           <div className="flex items-start justify-between">
             <div>
               <div className="flex items-center space-x-2">
-                {getFileIcon(policy.fileType)}
+                <FileText className={fileIconConfig.className} />
                 <span className="font-medium">{policy.title}</span>
                 {policy.isNew && (
                   <Badge className="bg-primary ml-2">New</Badge>
@@ -30,7 +33,9 @@ const PolicyCard: React.FC<PolicyCardProps> = ({ policy }) => {
               </div>
             </div>
             <div className="flex items-center space-x-2">
-              {getStatusBadge(policy.status)}
+              <Badge className={statusConfig.className} variant={statusConfig.variant as any}>
+                {statusConfig.text}
+              </Badge>
               {policy.status === 'under-review' && (
                 <AlertTriangle className="h-4 w-4 text-amber-500" />
               )}

@@ -11,14 +11,14 @@ interface WorkflowTabsProps {
 const WorkflowTabs: React.FC<WorkflowTabsProps> = ({ workflows }) => {
   return (
     <Tabs defaultValue="active" className="w-full">
-      <TabsList className="grid w-full max-w-md grid-cols-3">
+      <TabsList className="grid w-full max-w-sm grid-cols-3 p-0.5 h-8 text-xs">
         <TabsTrigger value="active">Active</TabsTrigger>
         <TabsTrigger value="pending">Pending</TabsTrigger>
         <TabsTrigger value="completed">Completed</TabsTrigger>
       </TabsList>
 
-      <TabsContent value="active" className="mt-4">
-        <div className="grid gap-4 md:grid-cols-2">
+      <TabsContent value="active" className="p-3 pt-4">
+        <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
           {workflows
             .filter(workflow => workflow.status === 'active')
             .map(workflow => (
@@ -27,8 +27,8 @@ const WorkflowTabs: React.FC<WorkflowTabsProps> = ({ workflows }) => {
         </div>
       </TabsContent>
 
-      <TabsContent value="pending" className="mt-4">
-        <div className="grid gap-4 md:grid-cols-2">
+      <TabsContent value="pending" className="p-3 pt-4">
+        <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
           {workflows
             .filter(workflow => workflow.status === 'pending')
             .map(workflow => (
@@ -37,8 +37,8 @@ const WorkflowTabs: React.FC<WorkflowTabsProps> = ({ workflows }) => {
         </div>
       </TabsContent>
 
-      <TabsContent value="completed" className="mt-4">
-        <div className="grid gap-4 md:grid-cols-2">
+      <TabsContent value="completed" className="p-3 pt-4">
+        <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
           {workflows
             .filter(workflow => workflow.status === 'completed')
             .map(workflow => (

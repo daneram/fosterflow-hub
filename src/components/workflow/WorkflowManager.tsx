@@ -12,10 +12,14 @@ const WorkflowManager: React.FC = () => {
 
   return (
     <Layout>
-      <div className="space-y-3">
+      <div className="space-y-4 max-w-7xl">
         <WorkflowHeader />
-        <WorkflowTabs workflows={workflows} />
-        <WorkflowTemplates />
+        <div className="bg-card rounded-lg border shadow-sm">
+          <WorkflowTabs workflows={workflows} />
+        </div>
+        <div className="bg-card rounded-lg border shadow-sm p-4">
+          <WorkflowTemplates />
+        </div>
       </div>
     </Layout>
   );

@@ -63,15 +63,15 @@ const AIChat: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-full border-l">
-      <CardHeader className="pb-3 border-b">
+    <div className="flex flex-col h-full border-l bg-card">
+      <CardHeader className="pb-2 border-b px-3 py-2">
         <div className="flex items-center">
-          <Bot className="mr-2 h-5 w-5 text-primary" />
-          <CardTitle>AI Assistant</CardTitle>
+          <Bot className="mr-2 h-4 w-4 text-primary" />
+          <CardTitle className="text-sm">AI Assistant</CardTitle>
         </div>
       </CardHeader>
 
-      <div className="flex-1 overflow-auto p-4 space-y-4">
+      <div className="flex-1 overflow-auto p-3 space-y-3">
         {messages.map((message, index) => (
           <div
             key={index}
@@ -82,22 +82,22 @@ const AIChat: React.FC = () => {
           >
             <div
               className={cn(
-                "flex items-start gap-2 max-w-[80%] rounded-lg p-3",
+                "flex items-start gap-1.5 max-w-[85%] rounded-lg p-2",
                 message.role === 'assistant' 
                   ? "bg-secondary text-secondary-foreground" 
                   : "bg-primary text-primary-foreground"
               )}
             >
-              <div className="mt-0.5">
+              <div className="mt-0.5 flex-shrink-0">
                 {message.role === 'assistant' ? (
-                  <Bot className="h-4 w-4" />
+                  <Bot className="h-3.5 w-3.5" />
                 ) : (
-                  <User className="h-4 w-4" />
+                  <User className="h-3.5 w-3.5" />
                 )}
               </div>
               <div>
-                <p className="text-sm">{message.content}</p>
-                <p className="text-xs opacity-70 mt-1">
+                <p className="text-xs">{message.content}</p>
+                <p className="text-[10px] opacity-70 mt-1">
                   {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </p>
               </div>
@@ -106,13 +106,13 @@ const AIChat: React.FC = () => {
         ))}
         {isLoading && (
           <div className="flex justify-start">
-            <div className="bg-secondary rounded-lg p-3">
-              <div className="flex items-center gap-2">
-                <Bot className="h-4 w-4" />
+            <div className="bg-secondary rounded-lg p-2">
+              <div className="flex items-center gap-1.5">
+                <Bot className="h-3.5 w-3.5" />
                 <div className="flex space-x-1">
-                  <div className="h-2 w-2 animate-bounce rounded-full bg-primary"></div>
-                  <div className="h-2 w-2 animate-bounce rounded-full bg-primary" style={{ animationDelay: '0.2s' }}></div>
-                  <div className="h-2 w-2 animate-bounce rounded-full bg-primary" style={{ animationDelay: '0.4s' }}></div>
+                  <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary"></div>
+                  <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary" style={{ animationDelay: '0.2s' }}></div>
+                  <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary" style={{ animationDelay: '0.4s' }}></div>
                 </div>
               </div>
             </div>
@@ -123,16 +123,16 @@ const AIChat: React.FC = () => {
 
       <form
         onSubmit={handleSubmit}
-        className="border-t p-4 flex items-center gap-2"
+        className="border-t p-2 flex items-center gap-2"
       >
         <Input
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ask a question..."
-          className="flex-1"
+          className="flex-1 h-8 text-xs"
         />
-        <Button type="submit" size="icon" disabled={!input.trim() || isLoading}>
-          <Send className="h-4 w-4" />
+        <Button type="submit" size="sm" className="h-8 w-8 p-0" disabled={!input.trim() || isLoading}>
+          <Send className="h-3.5 w-3.5" />
         </Button>
       </form>
     </div>

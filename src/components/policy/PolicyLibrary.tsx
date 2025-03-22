@@ -9,6 +9,7 @@ import { MOCK_POLICIES } from './policyData';
 import { filterPolicies } from './policyUtils';
 import PolicyHeader from './PolicyHeader';
 import PolicyList from './PolicyList';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const PolicyLibrary: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -38,7 +39,9 @@ const PolicyLibrary: React.FC = () => {
             </div>
             
             <CardContent className="pt-4 pb-3">
-              <PolicyList policies={filteredPolicies} />
+              <ScrollArea className="max-h-[60vh]">
+                <PolicyList policies={filteredPolicies} />
+              </ScrollArea>
             </CardContent>
           </Tabs>
 

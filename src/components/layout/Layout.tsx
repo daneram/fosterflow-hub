@@ -31,7 +31,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
 
   return (
-    <div className="min-h-screen flex bg-background">
+    <div className="min-h-screen flex bg-background overflow-hidden">
       {/* Sidebar with optimized width */}
       <div className={cn(
         "h-screen transition-all duration-300 ease-in-out flex-shrink-0",
@@ -50,9 +50,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           direction="horizontal"
           className="min-h-screen w-full"
         >
-          {/* Main content panel with reduced padding */}
-          <ResizablePanel defaultSize={75} minSize={50}>
-            <div className="min-h-screen p-3 sm:p-4 md:p-5 overflow-auto">{children}</div>
+          {/* Main content panel with proper overflow handling */}
+          <ResizablePanel defaultSize={75} minSize={50} id="main-content">
+            <div className="h-screen overflow-y-auto p-3 sm:p-4 md:p-5">{children}</div>
           </ResizablePanel>
           
           {/* Resizable handle - only visible on desktop when AI chat is open */}
@@ -60,7 +60,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           
           {/* AI Assistant panel - only rendered on desktop when open, with reduced default size */}
           {!isMobile && aiChatOpen && (
-            <ResizablePanel defaultSize={25} minSize={20}>
+            <ResizablePanel defaultSize={25} minSize={20} id="ai-chat">
               <AIChat />
             </ResizablePanel>
           )}

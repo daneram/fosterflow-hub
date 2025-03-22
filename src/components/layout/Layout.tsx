@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import { cn } from '@/lib/utils';
-import { Bot, X } from 'lucide-react';
+import { Bot, User, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import AIChat from '@/components/ai/AIChat';
@@ -13,7 +13,12 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(() => {
+    // Get saved state from localStorage, default to true if not found
+    const saved = localStorage.getItem('sidebar-state');
+    return saved ? saved === 'open' : true;
+  });
+  
   const [aiChatOpen, setAiChatOpen] = useState(false);
   const isMobile = useIsMobile();
 
@@ -21,6 +26,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   useEffect(() => {
     setAiChatOpen(!isMobile);
   }, [isMobile]);
+
+  // Save sidebar state to localStorage when it changes
+  useEffect(() => {
+    localStorage.setItem('sidebar-state', sidebarOpen ? 'open' : 'closed');
+  }, [sidebarOpen]);
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -32,6 +42,16 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className="min-h-screen flex bg-background overflow-hidden">
+      {/* User button for toggling sidebar */}
+      <Button
+        variant="ghost"
+        size="icon"
+        className="fixed left-3 top-3 z-50"
+        onClick={toggleSidebar}
+      >
+        <User className="h-5 w-5" />
+      </Button>
+
       {/* Sidebar with optimized width */}
       <div className={cn(
         "h-screen transition-all duration-300 ease-in-out flex-shrink-0",

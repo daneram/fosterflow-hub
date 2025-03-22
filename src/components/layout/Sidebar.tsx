@@ -23,6 +23,7 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface NavItemProps {
   to: string;
@@ -41,6 +42,13 @@ interface SidebarProps {
 const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClick }) => {
   const location = useLocation();
   const isActive = location.pathname === to;
+  const isMobile = useIsMobile();
+
+  const handleClick = () => {
+    if (onClick && isMobile) {
+      onClick();
+    }
+  };
 
   return (
     <Link
@@ -52,7 +60,7 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
           : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground",
         !isOpen && "justify-center px-0"
       )}
-      onClick={onClick}
+      onClick={handleClick}
       title={!isOpen ? label : undefined}
     >
       <Icon className="h-4 w-4" />
@@ -62,8 +70,10 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
 };
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onNavItemClick }) => {
+  const isMobile = useIsMobile();
+
   const handleNavItemClick = () => {
-    if (onNavItemClick) {
+    if (onNavItemClick && isMobile) {
       onNavItemClick();
     }
   };

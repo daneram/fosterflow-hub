@@ -40,6 +40,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     setAiChatOpen(!aiChatOpen);
   };
 
+  const closeSidebarOnMobile = () => {
+    if (isMobile) {
+      setSidebarOpen(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex bg-background overflow-hidden">
       {/* User button for toggling sidebar */}
@@ -60,7 +66,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <Sidebar 
           isOpen={sidebarOpen} 
           onToggle={toggleSidebar} 
-          onNavItemClick={() => isMobile && setSidebarOpen(false)} 
+          onNavItemClick={closeSidebarOnMobile} 
         />
       </div>
 

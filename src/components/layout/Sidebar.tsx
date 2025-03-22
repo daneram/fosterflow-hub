@@ -42,13 +42,6 @@ interface SidebarProps {
 const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClick }) => {
   const location = useLocation();
   const isActive = location.pathname === to;
-  const isMobile = useIsMobile();
-
-  const handleClick = () => {
-    if (onClick && isMobile) {
-      onClick();
-    }
-  };
 
   return (
     <Link
@@ -60,7 +53,7 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
           : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground",
         !isOpen && "justify-center px-0"
       )}
-      onClick={handleClick}
+      onClick={onClick}
       title={!isOpen ? label : undefined}
     >
       <Icon className="h-4 w-4" />
@@ -71,12 +64,6 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onNavItemClick }) => {
   const isMobile = useIsMobile();
-
-  const handleNavItemClick = () => {
-    if (onNavItemClick && isMobile) {
-      onNavItemClick();
-    }
-  };
 
   return (
     <div className={cn(
@@ -122,39 +109,39 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onNavItemClick }) =
       )}>
         {isOpen && <div className="text-xs font-medium text-muted-foreground mb-1.5">DASHBOARD</div>}
         <nav className="space-y-0.5">
-          <NavItem to="/" icon={LayoutDashboard} label="Dashboard" isOpen={isOpen} onClick={handleNavItemClick} />
+          <NavItem to="/" icon={LayoutDashboard} label="Dashboard" isOpen={isOpen} onClick={onNavItemClick} />
         </nav>
         
         {isOpen && <div className="text-xs font-medium text-muted-foreground mt-4 mb-1.5">CORE</div>}
         <nav className="space-y-0.5">
-          <NavItem to="/records" icon={FolderOpen} label="Records" isOpen={isOpen} onClick={handleNavItemClick} />
-          <NavItem to="/activity" icon={Activity} label="Activity" isOpen={isOpen} onClick={handleNavItemClick} />
-          <NavItem to="/compliance" icon={ShieldCheck} label="Compliance" isOpen={isOpen} onClick={handleNavItemClick} />
-          <NavItem to="/insights" icon={BarChart2} label="Insights" isOpen={isOpen} onClick={handleNavItemClick} />
+          <NavItem to="/records" icon={FolderOpen} label="Records" isOpen={isOpen} onClick={onNavItemClick} />
+          <NavItem to="/activity" icon={Activity} label="Activity" isOpen={isOpen} onClick={onNavItemClick} />
+          <NavItem to="/compliance" icon={ShieldCheck} label="Compliance" isOpen={isOpen} onClick={onNavItemClick} />
+          <NavItem to="/insights" icon={BarChart2} label="Insights" isOpen={isOpen} onClick={onNavItemClick} />
         </nav>
         
         {isOpen && <div className="text-xs font-medium text-muted-foreground mt-4 mb-1.5">FOSTERING</div>}
         <nav className="space-y-0.5">
-          <NavItem to="/form-f" icon={FileCheck} label="Form F" isOpen={isOpen} onClick={handleNavItemClick} />
-          <NavItem to="/children" icon={Baby} label="Children" isOpen={isOpen} onClick={handleNavItemClick} />
-          <NavItem to="/carers" icon={Users} label="Carers" isOpen={isOpen} onClick={handleNavItemClick} />
+          <NavItem to="/form-f" icon={FileCheck} label="Form F" isOpen={isOpen} onClick={onNavItemClick} />
+          <NavItem to="/children" icon={Baby} label="Children" isOpen={isOpen} onClick={onNavItemClick} />
+          <NavItem to="/carers" icon={Users} label="Carers" isOpen={isOpen} onClick={onNavItemClick} />
         </nav>
         
         {isOpen && <div className="text-xs font-medium text-muted-foreground mt-4 mb-1.5">ORGANIZATION</div>}
         <nav className="space-y-0.5">
-          <NavItem to="/team" icon={UsersRound} label="Team" isOpen={isOpen} onClick={handleNavItemClick} />
-          <NavItem to="/policies" icon={FileText} label="Policies" isOpen={isOpen} onClick={handleNavItemClick} />
-          <NavItem to="/training" icon={GraduationCap} label="Training" isOpen={isOpen} onClick={handleNavItemClick} />
-          <NavItem to="/recruitment" icon={UserPlus} label="Recruitment" isOpen={isOpen} onClick={handleNavItemClick} />
-          <NavItem to="/finance" icon={DollarSign} label="Finance" isOpen={isOpen} onClick={handleNavItemClick} />
+          <NavItem to="/team" icon={UsersRound} label="Team" isOpen={isOpen} onClick={onNavItemClick} />
+          <NavItem to="/policies" icon={FileText} label="Policies" isOpen={isOpen} onClick={onNavItemClick} />
+          <NavItem to="/training" icon={GraduationCap} label="Training" isOpen={isOpen} onClick={onNavItemClick} />
+          <NavItem to="/recruitment" icon={UserPlus} label="Recruitment" isOpen={isOpen} onClick={onNavItemClick} />
+          <NavItem to="/finance" icon={DollarSign} label="Finance" isOpen={isOpen} onClick={onNavItemClick} />
         </nav>
         
         {isOpen && <div className="text-xs font-medium text-muted-foreground mt-4 mb-1.5">TOOLS</div>}
         <nav className="space-y-0.5">
-          <NavItem to="/forms" icon={FileSpreadsheet} label="Forms" isOpen={isOpen} onClick={handleNavItemClick} />
-          <NavItem to="/workflow" icon={GitBranch} label="Workflows" isOpen={isOpen} onClick={handleNavItemClick} />
-          <NavItem to="/contacts" icon={Contact} label="Contacts" isOpen={isOpen} onClick={handleNavItemClick} />
-          <NavItem to="/settings" icon={Settings} label="Settings" isOpen={isOpen} onClick={handleNavItemClick} />
+          <NavItem to="/forms" icon={FileSpreadsheet} label="Forms" isOpen={isOpen} onClick={onNavItemClick} />
+          <NavItem to="/workflow" icon={GitBranch} label="Workflows" isOpen={isOpen} onClick={onNavItemClick} />
+          <NavItem to="/contacts" icon={Contact} label="Contacts" isOpen={isOpen} onClick={onNavItemClick} />
+          <NavItem to="/settings" icon={Settings} label="Settings" isOpen={isOpen} onClick={onNavItemClick} />
         </nav>
       </div>
 

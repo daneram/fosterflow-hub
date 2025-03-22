@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import { cn } from '@/lib/utils';
-import { Bot, User, X } from 'lucide-react';
+import { Bot, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import AIChat from '@/components/ai/AIChat';
@@ -51,15 +51,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className="min-h-screen flex bg-background overflow-hidden">
-      {/* User button for toggling sidebar - only visible on desktop */}
-      <Button
-        variant="ghost"
-        size="icon"
-        className="hidden md:flex fixed left-3 top-3 z-50"
-        onClick={toggleSidebar}
-      >
-        <User className="h-5 w-5" />
-      </Button>
+      {/* Removed User button for toggling sidebar on desktop */}
 
       {/* Sidebar with optimized width */}
       <div className={cn(

@@ -32,11 +32,10 @@ export const RecordContent: React.FC<RecordContentProps> = ({
   toggleSort
 }) => {
   const isMobile = useIsMobile();
-  const viewMode = isMobile ? 'list' : 'table';
 
   return (
     <div className="w-full">
-      {viewMode === 'list' ? (
+      {isMobile ? (
         <RecordListView
           records={filteredRecords}
           selectedRecords={selectedRecords}

@@ -23,32 +23,18 @@ export const TypeFilter: React.FC<TypeFilterProps> = ({
           All
         </Button>
         <Button 
-          variant={selectedType === 'case' ? 'default' : 'outline'} 
+          variant={selectedType === 'children' ? 'default' : 'outline'} 
           size="sm"
-          onClick={() => setSelectedType('case')}
+          onClick={() => setSelectedType('children')}
         >
-          Cases
+          Children
         </Button>
         <Button 
-          variant={selectedType === 'assessment' ? 'default' : 'outline'} 
+          variant={selectedType === 'carers' ? 'default' : 'outline'} 
           size="sm"
-          onClick={() => setSelectedType('assessment')}
+          onClick={() => setSelectedType('carers')}
         >
-          Assessments
-        </Button>
-        <Button 
-          variant={selectedType === 'report' ? 'default' : 'outline'} 
-          size="sm"
-          onClick={() => setSelectedType('report')}
-        >
-          Reports
-        </Button>
-        <Button 
-          variant={selectedType === 'document' ? 'default' : 'outline'} 
-          size="sm"
-          onClick={() => setSelectedType('document')}
-        >
-          Documents
+          Carers
         </Button>
       </div>
     </div>

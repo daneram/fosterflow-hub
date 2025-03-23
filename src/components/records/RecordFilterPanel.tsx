@@ -30,23 +30,21 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
     <Card className="shadow-sm border border-border/60">
       <FilterHeader clearFilters={clearFilters} />
       <CardContent className="p-3">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
-          {/* Type filter - Takes more space */}
-          <div className="lg:col-span-10">
+        <div className="grid grid-cols-1 gap-3">
+          {/* Type filter */}
+          <div>
             <TypeFilter 
               selectedType={selectedType}
               setSelectedType={setSelectedType}
             />
           </div>
           
-          {/* Advanced toggle - Takes less space */}
-          <div className="lg:col-span-2 flex items-end">
-            <div className="w-full">
-              <AdvancedFiltersToggle 
-                isAdvancedSearchOpen={isAdvancedSearchOpen}
-                setIsAdvancedSearchOpen={setIsAdvancedSearchOpen}
-              />
-            </div>
+          {/* Advanced toggle - Moved underneath */}
+          <div className="w-full">
+            <AdvancedFiltersToggle 
+              isAdvancedSearchOpen={isAdvancedSearchOpen}
+              setIsAdvancedSearchOpen={setIsAdvancedSearchOpen}
+            />
           </div>
         </div>
         

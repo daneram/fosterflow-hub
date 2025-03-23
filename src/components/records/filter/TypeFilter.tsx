@@ -34,13 +34,6 @@ export const TypeFilter: React.FC<TypeFilterProps> = ({
       >
         Carers
       </Button>
-      <Button 
-        variant={selectedType === 'staff' ? 'default' : 'outline'} 
-        size="sm"
-        onClick={() => setSelectedType('staff')}
-      >
-        Staff
-      </Button>
     </div>
   );
 };

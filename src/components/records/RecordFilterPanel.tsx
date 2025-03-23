@@ -5,6 +5,7 @@ import { FilterHeader } from './filter/FilterHeader';
 import { TypeFilter } from './filter/TypeFilter';
 import { AdvancedFiltersToggle } from './filter/AdvancedFiltersToggle';
 import { AdvancedFilters } from './filter/AdvancedFilters';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface RecordFilterPanelProps {
   selectedType: string | null;
@@ -26,27 +27,49 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
   setIsAdvancedSearchOpen,
   clearFilters
 }) => {
+  const isMobile = useIsMobile();
+
   return (
     <Card className="shadow-sm border border-border/60">
       <FilterHeader clearFilters={clearFilters} />
       <CardContent className="p-3">
-        <div className="flex flex-wrap justify-between items-center gap-3">
-          {/* Type filter */}
-          <div>
-            <TypeFilter 
-              selectedType={selectedType}
-              setSelectedType={setSelectedType}
-            />
+        {isMobile ? (
+          <div className="space-y-3">
+            {/* Center type filters on mobile */}
+            <div className="flex justify-center">
+              <TypeFilter 
+                selectedType={selectedType}
+                setSelectedType={setSelectedType}
+              />
+            </div>
+            
+            {/* Advanced toggle - Full width on mobile */}
+            <div className="w-full">
+              <AdvancedFiltersToggle 
+                isAdvancedSearchOpen={isAdvancedSearchOpen}
+                setIsAdvancedSearchOpen={setIsAdvancedSearchOpen}
+              />
+            </div>
           </div>
-          
-          {/* Advanced toggle - Now next to Staff on the right */}
-          <div>
-            <AdvancedFiltersToggle 
-              isAdvancedSearchOpen={isAdvancedSearchOpen}
-              setIsAdvancedSearchOpen={setIsAdvancedSearchOpen}
-            />
+        ) : (
+          <div className="flex flex-wrap justify-between items-center gap-3">
+            {/* Type filter */}
+            <div>
+              <TypeFilter 
+                selectedType={selectedType}
+                setSelectedType={setSelectedType}
+              />
+            </div>
+            
+            {/* Advanced toggle - Right side on desktop */}
+            <div>
+              <AdvancedFiltersToggle 
+                isAdvancedSearchOpen={isAdvancedSearchOpen}
+                setIsAdvancedSearchOpen={setIsAdvancedSearchOpen}
+              />
+            </div>
           </div>
-        </div>
+        )}
         
         {/* Advanced Filters Panel */}
         <div className={`mt-3 ${isAdvancedSearchOpen ? 'animate-fade-in' : ''}`}>

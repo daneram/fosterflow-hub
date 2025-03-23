@@ -22,7 +22,7 @@ export const MOCK_RECORDS: Record[] = [
   },
   {
     id: 'ASS-2023-042',
-    title: 'Smith Initial Assessment',
+    title: 'Initial Foster Carer Assessment',
     type: 'assessment',
     client: 'Smith, John',
     createdAt: new Date('2023-03-22'),
@@ -38,7 +38,7 @@ export const MOCK_RECORDS: Record[] = [
   },
   {
     id: 'REP-2023-087',
-    title: 'Monthly Progress Report - Williams',
+    title: 'Monthly Placement Review',
     type: 'report',
     client: 'Williams, Sarah',
     createdAt: new Date('2023-04-30'),
@@ -53,7 +53,7 @@ export const MOCK_RECORDS: Record[] = [
   },
   {
     id: 'DOC-180223-156',
-    title: 'Medical Records - Thompson Children',
+    title: 'CLA Review Documentation',
     type: 'document',
     client: 'Thompson Family',
     createdAt: new Date('2023-02-18'),
@@ -84,7 +84,7 @@ export const MOCK_RECORDS: Record[] = [
   },
   {
     id: 'DOC-100323-198',
-    title: 'School Records - Jones Children',
+    title: 'Risk Assessment Update',
     type: 'document',
     client: 'Jones Family',
     createdAt: new Date('2023-03-10'),
@@ -94,6 +94,64 @@ export const MOCK_RECORDS: Record[] = [
     priority: 'low',
     completeness: 100,
     owner: 'Michael Brown',
+    compliance: 'complete'
+  },
+  {
+    id: 'ASS-2023-103',
+    title: 'Foster Carer Annual Review',
+    type: 'assessment',
+    client: 'Parker, David & Susan',
+    createdAt: new Date('2023-06-15'),
+    updatedAt: new Date('2023-06-20'),
+    status: 'active',
+    tags: ['annual', 'review'],
+    priority: 'medium',
+    completeness: 90,
+    owner: 'Jennifer Adams',
+    lastAccessed: new Date('2023-06-22'),
+    compliance: 'complete'
+  },
+  {
+    id: 'DOC-250523-211',
+    title: 'Foster Carer Profile',
+    type: 'document',
+    client: 'Martinez, Carlos & Maria',
+    createdAt: new Date('2023-05-25'),
+    updatedAt: new Date('2023-05-25'),
+    status: 'active',
+    tags: ['profile', 'matching'],
+    priority: 'medium',
+    completeness: 100,
+    owner: 'Robert Johnson',
+    compliance: 'complete'
+  },
+  {
+    id: 'REP-2023-129',
+    title: 'Placement Disruption Report',
+    type: 'report',
+    client: 'Wilson, Thomas',
+    createdAt: new Date('2023-07-03'),
+    updatedAt: new Date('2023-07-05'),
+    status: 'active',
+    tags: ['disruption', 'urgent'],
+    priority: 'high',
+    completeness: 85,
+    owner: 'Emily Davis',
+    lastAccessed: new Date('2023-07-10'),
+    compliance: 'incomplete'
+  },
+  {
+    id: 'DOC-120423-231',
+    title: 'Delegated Authority Form',
+    type: 'document',
+    client: 'Anderson Family',
+    createdAt: new Date('2023-04-12'),
+    updatedAt: new Date('2023-04-12'),
+    status: 'active',
+    tags: ['authority', 'legal'],
+    priority: 'medium',
+    completeness: 100,
+    owner: 'Sarah Wilson',
     compliance: 'complete'
   }
 ];

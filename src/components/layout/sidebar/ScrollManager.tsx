@@ -1,5 +1,5 @@
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
@@ -13,17 +13,18 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
   const scrollPositionRef = useRef<number>(0);
   const viewportRef = useRef<HTMLElement | null>(null);
   const location = useLocation();
-  const initialLoadRef = useRef(true);
+  const [isInitialized, setIsInitialized] = useState(false);
   
   // Find the viewport element and store a reference to it
   useEffect(() => {
-    if (scrollAreaRef.current) {
-      const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
-      if (viewport instanceof HTMLElement) {
-        viewportRef.current = viewport;
-      }
+    if (!scrollAreaRef.current) return;
+    
+    const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+    if (viewport instanceof HTMLElement) {
+      viewportRef.current = viewport;
+      setIsInitialized(true);
     }
-  }, [scrollAreaRef.current]);
+  }, []);
   
   // Save scroll position when scrolling
   useEffect(() => {
@@ -42,24 +43,34 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
   
   // When route changes, restore scroll position in the sidebar
   useEffect(() => {
-    // Skip scroll restoration on initial load
-    if (initialLoadRef.current) {
-      initialLoadRef.current = false;
-      return;
-    }
-
-    const viewport = viewportRef.current;
-    if (viewport && scrollPositionRef.current > 0) {
-      // Use multiple RAF calls to ensure we restore after the browser has completed all layout calculations
+    if (!isInitialized) return;
+    
+    // Use a more aggressive approach to ensure scroll position is maintained
+    const restoreScrollPosition = () => {
+      const viewport = viewportRef.current;
+      if (!viewport) return;
+      
+      // Apply the stored scroll position multiple times to ensure it sticks
+      const applyScroll = () => {
+        if (viewport) {
+          viewport.scrollTop = scrollPositionRef.current;
+        }
+      };
+      
+      // Apply immediately
+      applyScroll();
+      
+      // And then in successive animation frames to handle any layout shifts
       requestAnimationFrame(() => {
+        applyScroll();
         requestAnimationFrame(() => {
-          if (viewport) {
-            viewport.scrollTop = scrollPositionRef.current;
-          }
+          applyScroll();
         });
       });
-    }
-  }, [location.pathname]);
+    };
+    
+    restoreScrollPosition();
+  }, [location.pathname, isInitialized]);
 
   return (
     <ScrollArea 

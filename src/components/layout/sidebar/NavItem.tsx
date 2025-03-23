@@ -25,7 +25,7 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
     
     // Use navigate instead of letting the link handle it
     // This prevents full remounting of components
-    navigate(to);
+    navigate(to, { replace: false, state: { preserveScroll: true } });
   }, [isActive, onClick, navigate, to]);
 
   return (

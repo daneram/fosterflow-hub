@@ -24,7 +24,7 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
     }
     
     // Use navigate instead of letting the link handle it
-    navigate(to);
+    navigate(to, { replace: false, state: { preserveScroll: true } });
   }, [isActive, onClick, navigate, to]);
 
   return (

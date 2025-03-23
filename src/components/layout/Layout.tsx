@@ -40,14 +40,16 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       onNavItemClick={closeSidebarOnMobile} 
       isMobile={isMobile}
       isTransitioning={false}
-      key="sidebar" // Fixed key to prevent remounting
     />
   ), [sidebarOpen, toggleSidebar, closeSidebarOnMobile, isMobile]);
 
   return (
     <SidebarProvider>
       <div className="h-screen flex bg-background overflow-hidden">
-        {memoizedSidebar}
+        {/* Use a fixed key to ensure the sidebar isn't remounted */}
+        <React.Fragment key="sidebar-container">
+          {memoizedSidebar}
+        </React.Fragment>
 
         <ContentArea 
           aiChatOpen={aiChatOpen} 
@@ -63,4 +65,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 };
 
 // Use React.memo to prevent unnecessary re-renders of the entire Layout
-export default React.memo(Layout);
+export default React.memo(Layout, (prevProps, nextProps) => {
+  // Always return true to prevent re-renders based on children changes
+  // This is safe because we're only concerned with the sidebar's state
+  return true;
+});

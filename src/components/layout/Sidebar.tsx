@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { cn } from '@/lib/utils';
 import SidebarHeader from './sidebar/SidebarHeader';
 import SidebarFooter from './sidebar/SidebarFooter';
@@ -15,7 +15,7 @@ import {
   toolsSection
 } from './sidebar/sidebarSections';
 
-// Create a memoized list of sections to prevent re-creation on each render
+// Create a memoized list of sections - moved outside component to prevent re-creation
 const sidebarSections = [
   { key: 'dashboard', section: dashboardSection },
   { key: 'core', section: coreSection },
@@ -24,6 +24,36 @@ const sidebarSections = [
   { key: 'tools', section: toolsSection }
 ];
 
+// Separate memoized component for sidebar content to further reduce re-renders
+const SidebarContent = React.memo(({ isOpen, onNavItemClick, isMobile }: Pick<SidebarProps, 'isOpen' | 'onNavItemClick' | 'isMobile'>) => {
+  return (
+    <ScrollManager isOpen={isOpen}>
+      <div className="flex flex-col space-y-0">
+        {isMobile && (
+          <AIChatSection isOpen={isOpen} onNavItemClick={onNavItemClick} />
+        )}
+        
+        {sidebarSections.map(({ key, section }) => (
+          <SidebarSection 
+            key={key}
+            title={section.title} 
+            isOpen={isOpen} 
+            items={section.items} 
+            onNavItemClick={onNavItemClick} 
+          />
+        ))}
+      </div>
+    </ScrollManager>
+  );
+}, (prevProps, nextProps) => {
+  return (
+    prevProps.isOpen === nextProps.isOpen &&
+    prevProps.isMobile === nextProps.isMobile
+  );
+});
+
+SidebarContent.displayName = 'SidebarContent';
+
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onNavItemClick, isMobile }) => {
   return (
     <div className={cn(
@@ -31,25 +61,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onNavItemClick, isM
       isOpen ? "w-52" : "w-14" // Fixed width without transitions
     )}>
       <SidebarHeader isOpen={isOpen} onToggle={onToggle} />
-
-      <ScrollManager isOpen={isOpen}>
-        <div className="flex flex-col space-y-0">
-          {isMobile && (
-            <AIChatSection isOpen={isOpen} onNavItemClick={onNavItemClick} />
-          )}
-          
-          {sidebarSections.map(({ key, section }) => (
-            <SidebarSection 
-              key={key}
-              title={section.title} 
-              isOpen={isOpen} 
-              items={section.items} 
-              onNavItemClick={onNavItemClick} 
-            />
-          ))}
-        </div>
-      </ScrollManager>
-
+      <SidebarContent isOpen={isOpen} onNavItemClick={onNavItemClick} isMobile={isMobile} />
       <SidebarFooter isOpen={isOpen} />
     </div>
   );

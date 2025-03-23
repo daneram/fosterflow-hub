@@ -6,15 +6,7 @@ import './index.css'
 // Logo URL constant to ensure consistency
 const LOGO_URL = "/lovable-uploads/6d655b66-ad8d-445b-93e9-36d9917768dc.png";
 
-// Preload critical images and components before rendering the app
-const preloadAssets = () => {
-  return Promise.all([
-    preloadLogo(),
-    preloadCriticalComponents()
-  ]);
-};
-
-// Preload the logo
+// Preload critical images before rendering the app
 const preloadLogo = () => {
   return new Promise<void>((resolve) => {
     const img = new Image();
@@ -39,29 +31,10 @@ const preloadLogo = () => {
   });
 };
 
-// Preload critical React components to improve initial render performance
-const preloadCriticalComponents = () => {
-  return new Promise<void>((resolve) => {
-    // Using dynamic imports to preload critical components
-    Promise.all([
-      import('./components/layout/Sidebar.tsx'),
-      import('./components/layout/sidebar/SidebarSection.tsx'),
-      import('./components/layout/sidebar/NavItem.tsx'),
-      import('./components/layout/sidebar/AIChatSection.tsx'),
-      import('./components/layout/sidebar/BotItem.tsx')
-    ]).then(() => {
-      resolve();
-    }).catch(() => {
-      // Resolve anyway to prevent blocking the app
-      resolve();
-    });
-  });
-};
-
 // Initialize app after preloading critical assets
 const initializeApp = async () => {
-  // Wait for assets to be preloaded
-  await preloadAssets();
+  // Wait for logo to be preloaded
+  await preloadLogo();
   
   const container = document.getElementById("root");
   if (!container) return;

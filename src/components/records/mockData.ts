@@ -1,10 +1,10 @@
 
 import { Record } from './types';
 
-// Enhanced mock records with additional fields
+// Enhanced mock records with additional fields and proper IDs
 export const MOCK_RECORDS: Record[] = [
   {
-    id: 'CAS-2023-001',
+    id: 'CAS-150123-001',
     title: 'Johnson Family Case',
     type: 'case',
     client: 'Johnson Family',
@@ -52,7 +52,7 @@ export const MOCK_RECORDS: Record[] = [
     compliance: 'complete'
   },
   {
-    id: 'DOC-2023-156',
+    id: 'DOC-180223-156',
     title: 'Medical Records - Thompson Children',
     type: 'document',
     client: 'Thompson Family',
@@ -67,7 +67,7 @@ export const MOCK_RECORDS: Record[] = [
     compliance: 'complete'
   },
   {
-    id: 'CAS-2023-002',
+    id: 'CAS-050123-002',
     title: 'Davis Family Reunification',
     type: 'case',
     client: 'Davis Family',
@@ -83,7 +83,7 @@ export const MOCK_RECORDS: Record[] = [
     favorite: true
   },
   {
-    id: 'DOC-2023-198',
+    id: 'DOC-100323-198',
     title: 'School Records - Jones Children',
     type: 'document',
     client: 'Jones Family',

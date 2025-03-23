@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronUp, ChevronDown, FileText } from 'lucide-react';
@@ -35,35 +36,71 @@ export const RecordTableView: React.FC<RecordTableViewProps> = ({
 }) => {
   // Function to format the unique identifier
   const formatUniqueIdentifier = (record: Record) => {
-    // Extract 3 uppercase letters for case ID
-    let caseId = '';
-    if (record.type === 'case') {
-      // Extract first 3 letters from the ID and convert to uppercase
-      const letters = record.id.match(/[a-zA-Z]+/);
-      if (letters) {
-        caseId = letters[0].substring(0, 3).toUpperCase();
-      }
+    let prefix = '';
+    let formattedId = '';
+    
+    // Format based on record type
+    switch(record.type) {
+      case 'case':
+        // Extract 3 uppercase letters for case ID from the record title
+        const titleWords = record.title.split(' ');
+        const letters = titleWords.map(word => word[0] || '').join('').substring(0, 3).toUpperCase();
+        
+        // Format date as DDMMYY
+        const dateString = record.createdAt.toLocaleDateString('en-GB', {
+          day: '2-digit',
+          month: '2-digit',
+          year: '2-digit'
+        }).replace(/\//g, '');
+        
+        // Get the numeric part from the ID or default to sequential number
+        const numericPart = record.id.match(/\d+/) ? record.id.match(/\d+/)[0].padStart(3, '0') : '001';
+        
+        formattedId = `CAS-${dateString}-${numericPart}`;
+        break;
+        
+      case 'assessment':
+        // For assessments, use year-date-sequential format
+        const yearPart = record.createdAt.getFullYear();
+        const monthDay = record.createdAt.toLocaleDateString('en-GB', {
+          day: '2-digit',
+          month: '2-digit'
+        }).replace(/\//g, '');
+        
+        const assessmentNum = record.id.match(/\d+/) ? record.id.match(/\d+/)[0].padStart(3, '0') : '001';
+        formattedId = `${yearPart}-${monthDay}-${assessmentNum}`;
+        break;
+        
+      case 'report':
+        // Format reports with year-date-ID format with REP prefix
+        const reportYear = record.createdAt.getFullYear();
+        const reportDate = record.createdAt.toLocaleDateString('en-GB', {
+          day: '2-digit',
+          month: '2-digit'
+        }).replace(/\//g, '');
+        
+        const reportNum = record.id.match(/\d+/) ? record.id.match(/\d+/)[0].padStart(3, '0') : '001';
+        formattedId = `REP-${reportYear}-${reportDate}-${reportNum}`;
+        break;
+        
+      case 'document':
+        // Format documents with date-ID format
+        const docDate = record.createdAt.toLocaleDateString('en-GB', {
+          day: '2-digit',
+          month: '2-digit',
+          year: '2-digit'
+        }).replace(/\//g, '');
+        
+        const docNum = record.id.match(/\d+/) ? record.id.match(/\d+/)[0].padStart(3, '0') : '001';
+        formattedId = `DOC-${docDate}-${docNum}`;
+        break;
+        
+      default:
+        // For any other type, just use the ID as is
+        formattedId = record.id;
     }
     
-    // Get form ID and ensure it's 3 digits
-    let formId = '';
-    if (record.type === 'assessment' || record.type === 'report') {
-      // Extract digits from the ID or use default
-      const matches = record.id.match(/\d+/);
-      const digits = matches ? matches[0] : '0';
-      // Pad to ensure 3 digits
-      formId = digits.padStart(3, '0');
-    }
-    
-    const dateString = record.createdAt.toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: '2-digit',
-      year: '2-digit'
-    }).replace(/\//g, '');
-    
-    const uniqueId = record.id.split('-').pop() || record.id;
-    
-    return `${caseId}-${formId}-${dateString}-${uniqueId}`;
+    return formattedId;
   };
 
   return (

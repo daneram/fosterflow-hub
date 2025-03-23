@@ -25,9 +25,9 @@ export const AdvancedFiltersToggle: React.FC<AdvancedFiltersToggleProps> = ({
 
   return (
     <Button 
-      variant="outline" 
+      variant={isAdvancedSearchOpen ? "default" : "outline"}
       size="sm" 
-      className="h-8 bg-background hover:bg-accent w-full justify-between py-1"
+      className="h-8 w-full justify-between py-1"
       onClick={handleToggleClick}
     >
       <div className="flex items-center">

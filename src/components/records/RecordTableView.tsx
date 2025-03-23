@@ -75,21 +75,21 @@ export const RecordTableView: React.FC<RecordTableViewProps> = ({
             ) : (
               records.map((record) => (
                 <tr key={record.id} className="border-b hover:bg-muted/50">
-                  <td className="p-4 font-medium">
+                  <td className="py-2 px-4 font-medium">
                     <div className="flex flex-col">
                       <span>{record.title}</span>
                       <div className="text-xs text-muted-foreground">{record.id}</div>
                     </div>
                   </td>
-                  <td className="p-4">
+                  <td className="py-2 px-4">
                     {record.client && (
                       <span className="text-sm text-muted-foreground hover:underline cursor-pointer">
                         {record.client}
                       </span>
                     )}
                   </td>
-                  <td className="p-4">{record.owner || 'Unassigned'}</td>
-                  <td className="p-4">{formatDate(record.updatedAt)}</td>
+                  <td className="py-2 px-4">{record.owner || 'Unassigned'}</td>
+                  <td className="py-2 px-4">{formatDate(record.updatedAt)}</td>
                 </tr>
               ))
             )}

@@ -4,7 +4,7 @@ import Layout from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, FileText, Folder, Users, Calendar, Download, Eye, FileEdit, Filter, Grid, List, Table as TableIcon, Star, Clock, Plus, MoreHorizontal, CheckCircle, AlertCircle, XCircle } from 'lucide-react';
+import { Search, FileText, Folder, Users, Calendar, Download, Eye, FileEdit, Filter, Grid, List, Table as TableIcon, Star, Clock, Plus, MoreHorizontal, CheckCircle, AlertCircle, XCircle, ChevronUp, ChevronDown } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';

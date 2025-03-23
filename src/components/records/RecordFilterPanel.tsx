@@ -1,11 +1,11 @@
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Filter, Star, Plus } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { Star, Filter, Plus } from 'lucide-react';
+import { SavedFilterPresets } from './SavedFilterPresets';
 
 interface RecordFilterPanelProps {
   selectedType: string | null;
@@ -16,6 +16,7 @@ interface RecordFilterPanelProps {
   setShowFavoritesOnly: (show: boolean) => void;
   isAdvancedSearchOpen: boolean;
   setIsAdvancedSearchOpen: (open: boolean) => void;
+  onSelectPreset: (preset: string) => void;
 }
 
 export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
@@ -26,18 +27,23 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
   showFavoritesOnly,
   setShowFavoritesOnly,
   isAdvancedSearchOpen,
-  setIsAdvancedSearchOpen
+  setIsAdvancedSearchOpen,
+  onSelectPreset
 }) => {
   return (
     <Card>
       <CardHeader className="py-3">
         <CardTitle className="text-lg flex items-center justify-between">
           Filters
-          <Button variant="ghost" size="sm" onClick={() => {
-            setSelectedType(null);
-            setSelectedStatus(null);
-            setShowFavoritesOnly(false);
-          }}>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={() => {
+              setSelectedType(null);
+              setSelectedStatus(null);
+              setShowFavoritesOnly(false);
+            }}
+          >
             Clear
           </Button>
         </CardTitle>
@@ -48,7 +54,7 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
           <Button 
             variant="outline" 
             size="sm"
-            onClick={() => setShowFavoritesOnly(prev => !prev)}
+            onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
             className={showFavoritesOnly ? "bg-primary/10" : ""}
           >
             <Star className={`h-4 w-4 mr-1 ${showFavoritesOnly ? "text-yellow-500" : ""}`} />
@@ -84,19 +90,7 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
             </CollapsibleTrigger>
           </div>
           <CollapsibleContent className="pt-2">
-            <div className="space-y-2 text-sm">
-              <Button variant="ghost" size="sm" className="w-full justify-start">
-                <Star className="h-4 w-4 mr-2 text-yellow-500" />
-                Recent Active Cases
-              </Button>
-              <Button variant="ghost" size="sm" className="w-full justify-start">
-                <Star className="h-4 w-4 mr-2 text-yellow-500" />
-                Incomplete Assessments
-              </Button>
-              <Button variant="ghost" size="sm" className="w-full justify-start">
-                My Assigned Documents
-              </Button>
-            </div>
+            <SavedFilterPresets onSelectPreset={onSelectPreset} />
           </CollapsibleContent>
         </Collapsible>
         
@@ -189,7 +183,7 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
             variant="outline" 
             size="sm" 
             className="w-full"
-            onClick={() => setIsAdvancedSearchOpen(prev => !prev)}
+            onClick={() => setIsAdvancedSearchOpen(!isAdvancedSearchOpen)}
           >
             <Filter className="h-4 w-4 mr-1" />
             Advanced Filters

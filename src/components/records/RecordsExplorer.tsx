@@ -12,7 +12,8 @@ import { useRecordsFiltering } from './hooks/useRecordsFiltering';
 import { useRecordSelection } from './hooks/useRecordSelection';
 import { usePresetFilters } from './PresetUtils';
 import { Input } from '@/components/ui/input';
-import { Search } from 'lucide-react';
+import { Search, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const RecordsExplorer: React.FC = () => {
   const { filteringProps, filteredRecords } = useRecordsFiltering(MOCK_RECORDS);
@@ -47,16 +48,26 @@ const RecordsExplorer: React.FC = () => {
       <div className="space-y-6">
         <RecordsHeader />
         
-        {/* Search Input - Now above the filters */}
+        {/* Search Input with Clear button */}
         <div className="relative w-full max-w-md">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="search"
             placeholder="Search records..."
-            className="pl-8 h-9"
+            className="pl-8 h-9 pr-8"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
+          {searchQuery && (
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => setSearchQuery('')}
+              className="absolute right-0 top-0 h-9 px-2 hover:bg-transparent"
+            >
+              <X className="h-3.5 w-3.5" />
+            </Button>
+          )}
         </div>
         
         {/* Filter Panel - Horizontal across the top */}

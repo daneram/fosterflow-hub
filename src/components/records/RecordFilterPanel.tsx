@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { FilterHeader } from './filter/FilterHeader';
 import { TypeFilter } from './filter/TypeFilter';
 import { AdvancedFiltersToggle } from './filter/AdvancedFiltersToggle';
 import { AdvancedFilters } from './filter/AdvancedFilters';
@@ -34,17 +33,9 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
 }) => {
   const isMobile = useIsMobile();
   
-  const handleClearFilters = () => {
-    clearFilters();
-    if (isAdvancedSearchOpen) {
-      setIsAdvancedSearchOpen(false);
-    }
-  };
-  
   return (
     <Card className="shadow-sm border border-border/60">
-      <FilterHeader clearFilters={handleClearFilters} />
-      <CardContent className={isMobile ? "px-3 pb-3 pt-4" : "px-3 py-2"}>
+      <CardContent className={isMobile ? "px-3 pb-3 pt-4" : "px-3 py-3"}>
         {isMobile ? (
           <div className="flex flex-col justify-center space-y-4">
             {/* Center type filters on mobile */}

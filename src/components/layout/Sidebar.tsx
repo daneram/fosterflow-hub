@@ -27,7 +27,7 @@ const sidebarSections = [
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onNavItemClick, isMobile }) => {
   return (
     <div className={cn(
-      "h-screen flex flex-col bg-sidebar py-4",
+      "h-screen flex flex-col bg-sidebar py-4 px-0", // Removed horizontal padding
       isOpen ? "w-52" : "w-14" // Fixed width without transitions
     )}>
       <SidebarHeader isOpen={isOpen} onToggle={onToggle} />

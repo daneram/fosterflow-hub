@@ -35,14 +35,14 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
         isActive 
           ? "bg-primary text-primary-foreground" 
           : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground",
-        "px-2.5",
+        "pl-4 pr-3", // Adjusted padding for icon alignment
         // Add custom rounded corners - square on left, rounded on right
         "rounded-r-md rounded-l-none"
       )}
       onClick={handleClick}
       title={!isOpen ? label : undefined}
     >
-      <div className="flex items-center justify-center w-6 h-6 flex-shrink-0">
+      <div className="flex items-center justify-center w-5 h-5 flex-shrink-0">
         <Icon className="h-5 w-5" />
       </div>
       <div className={cn("ml-3 overflow-hidden transition-opacity duration-100", 

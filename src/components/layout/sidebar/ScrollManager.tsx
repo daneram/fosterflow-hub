@@ -1,6 +1,5 @@
 
 import React, { useRef, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface ScrollManagerProps {
@@ -8,13 +7,14 @@ interface ScrollManagerProps {
   isOpen: boolean;
 }
 
+// A unique key for storing scroll position in localStorage
+const SCROLL_POSITION_KEY = 'sidebar-scroll-position';
+
 const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLElement | null>(null);
-  const scrollPositionRef = useRef<number>(0);
-  const location = useLocation();
   
-  // Find the viewport element and store a reference to it
+  // Initialize viewport ref and restore scroll position from localStorage
   useEffect(() => {
     if (!scrollAreaRef.current) return;
     
@@ -22,25 +22,26 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
     if (viewport instanceof HTMLElement) {
       viewportRef.current = viewport;
       
-      // Restore the previous scroll position if we have one
-      if (scrollPositionRef.current > 0) {
-        viewport.scrollTop = scrollPositionRef.current;
+      // Restore scroll position from localStorage
+      const savedPosition = localStorage.getItem(SCROLL_POSITION_KEY);
+      if (savedPosition) {
+        viewport.scrollTop = parseInt(savedPosition, 10);
       }
     }
-  }, [location.pathname]); // Re-run when pathname changes
+  }, []);
   
-  // Store scroll position whenever it changes
+  // Save scroll position to localStorage whenever it changes
   useEffect(() => {
     const viewport = viewportRef.current;
     if (!viewport) return;
     
     const handleScroll = () => {
-      scrollPositionRef.current = viewport.scrollTop;
+      localStorage.setItem(SCROLL_POSITION_KEY, viewport.scrollTop.toString());
     };
     
     viewport.addEventListener('scroll', handleScroll);
     return () => viewport.removeEventListener('scroll', handleScroll);
-  }, [viewportRef.current]);
+  }, []);
 
   return (
     <ScrollArea 

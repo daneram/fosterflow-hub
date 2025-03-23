@@ -21,8 +21,8 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
       onClick();
     }
     
-    // Navigate programmatically to prevent scroll position reset
-    navigate(to, { replace: false, state: { preserveScroll: true } });
+    // Navigate programmatically
+    navigate(to);
   }, [isActive, onClick, navigate, to]);
 
   return (
@@ -43,7 +43,7 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
         <Icon className="h-5 w-5" />
       </div>
       <div className={cn("ml-3 overflow-hidden transition-opacity duration-100", 
-                         isOpen ? "opacity-100" : "opacity-0 w-0")}>
+                       isOpen ? "opacity-100" : "opacity-0 w-0")}>
         <span className="truncate">{label}</span>
       </div>
     </Link>

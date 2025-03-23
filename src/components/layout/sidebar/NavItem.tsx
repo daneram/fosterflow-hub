@@ -10,20 +10,19 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
   const isActive = location.pathname === to;
 
   const handleClick = useCallback((e: React.MouseEvent) => {
-    // Prevent default navigation and any scroll position changes
+    // Prevent default navigation
     e.preventDefault();
-    e.stopPropagation();
     
     // Don't navigate if we're already on this page
     if (isActive) return;
     
-    // Run the onClick handler (which will close the sidebar on mobile) first
+    // Run the onClick handler first
     if (onClick) {
       onClick();
     }
     
-    // Navigate programmatically to prevent scroll position reset
-    navigate(to, { replace: false, state: { preserveScroll: true } });
+    // Navigate programmatically
+    navigate(to);
   }, [isActive, onClick, navigate, to]);
 
   return (

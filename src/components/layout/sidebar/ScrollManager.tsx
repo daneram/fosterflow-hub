@@ -29,21 +29,37 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
     const content = contentRef.current;
     setViewportHeight(viewport.clientHeight);
     
-    // Adjust bottom padding to ensure the last item is visible but not beyond viewport
     if (isMobile) {
-      // If content is shorter than viewport, don't add any padding
-      if (content.scrollHeight <= viewport.clientHeight) {
-        content.style.paddingBottom = '0px';
-      } else {
-        // Calculate appropriate padding to make the last item sit at the bottom
-        // This ensures the scrollbar stops exactly at the right position
-        const lastItem = content.querySelector('nav:last-child a:last-child');
-        if (lastItem) {
-          const lastItemHeight = (lastItem as HTMLElement).offsetHeight;
-          content.style.paddingBottom = `${Math.max(lastItemHeight, 48)}px`;
+      const lastNavSection = content.querySelector('nav:last-child');
+      const lastItem = lastNavSection?.querySelector('a:last-child');
+      
+      if (lastItem) {
+        // Get the height of the last item
+        const lastItemHeight = (lastItem as HTMLElement).offsetHeight;
+        
+        // Calculate the space needed to push the last item to the bottom of the viewport
+        const contentHeight = content.scrollHeight - parseInt(content.style.paddingBottom || '0', 10);
+        const lastItemPosition = (lastItem as HTMLElement).offsetTop;
+        
+        // Calculate needed padding: viewport height - (lastItemPosition + lastItemHeight)
+        // This will position the last item at the bottom of the viewport
+        const neededPadding = Math.max(
+          0,
+          viewport.clientHeight - ((lastItemPosition - content.offsetTop) + lastItemHeight)
+        );
+        
+        // Apply padding to position the last item at the bottom
+        if (neededPadding > 0) {
+          content.style.paddingBottom = `${neededPadding}px`;
         } else {
-          content.style.paddingBottom = '48px';
+          // If content is taller than viewport, use a default padding
+          content.style.paddingBottom = '16px';
         }
+      }
+    } else {
+      // Reset padding on desktop
+      if (content.style.paddingBottom) {
+        content.style.paddingBottom = '0px';
       }
     }
   }, [isMobile]);
@@ -87,7 +103,19 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
       resizeObserver.observe(contentRef.current);
     }
     
-    return () => resizeObserver.disconnect();
+    if (viewportRef.current) {
+      resizeObserver.observe(viewportRef.current);
+    }
+    
+    // Force recalculation after a small delay to ensure all elements are rendered
+    const timeoutId = setTimeout(() => {
+      calculateScrollMetrics();
+    }, 300);
+    
+    return () => {
+      resizeObserver.disconnect();
+      clearTimeout(timeoutId);
+    };
   }, [children, isOpen, calculateScrollMetrics]);
   
   // Reset scroll to top on navigation changes for mobile 

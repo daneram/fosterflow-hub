@@ -21,16 +21,16 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
         <Avatar className="h-6 w-6 flex-shrink-0">
           <AvatarImage 
             src="/lovable-uploads/6d655b66-ad8d-445b-93e9-36d9917768dc.png" 
-            alt="Fostering Innovations Ltd"
+            alt="Indigo Fostering"
           />
           <AvatarFallback className="bg-primary/10 text-primary text-xs font-medium">
-            FI
+            IF
           </AvatarFallback>
         </Avatar>
       </div>
       {isOpen && (
         <div className="flex-1 min-w-0 ml-3">
-          <h2 className="text-base font-semibold mb-0 break-words hyphens-auto leading-tight">Fostering Innovations Ltd</h2>
+          <h2 className="text-base font-semibold mb-0 break-words hyphens-auto leading-tight">Indigo Fostering</h2>
         </div>
       )}
     </div>

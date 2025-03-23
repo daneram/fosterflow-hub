@@ -37,7 +37,17 @@ export const RecordTableView: React.FC<RecordTableViewProps> = ({
   // Function to format the unique identifier
   const formatUniqueIdentifier = (record: Record) => {
     const caseId = record.type === 'case' ? record.id : '';
-    const formId = record.type === 'assessment' || record.type === 'report' ? record.id : '';
+    
+    // Get form ID and ensure it's 3 digits
+    let formId = '';
+    if (record.type === 'assessment' || record.type === 'report') {
+      // Extract digits from the ID or use default
+      const matches = record.id.match(/\d+/);
+      const digits = matches ? matches[0] : '0';
+      // Pad to ensure 3 digits
+      formId = digits.padStart(3, '0');
+    }
+    
     const dateString = record.createdAt.toLocaleDateString('en-GB', {
       day: '2-digit',
       month: '2-digit',

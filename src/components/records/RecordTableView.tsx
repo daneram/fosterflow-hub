@@ -44,7 +44,7 @@ export const RecordTableView: React.FC<RecordTableViewProps> = ({
   toggleSort
 }) => {
   return (
-    <div className="rounded-md"> {/* Removed border class */}
+    <div className="w-full">
       <div className="relative w-full overflow-auto">
         <table className="w-full caption-bottom text-sm">
           <thead>

@@ -35,7 +35,7 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
         isActive 
           ? "bg-primary text-primary-foreground" 
           : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground",
-        isOpen ? "px-2.5" : "px-2.5 justify-center"
+        "px-2.5"
       )}
       onClick={handleClick}
       title={!isOpen ? label : undefined}
@@ -43,11 +43,10 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
       <div className="flex items-center justify-center w-6 h-6 flex-shrink-0">
         <Icon className="h-5 w-5" />
       </div>
-      {isOpen && (
-        <div className="ml-3 overflow-hidden">
-          <span className="truncate">{label}</span>
-        </div>
-      )}
+      <div className={cn("ml-3 overflow-hidden transition-opacity duration-100", 
+                         isOpen ? "opacity-100" : "opacity-0 w-0")}>
+        <span className="truncate">{label}</span>
+      </div>
     </Link>
   );
 };

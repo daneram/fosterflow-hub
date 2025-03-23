@@ -40,11 +40,14 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
       onClick={handleClick}
       title={!isOpen ? label : undefined}
     >
-      <div className="flex items-center justify-center w-6 h-6">
+      <div className={cn(
+        "flex items-center justify-center w-6 h-6",
+        isOpen ? "mr-3" : ""
+      )}>
         <Icon className="h-5 w-5" />
       </div>
       {isOpen && (
-        <div className="ml-3 overflow-hidden">
+        <div className="overflow-hidden">
           <span className="truncate">{label}</span>
         </div>
       )}

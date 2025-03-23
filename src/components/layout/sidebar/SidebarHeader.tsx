@@ -10,6 +10,16 @@ interface SidebarHeaderProps {
 }
 
 const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
+  // Use memoized image to prevent reloading
+  const avatarImage = React.useMemo(() => (
+    <AvatarImage 
+      src="/lovable-uploads/6d655b66-ad8d-445b-93e9-36d9917768dc.png" 
+      alt="Indigo Fostering"
+      loading="eager"
+      fetchPriority="high"
+    />
+  ), []);
+
   return (
     <div className="px-2 mb-1">
       <div 
@@ -21,10 +31,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
       >
         <div className="flex items-center justify-center w-6 h-6 flex-shrink-0">
           <Avatar className="h-6 w-6">
-            <AvatarImage 
-              src="/lovable-uploads/6d655b66-ad8d-445b-93e9-36d9917768dc.png" 
-              alt="Indigo Fostering"
-            />
+            {avatarImage}
             <AvatarFallback className="bg-primary/10 text-primary text-xs font-medium">
               IF
             </AvatarFallback>

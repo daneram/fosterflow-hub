@@ -9,12 +9,12 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
   const isActive = location.pathname === to;
 
   const handleClick = (e: React.MouseEvent) => {
-    // Always call onClick (closeSidebarOnMobile) if provided, regardless of active state
     if (onClick) {
+      // Call the onClick handler (closeSidebarOnMobile) first
       onClick();
     }
     
-    // If we're already on this page, prevent the navigation to avoid unnecessary renders
+    // If this is the current page, prevent default navigation
     if (isActive) {
       e.preventDefault();
     }

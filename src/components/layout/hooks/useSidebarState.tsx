@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 export const useSidebarState = () => {
   const [sidebarOpen, setSidebarOpen] = useState(() => {
@@ -13,9 +13,9 @@ export const useSidebarState = () => {
     localStorage.setItem('sidebar-state', sidebarOpen ? 'open' : 'closed');
   }, [sidebarOpen]);
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
+  const toggleSidebar = useCallback(() => {
+    setSidebarOpen(prev => !prev);
+  }, []);
 
   return { sidebarOpen, setSidebarOpen, toggleSidebar };
 };

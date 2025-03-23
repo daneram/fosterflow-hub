@@ -36,7 +36,15 @@ export const RecordTableView: React.FC<RecordTableViewProps> = ({
 }) => {
   // Function to format the unique identifier
   const formatUniqueIdentifier = (record: Record) => {
-    const caseId = record.type === 'case' ? record.id : '';
+    // Extract 3 uppercase letters for case ID
+    let caseId = '';
+    if (record.type === 'case') {
+      // Extract first 3 letters from the ID and convert to uppercase
+      const letters = record.id.match(/[a-zA-Z]+/);
+      if (letters) {
+        caseId = letters[0].substring(0, 3).toUpperCase();
+      }
+    }
     
     // Get form ID and ensure it's 3 digits
     let formId = '';

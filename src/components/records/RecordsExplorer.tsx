@@ -11,6 +11,8 @@ import { RecordContent } from './RecordContent';
 import { useRecordsFiltering } from './hooks/useRecordsFiltering';
 import { useRecordSelection } from './hooks/useRecordSelection';
 import { usePresetFilters } from './PresetUtils';
+import { Input } from '@/components/ui/input';
+import { Search } from 'lucide-react';
 
 const RecordsExplorer: React.FC = () => {
   const { filteringProps, filteredRecords } = useRecordsFiltering(MOCK_RECORDS);
@@ -45,6 +47,18 @@ const RecordsExplorer: React.FC = () => {
       <div className="space-y-6">
         <RecordsHeader />
         
+        {/* Search Input - Now above the filters */}
+        <div className="relative w-full max-w-md">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="search"
+            placeholder="Search records..."
+            className="pl-8 h-9"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+        
         {/* Filter Panel - Horizontal across the top */}
         <div className="w-full">
           <RecordFilterPanel
@@ -66,12 +80,9 @@ const RecordsExplorer: React.FC = () => {
           <Card className="shadow-md border-muted">
             <CardHeader className="pb-2">
               <RecordSearchToolbar
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
                 selectedRecords={selectedRecords}
                 recordCount={filteredRecords.length}
               />
-              {/* Removed the CardDescription with "n records found" text */}
             </CardHeader>
             <CardContent className="p-4">
               <RecordContent 

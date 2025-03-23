@@ -35,7 +35,7 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
         isActive 
           ? "bg-primary text-primary-foreground" 
           : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground",
-        !isOpen && "justify-start w-full px-2.5"
+        !isOpen && "justify-center w-full px-2"
       )}
       onClick={handleClick}
       title={!isOpen ? label : undefined}

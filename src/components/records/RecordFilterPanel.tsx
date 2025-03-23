@@ -44,7 +44,7 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
   return (
     <Card className="shadow-sm border border-border/60">
       <FilterHeader clearFilters={handleClearFilters} />
-      <CardContent className="px-3 pb-3 pt-4">
+      <CardContent className={isMobile ? "px-3 pb-3 pt-4" : "px-3 py-2"}>
         {isMobile ? (
           <div className="flex flex-col justify-center space-y-4">
             {/* Center type filters on mobile */}
@@ -58,7 +58,7 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
             </div>
           </div>
         ) : (
-          <div className="flex items-center justify-between gap-3 py-2">
+          <div className="flex items-center justify-between gap-3 py-0.5">
             {/* Type filter */}
             <div>
               <TypeFilter selectedType={selectedType} setSelectedType={setSelectedType} />
@@ -72,7 +72,7 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
         )}
         
         {/* Advanced Filters Panel */}
-        <div className={`mt-3 ${isAdvancedSearchOpen ? 'animate-fade-in' : ''}`}>
+        <div className={`${isAdvancedSearchOpen ? 'mt-2 animate-fade-in' : 'mt-0'}`}>
           <AdvancedFilters isOpen={isAdvancedSearchOpen} selectedStatus={selectedStatus} setSelectedStatus={setSelectedStatus} />
         </div>
       </CardContent>

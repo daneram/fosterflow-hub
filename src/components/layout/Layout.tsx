@@ -19,31 +19,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
   const isAIAssistantPage = location.pathname === '/ai-assistant';
   
-  // Tracking content transitions instead of sidebar transitions
-  const [isContentTransitioning, setIsContentTransitioning] = useState(false);
-
   // Set initial AI chat state based on screen size
   useEffect(() => {
     setAiChatOpen(!isMobile && !isAIAssistantPage);
   }, [isMobile, isAIAssistantPage, setAiChatOpen]);
-
-  // Handle page transition effects for content area
-  useEffect(() => {
-    // Mark content as transitioning
-    setIsContentTransitioning(true);
-    
-    // Close sidebar on mobile during navigation if needed
-    if (isMobile && sidebarOpen) {
-      setSidebarOpen(false);
-    }
-    
-    // Reset transition state after a shorter delay
-    const timer = setTimeout(() => {
-      setIsContentTransitioning(false);
-    }, 100);
-    
-    return () => clearTimeout(timer);
-  }, [location.pathname, isMobile]);
 
   // Close the sidebar on mobile when a navigation item is clicked
   const closeSidebarOnMobile = useCallback(() => {
@@ -60,14 +39,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       onNavItemClick={closeSidebarOnMobile} 
       toggleAiChat={toggleAiChat} 
       isMobile={isMobile}
-      isTransitioning={false} // Never hide sidebar completely on transitions
+      isTransitioning={false}
     />
   ), [sidebarOpen, toggleSidebar, closeSidebarOnMobile, toggleAiChat, isMobile]);
 
   return (
     <SidebarProvider>
       <div className="h-screen flex bg-background overflow-hidden">
-        {/* Always render the sidebar, never completely hide it during transitions */}
+        {/* Always render the sidebar */}
         {memoizedSidebar}
 
         {/* Main content and AI assistant */}
@@ -75,7 +54,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           aiChatOpen={aiChatOpen} 
           toggleAiChat={toggleAiChat} 
           isMobile={isMobile}
-          isTransitioning={isContentTransitioning}
+          isTransitioning={false}
         >
           {children}
         </ContentArea>

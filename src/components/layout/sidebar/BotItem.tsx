@@ -10,18 +10,17 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
   const isActive = location.pathname === to;
 
   const handleClick = useCallback((e: React.MouseEvent) => {
-    // Prevent default navigation
     e.preventDefault();
     
     // Don't navigate if we're already on this page
     if (isActive) return;
     
-    // Run the onClick handler first
+    // Run the onClick handler if provided
     if (onClick) {
       onClick();
     }
     
-    // Navigate programmatically
+    // Navigate programmatically without any special state
     navigate(to);
   }, [isActive, onClick, navigate, to]);
 

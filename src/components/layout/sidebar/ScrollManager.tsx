@@ -1,5 +1,5 @@
 
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useLocation } from 'react-router-dom';
@@ -18,9 +18,10 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
   const contentRef = useRef<HTMLElement | null>(null);
   const isMobile = useIsMobile();
   const location = useLocation();
+  const [hasInitialized, setHasInitialized] = useState(false);
   
   // Position the last menu item at the bottom of the screen on mobile
-  const positionLastItemAtBottom = useCallback(() => {
+  const positionLastItemAtBottom = () => {
     if (!isMobile || !viewportRef.current || !contentRef.current) return;
     
     const viewport = viewportRef.current;
@@ -49,19 +50,9 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
     if (desiredPadding !== currentPadding) {
       content.style.paddingBottom = `${desiredPadding}px`;
     }
-  }, [isMobile]);
-  
-  // Save current scroll position when route changes
-  useEffect(() => {
-    return () => {
-      if (viewportRef.current) {
-        // Save scroll position when unmounting
-        scrollPositions.set(location.pathname, viewportRef.current.scrollTop);
-      }
-    };
-  }, [location.pathname]);
-  
-  // Initialize viewport ref, content ref and restore scroll position
+  };
+
+  // Initialize viewport ref and restore scroll position
   useEffect(() => {
     if (!scrollAreaRef.current) return;
     
@@ -77,7 +68,6 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
       // Restore scroll position for current route
       const savedPosition = scrollPositions.get(location.pathname);
       if (savedPosition !== undefined) {
-        // Use requestAnimationFrame to ensure DOM is fully rendered
         requestAnimationFrame(() => {
           if (viewportRef.current) {
             viewportRef.current.scrollTop = savedPosition;
@@ -85,20 +75,36 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
         });
       }
       
-      // Position the last item on mobile
       positionLastItemAtBottom();
+      setHasInitialized(true);
     }
-  }, [location.pathname, isMobile, positionLastItemAtBottom]);
+  }, [location.pathname, isMobile]);
   
-  // Recalculate when children or sidebar open state changes
+  // Save current scroll position when route changes
   useEffect(() => {
-    // Use a short delay to ensure DOM is fully rendered
-    const timeoutId = setTimeout(() => {
-      positionLastItemAtBottom();
-    }, 200);
+    return () => {
+      if (viewportRef.current) {
+        // Save scroll position when unmounting
+        scrollPositions.set(location.pathname, viewportRef.current.scrollTop);
+      }
+    };
+  }, [location.pathname]);
+  
+  // Update positioning when sidebar open state changes
+  useEffect(() => {
+    if (!hasInitialized) return;
     
-    return () => clearTimeout(timeoutId);
-  }, [children, isOpen, positionLastItemAtBottom]);
+    // Use requestAnimationFrame to ensure DOM has updated
+    requestAnimationFrame(() => {
+      positionLastItemAtBottom();
+      
+      // Restore scroll position
+      const savedPosition = scrollPositions.get(location.pathname);
+      if (savedPosition !== undefined && viewportRef.current) {
+        viewportRef.current.scrollTop = savedPosition;
+      }
+    });
+  }, [isOpen, hasInitialized, location.pathname]);
   
   // Set up resize observer
   useEffect(() => {
@@ -112,7 +118,7 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
     resizeObserver.observe(viewportRef.current);
     
     return () => resizeObserver.disconnect();
-  }, [positionLastItemAtBottom]);
+  }, []);
 
   // Save scroll position on scroll
   useEffect(() => {

@@ -20,10 +20,7 @@ const ContentArea: React.FC<ContentAreaProps> = ({
   isTransitioning = false
 }) => {
   return (
-    <div className={cn(
-      "flex-1 overflow-hidden", 
-      isTransitioning ? "opacity-90 transition-opacity duration-100" : "opacity-100"
-    )}>
+    <div className="flex-1 overflow-hidden">
       <ResizablePanelGroup direction="horizontal" className="min-h-screen">
         {/* Main content panel */}
         <ResizablePanel 
@@ -44,7 +41,6 @@ const ContentArea: React.FC<ContentAreaProps> = ({
               minSize={30}
               className="border-l"
             >
-              {/* Remove the toggleAiChat prop if AIChat doesn't accept it */}
               <AIChat />
             </ResizablePanel>
           </>

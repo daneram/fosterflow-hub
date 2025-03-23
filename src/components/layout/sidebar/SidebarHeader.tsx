@@ -30,7 +30,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
       </div>
       {isOpen && (
         <div className="flex-1 min-w-0 ml-3">
-          <h2 className="text-base font-semibold mb-0 truncate">Fostering Innovations Ltd</h2>
+          <h2 className="text-base font-semibold mb-0 break-words hyphens-auto leading-tight">Fostering Innovations Ltd</h2>
         </div>
       )}
     </div>

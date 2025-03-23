@@ -17,15 +17,17 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
       )}
       onClick={onToggle}
     >
-      <Avatar className="h-5 w-5 flex-shrink-0 ml-0">
-        <AvatarImage 
-          src="/lovable-uploads/6d655b66-ad8d-445b-93e9-36d9917768dc.png" 
-          alt="Indigo Fostering"
-        />
-        <AvatarFallback className="bg-primary/10 text-primary text-xs font-medium">
-          IF
-        </AvatarFallback>
-      </Avatar>
+      <div className={isOpen ? "ml-0.5" : "ml-0"}>
+        <Avatar className="h-5 w-5 flex-shrink-0">
+          <AvatarImage 
+            src="/lovable-uploads/6d655b66-ad8d-445b-93e9-36d9917768dc.png" 
+            alt="Indigo Fostering"
+          />
+          <AvatarFallback className="bg-primary/10 text-primary text-xs font-medium">
+            IF
+          </AvatarFallback>
+        </Avatar>
+      </div>
       {isOpen && (
         <div className="flex-1 min-w-0 ml-3">
           <h2 className="text-base font-semibold mb-0 truncate">Indigo Fostering</h2>

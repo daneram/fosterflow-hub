@@ -15,7 +15,7 @@ export const RecordSearchToolbar: React.FC<RecordSearchToolbarProps> = ({
   recordCount
 }) => {
   return (
-    <div className="flex justify-end items-center py-1">
+    <div className="flex justify-end items-center py-0.5">
       {selectedRecords.length > 0 && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

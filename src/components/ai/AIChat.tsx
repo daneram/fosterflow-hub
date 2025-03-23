@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -55,7 +54,7 @@ const AIChat: React.FC = () => {
   };
   return <div className="flex flex-col h-full border-l bg-card">
       <CardHeader className="pb-2 border-b px-3 py-[12px]">
-        <div className="flex items-center py-[12px]">
+        <div className="flex items-center py-0">
           <Bot className="mr-2 h-5 w-5 text-primary" />
           <CardTitle className="text-sm">FosterNotes AI</CardTitle>
         </div>

@@ -31,17 +31,17 @@ export const RecordTableRow: React.FC<RecordTableRowProps> = ({
               <div className="font-medium">{record.title}</div>
               
               <div className="flex justify-between items-center mt-1.5">
-                <div className="text-xs text-muted-foreground">
+                <span className="text-xs text-muted-foreground">
                   {formatUniqueIdentifier(record)}
-                </div>
+                </span>
                 
-                <div className="text-xs text-muted-foreground">
+                <span className="text-xs text-muted-foreground">
                   {record.owner || 'Unassigned'}
-                </div>
+                </span>
                 
-                <div className="text-xs text-muted-foreground">
+                <span className="text-xs text-muted-foreground">
                   {formatDate(record.updatedAt)}
-                </div>
+                </span>
               </div>
             </div>
           </div>

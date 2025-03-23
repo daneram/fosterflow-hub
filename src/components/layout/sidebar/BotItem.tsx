@@ -21,8 +21,8 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
       onClick();
     }
     
-    // Navigate immediately without delay
-    navigate(to);
+    // Navigate programmatically to prevent scroll position reset
+    navigate(to, { replace: false, state: { preserveScroll: true } });
   }, [isActive, onClick, navigate, to]);
 
   return (

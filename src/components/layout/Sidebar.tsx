@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { cn } from '@/lib/utils';
 import SidebarHeader from './sidebar/SidebarHeader';
@@ -53,7 +54,10 @@ const Sidebar: React.FC<SidebarProps> = ({
         "transition-opacity duration-200",
         
         // Never completely hide the sidebar
-        isMobile && isTransitioning ? "opacity-90" : "opacity-100"
+        isMobile && isTransitioning ? "opacity-90" : "opacity-100",
+        
+        // Add shadow for mobile sidebar when open
+        isMobile && isOpen ? "shadow-lg" : ""
       )}
     >
       <SidebarHeader isOpen={isOpen} onToggle={onToggle} />

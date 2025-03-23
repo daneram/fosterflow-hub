@@ -67,15 +67,18 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <SidebarProvider>
       <div className="h-screen flex bg-background overflow-hidden">
-        {/* Always render the sidebar, never completely hide it during transitions */}
-        {memoizedSidebar}
+        {/* Position sidebar absolutely on mobile to prevent content squishing */}
+        <div className={`${isMobile ? 'absolute z-50 h-full' : ''}`}>
+          {memoizedSidebar}
+        </div>
 
-        {/* Main content and AI assistant */}
+        {/* Main content and AI assistant - no longer gets squished on mobile */}
         <ContentArea 
           aiChatOpen={aiChatOpen} 
           toggleAiChat={toggleAiChat} 
           isMobile={isMobile}
           isTransitioning={isContentTransitioning}
+          sidebarOpen={sidebarOpen}
         >
           {children}
         </ContentArea>

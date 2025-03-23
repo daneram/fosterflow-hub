@@ -16,15 +16,13 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
     // Don't navigate if we're already on this page
     if (isActive) return;
     
-    // Run the onClick handler (which will close the sidebar on mobile)
+    // Run the onClick handler (which will close the sidebar on mobile) first
     if (onClick) {
       onClick();
     }
     
-    // Navigate with a small delay to allow sidebar transitions to start
-    setTimeout(() => {
-      navigate(to);
-    }, 10);
+    // Navigate immediately, removing the delay that was causing flicker
+    navigate(to);
   }, [isActive, onClick, navigate, to]);
 
   return (

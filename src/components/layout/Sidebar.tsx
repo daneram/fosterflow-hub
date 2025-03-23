@@ -31,17 +31,22 @@ const Sidebar: React.FC<SidebarProps> = ({
   isMobile,
   isTransitioning = false
 }) => {
+  // Don't render during transitions on mobile to prevent flickering
+  if (isMobile && isTransitioning) {
+    return <div className="w-0 transition-none" aria-hidden="true" />;
+  }
+
   return (
     <div 
       className={cn(
         "h-screen flex flex-col bg-sidebar py-4 px-0", // Base styles
         isOpen ? "w-52" : "w-14", // Width based on open state
         
-        // Hide sidebar during transitions on mobile to prevent flicker
-        isMobile && isTransitioning ? "opacity-0" : "opacity-100",
+        // Add transition for non-mobile
+        !isMobile ? "transition-all duration-200" : "", 
         
-        // Add transition but only for opacity, not width
-        "transition-opacity duration-75"
+        // Don't transition width on mobile
+        isMobile ? "transition-none" : ""
       )}
     >
       <SidebarHeader isOpen={isOpen} onToggle={onToggle} />

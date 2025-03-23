@@ -19,7 +19,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
   const isAIAssistantPage = location.pathname === '/ai-assistant';
   
-  // Track if we're in a page transition to prevent sidebar flicker
+  // Track if we're in a page transition for handling sidebar visibility
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   // Set initial AI chat state based on screen size
@@ -27,7 +27,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     setAiChatOpen(!isMobile && !isAIAssistantPage);
   }, [isMobile, isAIAssistantPage, setAiChatOpen]);
 
-  // Handle page transition effects
+  // Handle page transition effects - with improved timing
   useEffect(() => {
     // Mark as transitioning
     setIsTransitioning(true);
@@ -37,10 +37,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       setSidebarOpen(false);
     }
     
-    // Reset transition state after a short delay
+    // Reset transition state after a shorter delay
     const timer = setTimeout(() => {
       setIsTransitioning(false);
-    }, 300); // Match this with transition duration
+    }, 150); // Reduced transition time to minimize perceived flicker
     
     return () => clearTimeout(timer);
   }, [location.pathname, isMobile]);
@@ -55,10 +55,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       // Set sidebar state to closed
       setSidebarOpen(false);
       
-      // Reset transition state after animation completes
+      // Reset transition state after animation completes - shorter timing
       setTimeout(() => {
         setIsTransitioning(false);
-      }, 300);
+      }, 150);
     }
   }, [isMobile, setSidebarOpen, sidebarOpen]);
 

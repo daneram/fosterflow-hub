@@ -16,15 +16,13 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
     // Don't navigate if we're already on this page
     if (isActive) return;
     
-    // Run the onClick handler (which will close the sidebar on mobile)
+    // Run the onClick handler first
     if (onClick) {
       onClick();
     }
     
-    // Navigate with a small delay to allow sidebar transitions to start
-    setTimeout(() => {
-      navigate(to);
-    }, 10);
+    // Navigate immediately without delay
+    navigate(to);
   }, [isActive, onClick, navigate, to]);
 
   return (
@@ -36,7 +34,6 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
           ? "bg-primary text-primary-foreground" 
           : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground",
         "pl-4 pr-3", // Adjusted padding for icon alignment
-        // Add custom rounded corners - square on left, rounded on right
         "rounded-r-md rounded-l-none"
       )}
       onClick={handleClick}

@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { RecordListView } from './RecordListView';
 import { RecordTableView } from './RecordTableView';
 import { Record } from './types';

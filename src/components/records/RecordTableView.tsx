@@ -2,8 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Eye, Download, MoreHorizontal, Star, FileEdit, Users, ChevronUp, ChevronDown, FileText } from 'lucide-react';
+import { FileText, ChevronUp, ChevronDown } from 'lucide-react';
 
 interface Record {
   id: string;
@@ -44,8 +43,6 @@ export const RecordTableView: React.FC<RecordTableViewProps> = ({
   handleSelectRecord,
   formatDate,
   getTypeIcon,
-  getStatusBadge,
-  getComplianceIcon,
   sortField,
   sortDirection,
   toggleSort
@@ -72,14 +69,13 @@ export const RecordTableView: React.FC<RecordTableViewProps> = ({
               </th>
               <th className="h-10 px-4 text-left" onClick={() => toggleSort('title')}>
                 <div className="flex items-center space-x-1">
-                  <span>Title</span>
+                  <span>Case Name</span>
                   {sortField === 'title' && (
                     sortDirection === 'asc' ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />
                   )}
                 </div>
               </th>
-              <th className="h-10 px-4 text-left">Client</th>
-              <th className="h-10 px-4 text-left">Status</th>
+              <th className="h-10 px-4 text-left">Case Worker</th>
               <th className="h-10 px-4 text-left" onClick={() => toggleSort('updatedAt')}>
                 <div className="flex items-center space-x-1">
                   <span>Updated</span>
@@ -88,13 +84,12 @@ export const RecordTableView: React.FC<RecordTableViewProps> = ({
                   )}
                 </div>
               </th>
-              <th className="h-10 px-4 text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
             {records.length === 0 ? (
               <tr>
-                <td colSpan={7} className="h-24 text-center">
+                <td colSpan={5} className="h-24 text-center">
                   <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
                     <FileText className="h-8 w-8 mb-2" />
                     <p>No records found</p>
@@ -113,7 +108,6 @@ export const RecordTableView: React.FC<RecordTableViewProps> = ({
                   <td className="p-2">
                     <div className="flex items-center">
                       {getTypeIcon(record.type)}
-                      {record.favorite && <Star className="h-4 w-4 ml-1 text-yellow-500" />}
                     </div>
                   </td>
                   <td className="p-4 font-medium">
@@ -122,51 +116,8 @@ export const RecordTableView: React.FC<RecordTableViewProps> = ({
                       <div className="text-xs text-muted-foreground">{record.id}</div>
                     </div>
                   </td>
-                  <td className="p-4">{record.client}</td>
-                  <td className="p-4">
-                    <div className="flex flex-col space-y-1">
-                      {getStatusBadge(record.status)}
-                      {record.compliance && (
-                        <div className="flex items-center mt-1">
-                          {getComplianceIcon(record.compliance)}
-                          <span className="ml-1 text-xs">{record.compliance}</span>
-                        </div>
-                      )}
-                    </div>
-                  </td>
+                  <td className="p-4">{record.owner || 'Unassigned'}</td>
                   <td className="p-4">{formatDate(record.updatedAt)}</td>
-                  <td className="p-4">
-                    <div className="flex items-center justify-center space-x-1">
-                      <Button variant="ghost" size="sm">
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                      <Button variant="ghost" size="sm">
-                        <Download className="h-4 w-4" />
-                      </Button>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="sm">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem>
-                            <Star className="h-4 w-4 mr-2" />
-                            {record.favorite ? 'Remove Favorite' : 'Add to Favorites'}
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <FileEdit className="h-4 w-4 mr-2" />
-                            Edit Record
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem>
-                            <Users className="h-4 w-4 mr-2" />
-                            Change Owner
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                  </td>
                 </tr>
               ))
             )}

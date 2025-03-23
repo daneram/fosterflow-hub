@@ -36,7 +36,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       <div 
         className={cn(
           "h-screen flex flex-col bg-sidebar py-4 px-0",
-          !isOpen ? "w-14" : "w-64"
+          !isOpen ? "w-14" : "w-52"
         )} 
         aria-hidden="true"
       />
@@ -47,18 +47,13 @@ const Sidebar: React.FC<SidebarProps> = ({
     <div 
       className={cn(
         "h-screen flex flex-col bg-sidebar py-4 px-0", // Base styles
-        
-        // Width based on open state, wider for mobile
-        isMobile ? (isOpen ? "w-64" : "w-0") : (isOpen ? "w-52" : "w-14"),
+        isOpen ? "w-52" : "w-14", // Width based on open state
         
         // Add only opacity transition, keep width fixed during transitions
-        "transition-all duration-200",
+        "transition-opacity duration-200",
         
         // Never completely hide the sidebar
-        isMobile && isTransitioning ? "opacity-90" : "opacity-100",
-        
-        // Better shadow for mobile overlay
-        isMobile && "shadow-xl"
+        isMobile && isTransitioning ? "opacity-90" : "opacity-100"
       )}
     >
       <SidebarHeader isOpen={isOpen} onToggle={onToggle} />

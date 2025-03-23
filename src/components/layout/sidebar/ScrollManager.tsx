@@ -9,13 +9,13 @@ interface ScrollManagerProps {
   isOpen: boolean;
 }
 
-// Store scroll positions for each route
+// Create a persistent map to store scroll positions
+// Using a module-level variable ensures it persists even if the component remounts
 const scrollPositions = new Map<string, number>();
 
 const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLElement | null>(null);
-  const isMobile = useIsMobile();
   const location = useLocation();
   const [isInitialized, setIsInitialized] = useState(false);
   
@@ -23,27 +23,40 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
   useEffect(() => {
     if (!scrollAreaRef.current) return;
     
-    const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
-    if (viewport instanceof HTMLElement) {
-      viewportRef.current = viewport;
-      setIsInitialized(true);
-    }
+    // Find the scroll viewport element
+    const findViewport = () => {
+      const viewport = scrollAreaRef.current?.querySelector('[data-radix-scroll-area-viewport]');
+      if (viewport instanceof HTMLElement) {
+        viewportRef.current = viewport;
+        setIsInitialized(true);
+      } else {
+        // If not found immediately, try again after a short delay
+        setTimeout(findViewport, 50);
+      }
+    };
+
+    findViewport();
   }, []);
   
   // Save scroll position when location changes or component unmounts
   useEffect(() => {
     const saveScrollPosition = () => {
       if (viewportRef.current) {
-        scrollPositions.set(location.pathname, viewportRef.current.scrollTop);
-        console.log('Saved scroll position for', location.pathname, viewportRef.current.scrollTop);
+        const currentScroll = viewportRef.current.scrollTop;
+        scrollPositions.set(location.pathname, currentScroll);
+        console.log('Saved scroll position for', location.pathname, currentScroll);
       }
     };
 
-    // Save current position immediately
-    saveScrollPosition();
+    // Create an interval to continuously save the scroll position
+    // This ensures we always have the latest position
+    const intervalId = setInterval(saveScrollPosition, 500);
     
-    // And also save when unmounting or before navigation
-    return saveScrollPosition;
+    // Also save when unmounting or before navigation
+    return () => {
+      clearInterval(intervalId);
+      saveScrollPosition();
+    };
   }, [location.pathname]);
   
   // Restore scroll position after navigation
@@ -56,9 +69,7 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
       
       if (savedPosition !== undefined && viewportRef.current) {
         // Use multiple attempts with increasing timeouts to ensure restoration works
-        const attempts = [0, 10, 50, 100];
-        
-        attempts.forEach(delay => {
+        [0, 10, 50, 100, 250, 500].forEach(delay => {
           setTimeout(() => {
             if (viewportRef.current) {
               viewportRef.current.scrollTop = savedPosition;
@@ -69,7 +80,7 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
       }
     };
 
-    // Restore position with a slight delay to ensure DOM is ready
+    // Restore position with multiple attempts
     restorePosition();
   }, [location.pathname, isInitialized]);
 

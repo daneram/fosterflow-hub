@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { TableHead } from '@/components/ui/table';
-import { ChevronUp, ChevronDown } from 'lucide-react';
 import { Record } from '../types';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -20,12 +19,9 @@ export const RecordTableHeader: React.FC<RecordTableHeaderProps> = ({
 
   return (
     <tr className="border-b bg-muted/50">
-      <TableHead className="h-10 px-4 text-left" onClick={() => toggleSort('title')}>
+      <TableHead className="h-10 px-4 text-left">
         <div className="flex items-center space-x-1">
           <span>Document</span>
-          {sortField === 'title' && (
-            sortDirection === 'asc' ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />
-          )}
         </div>
       </TableHead>
       {!isMobile && (
@@ -34,12 +30,9 @@ export const RecordTableHeader: React.FC<RecordTableHeaderProps> = ({
             <span>Linked</span>
           </TableHead>
           <TableHead className="h-10 px-4 text-left">Staff</TableHead>
-          <TableHead className="h-10 px-4 text-left" onClick={() => toggleSort('updatedAt')}>
+          <TableHead className="h-10 px-4 text-left">
             <div className="flex items-center space-x-1">
               <span>Updated</span>
-              {sortField === 'updatedAt' && (
-                sortDirection === 'asc' ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />
-              )}
             </div>
           </TableHead>
         </>

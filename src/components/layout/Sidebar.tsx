@@ -1,4 +1,3 @@
-
 import React, { useCallback, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import SidebarHeader from './sidebar/SidebarHeader';
@@ -46,9 +45,9 @@ const Sidebar: React.FC<SidebarProps> = ({
   }
 
   // Memoize the nav click handler to prevent re-creation
-  const handleNavClick = useCallback((event: React.MouseEvent) => {
+  const handleNavClick = useCallback(() => {
     if (onNavItemClick) {
-      onNavItemClick(event);
+      onNavItemClick();
     }
   }, [onNavItemClick]);
 

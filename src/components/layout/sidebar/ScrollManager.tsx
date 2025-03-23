@@ -104,19 +104,24 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
     return () => resizeObserver.disconnect();
   }, [positionLastItemAtBottom]);
   
-  // Reset scroll to top on navigation changes for mobile 
+  // Only reset scroll to top on navigation changes for mobile if not preserving scroll
   useEffect(() => {
     if (isMobile && viewportRef.current && !isScrolling) {
-      viewportRef.current.scrollTop = 0;
+      // Check if we should preserve scroll position
+      const shouldPreserveScroll = location.state && (location.state as any).preserveScroll;
       
-      // Reposition after scrolling to top
-      const timeoutId = setTimeout(() => {
-        positionLastItemAtBottom();
-      }, 100);
-      
-      return () => clearTimeout(timeoutId);
+      if (!shouldPreserveScroll) {
+        viewportRef.current.scrollTop = 0;
+        
+        // Reposition after scrolling to top
+        const timeoutId = setTimeout(() => {
+          positionLastItemAtBottom();
+        }, 100);
+        
+        return () => clearTimeout(timeoutId);
+      }
     }
-  }, [location.pathname, isMobile, isScrolling, positionLastItemAtBottom]);
+  }, [location.pathname, isMobile, isScrolling, positionLastItemAtBottom, location.state]);
   
   // Save scroll position to localStorage with debounce
   useEffect(() => {

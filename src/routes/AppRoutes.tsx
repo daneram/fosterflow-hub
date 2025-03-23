@@ -9,7 +9,10 @@ import NotFound from "../pages/NotFound";
 // Import lazy-loaded components
 import * as LazyComponents from "./lazyComponents";
 
-// Custom transition component that doesn't show loader immediately
+// Import content loader
+import { ContentLoader } from "../components/layout/content/ContentArea";
+
+// Custom transition component that provides a smoother loading experience
 const RouteTransition: React.FC<{children: React.ReactNode}> = ({ children }) => {
   const [isPending, startTransition] = useTransition();
   const location = useLocation();
@@ -19,7 +22,12 @@ const RouteTransition: React.FC<{children: React.ReactNode}> = ({ children }) =>
     startTransition(() => {});
   }, [location, startTransition]);
   
-  return <>{children}</>;
+  return (
+    <>
+      {isPending && <ContentLoader />}
+      {children}
+    </>
+  );
 };
 
 const AppRoutes: React.FC = () => {

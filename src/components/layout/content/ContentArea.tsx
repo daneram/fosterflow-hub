@@ -10,9 +10,9 @@ interface ContentAreaProps {
   isMobile: boolean;
 }
 
-// Content loader with subtle animation instead of full screen blur
+// Content loader that only covers the main content area
 export const ContentLoader = () => (
-  <div className="fixed inset-0 z-40 pointer-events-none">
+  <div className="absolute inset-0 bg-white z-40 pointer-events-none">
     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
       <div className="animate-pulse h-6 w-6 rounded-full bg-primary/30"></div>
     </div>
@@ -30,8 +30,8 @@ const ContentArea: React.FC<ContentAreaProps> = ({
         direction="horizontal"
         className="min-h-screen w-full"
       >
-        {/* Main content panel with proper overflow handling */}
-        <ResizablePanel defaultSize={100} minSize={50} id="main-content">
+        {/* Main content panel with proper overflow handling and relative positioning for loader */}
+        <ResizablePanel defaultSize={75} minSize={50} id="main-content">
           <div className="h-screen overflow-y-auto p-3 sm:p-4 md:p-5 pt-3 relative">
             {children}
           </div>
@@ -40,7 +40,7 @@ const ContentArea: React.FC<ContentAreaProps> = ({
         {/* Resizable handle - only visible on desktop when AI chat is open */}
         {!isMobile && aiChatOpen && <ResizableHandle withHandle />}
         
-        {/* AI Assistant panel - only rendered on desktop when open, with reduced default size */}
+        {/* AI Assistant panel - only rendered on desktop when open */}
         {!isMobile && aiChatOpen && (
           <ResizablePanel defaultSize={25} minSize={20} id="ai-chat">
             <AIChat />

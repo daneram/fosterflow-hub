@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import SidebarHeader from './sidebar/SidebarHeader';
 import SidebarFooter from './sidebar/SidebarFooter';
@@ -15,7 +15,7 @@ import {
   toolsSection
 } from './sidebar/sidebarSections';
 
-// Create a memoized list of sections to prevent re-creation on each render
+// Memoize the sidebar sections to prevent re-creation on each render
 const sidebarSections = [
   { key: 'dashboard', section: dashboardSection },
   { key: 'core', section: coreSection },
@@ -31,7 +31,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   isMobile,
   isTransitioning = false
 }) => {
-  // Render a fixed-width placeholder instead of not rendering at all
+  // Render a fixed-width placeholder during transitions
   if (isMobile && isTransitioning) {
     return (
       <div 
@@ -40,10 +40,19 @@ const Sidebar: React.FC<SidebarProps> = ({
           !isOpen ? "w-14" : "w-52"
         )} 
         aria-hidden="true"
+        id="sidebar-container"
       />
     );
   }
 
+  // Memoize the nav click handler to prevent re-creation
+  const handleNavClick = useCallback((event: React.MouseEvent) => {
+    if (onNavItemClick) {
+      onNavItemClick(event);
+    }
+  }, [onNavItemClick]);
+
+  // Use a stable ID for the sidebar
   return (
     <div 
       className={cn(
@@ -64,7 +73,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       <ScrollManager isOpen={isOpen} sidebarId="sidebar-container">
         <div className="flex flex-col space-y-0">
           {isMobile && (
-            <AIChatSection isOpen={isOpen} onNavItemClick={onNavItemClick} />
+            <AIChatSection isOpen={isOpen} onNavItemClick={handleNavClick} />
           )}
           
           {sidebarSections.map(({ key, section }) => (
@@ -73,7 +82,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               title={section.title} 
               isOpen={isOpen} 
               items={section.items} 
-              onNavItemClick={onNavItemClick} 
+              onNavItemClick={handleNavClick} 
             />
           ))}
         </div>

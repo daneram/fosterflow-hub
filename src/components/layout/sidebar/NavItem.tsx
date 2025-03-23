@@ -1,5 +1,5 @@
 
-import React, { useCallback, useRef, useEffect } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { NavItemProps } from './types';
@@ -29,18 +29,23 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
     if (sidebarElement) {
       const scrollArea = sidebarElement.querySelector('[data-radix-scroll-area-viewport]') as HTMLElement;
       if (scrollArea) {
+        // Get the current scroll position
+        const scrollPos = scrollArea.scrollTop;
+        console.log(`Saving pre-navigation scroll position for ${location.pathname}: ${scrollPos}`);
+        
         // Save the scroll position to sessionStorage keyed by current route
-        sessionStorage.setItem('sidebar-scroll-' + location.pathname, scrollArea.scrollTop.toString());
+        sessionStorage.setItem(`sidebar-scroll-${location.pathname}`, scrollPos.toString());
       }
     }
     
-    // Navigate to the new page without a full remount
+    // Use navigate with state to preserve scroll
     navigate(to, { 
-      replace: false,
+      replace: false, // Don't replace history entry
       state: { 
         preserveScroll: true,
         sidebarScroll: true,
-        from: location.pathname
+        from: location.pathname,
+        timestamp: Date.now() // Add timestamp to ensure state is always unique
       }
     });
   }, [isActive, onClick, navigate, to, location.pathname]);

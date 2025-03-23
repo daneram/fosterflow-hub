@@ -1,4 +1,3 @@
-
 import React, { useRef, useEffect, useState } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useLocation } from 'react-router-dom';
@@ -16,8 +15,9 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen, sidebar
   const locationPathRef = useRef(location.pathname);
   const restoreAttempts = useRef(0);
   const frameRef = useRef<number | null>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
   
-  // Get viewport element from the scroll area
+  // Find viewport element and set it as ready when found
   useEffect(() => {
     if (!scrollAreaRef.current) return;
     
@@ -26,14 +26,12 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen, sidebar
         const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
         
         if (viewport instanceof HTMLElement) {
-          console.log('Viewport found and ready');
+          console.log(`Viewport found for ${location.pathname}`);
           setViewportReady(true);
-        } else {
-          // Retry a few times if viewport is not found immediately
-          if (restoreAttempts.current < 10) {
-            restoreAttempts.current++;
-            setTimeout(findViewport, 50);
-          }
+        } else if (restoreAttempts.current < 20) {
+          // Retry more aggressively
+          restoreAttempts.current++;
+          setTimeout(findViewport, 50);
         }
       }
     };
@@ -44,10 +42,14 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen, sidebar
       if (frameRef.current) {
         cancelAnimationFrame(frameRef.current);
       }
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
     };
   }, []);
   
-  // Save scroll position when navigating away from the current page
+  // When the location changes, save the scroll position for the previous path 
+  // and attempt to restore the scroll position for the new path
   useEffect(() => {
     if (!viewportReady || !scrollAreaRef.current) return;
     
@@ -62,21 +64,17 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen, sidebar
       }
     };
     
-    // Save the old position before updating the ref
+    // Save the scroll position of the previous path
     saveScrollPosition();
     
-    // Update the ref to the new location
+    // Update the ref to the new location path
     locationPathRef.current = location.pathname;
     
-    // Reset attempts counter for the new page
+    // Reset attempts counter
     restoreAttempts.current = 0;
-  }, [location.pathname, viewportReady]);
-  
-  // Restore scroll position when component mounts or when isOpen changes
-  useEffect(() => {
-    if (!viewportReady || !scrollAreaRef.current) return;
     
-    const restoreScrollPosition = () => {
+    // Set up persistent restoration attempts
+    const attemptToRestoreScroll = () => {
       const viewport = scrollAreaRef.current?.querySelector('[data-radix-scroll-area-viewport]');
       
       if (viewport instanceof HTMLElement) {
@@ -95,37 +93,81 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen, sidebar
               viewport.scrollTop = scrollPos;
               
               // If we haven't reached the target position, try again
-              if (Math.abs(viewport.scrollTop - scrollPos) > 1 && restoreAttempts.current < 10) {
+              if (Math.abs(viewport.scrollTop - scrollPos) > 1 && restoreAttempts.current < 15) {
                 restoreAttempts.current++;
                 frameRef.current = requestAnimationFrame(applyScroll);
               } else {
-                console.log(`Scroll position restored to ${viewport.scrollTop}`);
+                console.log(`Scroll position ${viewport.scrollTop === scrollPos ? 'successfully' : 'not'} restored to ${viewport.scrollTop}`);
               }
             }
           };
           
-          // Start the restoration process
           frameRef.current = requestAnimationFrame(applyScroll);
         }
       }
     };
     
-    // Give time for the DOM to be ready before restoring
-    const timer = setTimeout(restoreScrollPosition, 100);
+    // Immediately try to restore
+    setTimeout(attemptToRestoreScroll, 50);
+    
+    // And also set up an interval to keep trying for a short time
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+    
+    intervalRef.current = setInterval(() => {
+      if (restoreAttempts.current < 10) {
+        attemptToRestoreScroll();
+      } else {
+        // Clear the interval after a number of attempts
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+          intervalRef.current = null;
+        }
+      }
+    }, 100);
+    
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [location.pathname, viewportReady]);
+  
+  // Additionally restore scroll when isOpen changes
+  useEffect(() => {
+    if (!viewportReady || !scrollAreaRef.current) return;
+    
+    const restoreScrollPosition = () => {
+      const viewport = scrollAreaRef.current?.querySelector('[data-radix-scroll-area-viewport]');
+      
+      if (viewport instanceof HTMLElement) {
+        // Get the saved scroll position for this route
+        const key = `sidebar-scroll-${location.pathname}`;
+        const savedScrollPosition = sessionStorage.getItem(key);
+        
+        if (savedScrollPosition) {
+          const scrollPos = parseInt(savedScrollPosition, 10);
+          console.log(`Attempting to restore scroll after sidebar toggle: ${scrollPos}`);
+          viewport.scrollTop = scrollPos;
+        }
+      }
+    };
+    
+    // Wait a bit for the UI to settle after opening/closing
+    const timer = setTimeout(restoreScrollPosition, 150);
     
     return () => {
       clearTimeout(timer);
-      if (frameRef.current) {
-        cancelAnimationFrame(frameRef.current);
-      }
     };
-  }, [location.pathname, isOpen, viewportReady]);
+  }, [isOpen, viewportReady, location.pathname]);
   
   return (
     <ScrollArea 
       ref={scrollAreaRef} 
       className="flex-1 overflow-hidden"
       data-sidebar-scroll-area={sidebarId || 'main'}
+      data-current-path={location.pathname}
     >
       {children}
     </ScrollArea>

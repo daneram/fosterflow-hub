@@ -31,23 +31,22 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     }
   }, [isMobile, setSidebarOpen, sidebarOpen]);
 
-  // Use a stable child key to ensure the sidebar doesn't remount
+  // Use a stable sidebar key to ensure the sidebar doesn't remount
   // This is CRITICAL for maintaining scroll position
-  const stableSidebarKey = useMemo(() => "sidebar-stable-instance", []);
+  const stableSidebarKey = "sidebar-stable-instance";
 
   return (
     <SidebarProvider>
       <div className="h-screen flex bg-background overflow-hidden">
-        {/* Use a fixed key to ensure the sidebar isn't remounted */}
-        <React.Fragment key={stableSidebarKey}>
-          <Sidebar 
-            isOpen={sidebarOpen} 
-            onToggle={toggleSidebar} 
-            onNavItemClick={closeSidebarOnMobile} 
-            isMobile={isMobile}
-            isTransitioning={false}
-          />
-        </React.Fragment>
+        {/* Use a key prop directly on Sidebar instead of Fragment */}
+        <Sidebar 
+          key={stableSidebarKey}
+          isOpen={sidebarOpen} 
+          onToggle={toggleSidebar} 
+          onNavItemClick={closeSidebarOnMobile} 
+          isMobile={isMobile}
+          isTransitioning={false}
+        />
 
         <ContentArea 
           aiChatOpen={aiChatOpen} 

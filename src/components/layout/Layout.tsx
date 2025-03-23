@@ -52,16 +52,31 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       onNavItemClick={closeSidebarOnMobile} 
       toggleAiChat={toggleAiChat} 
       isMobile={isMobile}
-      isTransitioning={isContentTransitioning}
+      isTransitioning={false}
     />
-  ), [sidebarOpen, toggleSidebar, closeSidebarOnMobile, toggleAiChat, isMobile, isContentTransitioning]);
+  ), [sidebarOpen, toggleSidebar, closeSidebarOnMobile, toggleAiChat, isMobile]);
 
   return (
     <SidebarProvider>
       <div className="h-screen flex bg-background overflow-hidden relative">
         <div className={cn(
-          "w-full transition-all duration-200",
-          isMobile && sidebarOpen ? "filter backdrop-blur-sm bg-white/40" : ""
+          "md:static absolute z-50 h-full",
+          isMobile ? "transition-transform duration-300 ease-in-out" : "",
+          isMobile && !sidebarOpen ? "-translate-x-full" : "translate-x-0"
+        )}>
+          {memoizedSidebar}
+        </div>
+
+        {isMobile && sidebarOpen && (
+          <div 
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
+
+        <div className={cn(
+          "flex-1 transition-all duration-300",
+          isMobile && sidebarOpen ? "backdrop-blur-[6px]" : ""
         )}>
           <ContentArea 
             aiChatOpen={aiChatOpen} 
@@ -71,14 +86,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           >
             {children}
           </ContentArea>
-        </div>
-
-        <div className={cn(
-          "absolute top-0 left-0 h-full z-40",
-          isMobile ? "transition-transform duration-200" : "relative",
-          isMobile && !sidebarOpen ? "-translate-x-full" : "translate-x-0"
-        )}>
-          {memoizedSidebar}
         </div>
       </div>
     </SidebarProvider>

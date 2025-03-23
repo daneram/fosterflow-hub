@@ -31,11 +31,13 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
     <Link
       to={to}
       className={cn(
-        "flex items-center h-10 text-sm font-medium rounded-md",
+        "flex items-center h-10 text-sm font-medium",
         isActive 
           ? "bg-primary text-primary-foreground" 
           : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground",
-        "px-2.5"
+        "px-2.5",
+        // Add custom rounded corners - square on left, rounded on right
+        "rounded-r-md rounded-l-none"
       )}
       onClick={handleClick}
       title={!isOpen ? label : undefined}

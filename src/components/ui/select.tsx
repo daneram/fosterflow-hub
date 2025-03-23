@@ -1,7 +1,7 @@
 
 import * as React from "react"
 import * as SelectPrimitive from "@radix-ui/react-select"
-import { Check, ChevronDown, ChevronUp } from "lucide-react"
+import { Check, ChevronDown, ChevronUp, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
@@ -13,8 +13,10 @@ const SelectValue = SelectPrimitive.Value
 
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
->(({ className, children, ...props }, ref) => {
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> & {
+    onClear?: () => void;
+  }
+>(({ className, children, onClear, ...props }, ref) => {
   // Check if the select has a value by looking for the presence of a value attribute
   const hasValue = React.Children.toArray(children).some(
     child => React.isValidElement(child) && child.type === SelectValue && child.props.children
@@ -30,12 +32,27 @@ const SelectTrigger = React.forwardRef<
       {...props}
     >
       {children}
-      <SelectPrimitive.Icon asChild>
-        <ChevronDown className={cn(
-          "h-4 w-4", 
-          hasValue && className?.includes("bg-primary") ? "text-primary-foreground" : "opacity-50"
-        )} />
-      </SelectPrimitive.Icon>
+      {hasValue && onClear ? (
+        <div 
+          className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer z-10"
+          onClick={(e) => {
+            e.stopPropagation();
+            onClear();
+          }}
+        >
+          <X className={cn(
+            "h-4 w-4", 
+            className?.includes("bg-primary") ? "text-primary-foreground" : "opacity-50"
+          )} />
+        </div>
+      ) : (
+        <SelectPrimitive.Icon asChild>
+          <ChevronDown className={cn(
+            "h-4 w-4", 
+            hasValue && className?.includes("bg-primary") ? "text-primary-foreground" : "opacity-50"
+          )} />
+        </SelectPrimitive.Icon>
+      )}
     </SelectPrimitive.Trigger>
   );
 });

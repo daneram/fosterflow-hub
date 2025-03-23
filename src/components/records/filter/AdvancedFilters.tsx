@@ -33,12 +33,22 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
     setSelectedAssignee(value === "any" ? null : value);
   };
   
+  // Function to clear assignee
+  const clearAssignee = () => {
+    setSelectedAssignee(null);
+  };
+  
   return (
     <div className="space-y-4 py-2">
       <div className="space-y-2">
-        <Select onValueChange={handleAssigneeChange} value={selectedAssignee || undefined}>
+        <Select 
+          onValueChange={handleAssigneeChange} 
+          value={selectedAssignee || undefined}
+          open={false} // We need this to prevent the dropdown from opening when clicking the X
+        >
           <SelectTrigger 
             className={cn("h-9", selectedAssignee ? "bg-primary text-primary-foreground hover:bg-primary/90" : "")}
+            onClear={selectedAssignee ? clearAssignee : undefined}
           >
             <SelectValue placeholder="Assigned to" />
           </SelectTrigger>

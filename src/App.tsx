@@ -25,6 +25,9 @@ import FormsLibrary from "./components/forms/FormsLibrary";
 import WorkflowManager from "./components/workflow/WorkflowManager";
 import ContactsDirectory from "./components/contacts/ContactsDirectory";
 import SettingsPanel from "./components/settings/SettingsPanel";
+import EmailPage from "./components/email/EmailPage";
+import CalendarPage from "./components/calendar/CalendarPage";
+import TasksPage from "./components/tasks/TasksPage";
 
 const queryClient = new QueryClient();
 
@@ -53,6 +56,9 @@ const App = () => (
           <Route path="/workflow" element={<WorkflowManager />} />
           <Route path="/contacts" element={<ContactsDirectory />} />
           <Route path="/settings" element={<SettingsPanel />} />
+          <Route path="/email" element={<EmailPage />} />
+          <Route path="/calendar" element={<CalendarPage />} />
+          <Route path="/tasks" element={<TasksPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

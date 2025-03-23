@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -21,7 +20,10 @@ import {
   Settings,
   Contact,
   ChevronRight,
-  Bot
+  Bot,
+  Mail,
+  Calendar,
+  ListCheck
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -64,7 +66,7 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
           : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground",
         !isOpen && "justify-center px-0"
       )}
-      onClick={onClick} // Call the function directly
+      onClick={onClick}
       title={!isOpen ? label : undefined}
     >
       <Icon className="h-4 w-4" />
@@ -86,7 +88,6 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
           ? "bg-primary text-primary-foreground" 
           : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground",
         !isOpen && "justify-center px-0",
-        // Add centered styles when sidebar is closed to match NavItem
         !isOpen && "w-full flex justify-center"
       )}
       onClick={onClick}
@@ -104,7 +105,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onNavItemClick, tog
       "h-full flex flex-col bg-sidebar py-3 transition-all duration-300 ease-in-out",
       isOpen ? "w-56" : "w-14"
     )}>
-      {/* Logo/Header that toggles sidebar */}
       <div 
         className={cn(
           "px-2 py-1.5 flex items-center cursor-pointer",
@@ -141,7 +141,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onNavItemClick, tog
         "mt-4 px-2 flex-1 overflow-y-auto",
         !isOpen && "px-0"
       )}>
-        {/* AI Assistant button for mobile only */}
         {isMobile && (
           <>
             {isOpen && <div className="text-xs font-medium text-muted-foreground mb-1.5">AI ASSISTANT</div>}
@@ -162,6 +161,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onNavItemClick, tog
           <NavItem to="/activity" icon={Activity} label="Activity" isOpen={isOpen} onClick={onNavItemClick} />
           <NavItem to="/compliance" icon={ShieldCheck} label="Compliance" isOpen={isOpen} onClick={onNavItemClick} />
           <NavItem to="/insights" icon={BarChart2} label="Insights" isOpen={isOpen} onClick={onNavItemClick} />
+          <NavItem to="/email" icon={Mail} label="Email" isOpen={isOpen} onClick={onNavItemClick} />
+          <NavItem to="/calendar" icon={Calendar} label="Calendar" isOpen={isOpen} onClick={onNavItemClick} />
+          <NavItem to="/tasks" icon={ListCheck} label="Tasks" isOpen={isOpen} onClick={onNavItemClick} />
         </nav>
         
         {isOpen && <div className="text-xs font-medium text-muted-foreground mt-4 mb-1.5">FOSTERING</div>}

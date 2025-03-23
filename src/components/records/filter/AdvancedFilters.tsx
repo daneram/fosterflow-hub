@@ -18,6 +18,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
 }) => {
   const isMobile = useIsMobile();
   const [selectedAssignee, setSelectedAssignee] = React.useState<string | null>(null);
+  const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
   
   if (!isOpen) return null;
 
@@ -31,6 +32,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
   // Function to handle assignee selection
   const handleAssigneeChange = (value: string) => {
     setSelectedAssignee(value === "any" ? null : value);
+    setIsDropdownOpen(false);
   };
   
   // Function to clear assignee
@@ -44,7 +46,8 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
         <Select 
           onValueChange={handleAssigneeChange} 
           value={selectedAssignee || undefined}
-          open={false} // We need this to prevent the dropdown from opening when clicking the X
+          open={isDropdownOpen}
+          onOpenChange={setIsDropdownOpen}
         >
           <SelectTrigger 
             className={cn("h-9", selectedAssignee ? "bg-primary text-primary-foreground hover:bg-primary/90" : "")}

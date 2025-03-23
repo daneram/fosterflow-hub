@@ -169,15 +169,13 @@ export const RecordTableView: React.FC<RecordTableViewProps> = ({
                           <div className="font-medium">{record.title}</div>
                           <div className="text-xs text-muted-foreground">{formatUniqueIdentifier(record)}</div>
                         </div>
-                        <div className="flex flex-col text-right text-xs text-muted-foreground">
+                        <div className="flex flex-col text-right text-xs text-muted-foreground space-y-1">
                           {record.client && (
-                            <div className="mb-1 flex items-center justify-end">
-                              <User className="h-3 w-3 mr-1" />
+                            <div className="flex items-center justify-end">
                               <span>{record.client}</span>
                             </div>
                           )}
                           <div className="flex items-center justify-end">
-                            <Clock className="h-3 w-3 mr-1" />
                             <span>{formatDate(record.updatedAt)}</span>
                           </div>
                         </div>

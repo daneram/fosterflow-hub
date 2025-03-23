@@ -12,7 +12,7 @@ export const TypeFilter: React.FC<TypeFilterProps> = ({
   setSelectedType
 }) => {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-2 py-1">
       <Button 
         variant={selectedType === null ? 'default' : 'outline'} 
         size="sm"

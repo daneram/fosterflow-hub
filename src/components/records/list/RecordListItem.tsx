@@ -44,8 +44,8 @@ export const RecordListItem: React.FC<RecordListItemProps> = ({
           </div>
           
           <div className="flex justify-between items-center text-xs text-muted-foreground">
-            <span>{record.owner || 'Unassigned'}</span>
             <span>{record.client}</span>
+            <span>{record.owner || 'Unassigned'}</span>
           </div>
         </div>
       </div>

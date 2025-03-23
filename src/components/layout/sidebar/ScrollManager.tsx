@@ -1,4 +1,3 @@
-
 import React, { useRef, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -32,6 +31,7 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
     if (!viewport) return;
     
     const handleScroll = () => {
+      // Store current scroll position whenever the user scrolls
       scrollPositionRef.current = viewport.scrollTop;
     };
     
@@ -41,36 +41,8 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
     };
   }, [viewportRef.current]);
   
-  // When route changes, restore scroll position in the sidebar
-  useEffect(() => {
-    if (!isInitialized) return;
-    
-    // Use a more aggressive approach to ensure scroll position is maintained
-    const restoreScrollPosition = () => {
-      const viewport = viewportRef.current;
-      if (!viewport) return;
-      
-      // Apply the stored scroll position multiple times to ensure it sticks
-      const applyScroll = () => {
-        if (viewport) {
-          viewport.scrollTop = scrollPositionRef.current;
-        }
-      };
-      
-      // Apply immediately
-      applyScroll();
-      
-      // And then in successive animation frames to handle any layout shifts
-      requestAnimationFrame(() => {
-        applyScroll();
-        requestAnimationFrame(() => {
-          applyScroll();
-        });
-      });
-    };
-    
-    restoreScrollPosition();
-  }, [location.pathname, isInitialized]);
+  // No longer need to restore scroll position on route changes
+  // We're keeping the scroll position intact by preventing default navigation
 
   return (
     <ScrollArea 

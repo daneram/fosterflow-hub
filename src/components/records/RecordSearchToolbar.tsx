@@ -21,23 +21,23 @@ export const RecordSearchToolbar: React.FC<RecordSearchToolbarProps> = ({
   recordCount
 }) => {
   return (
-    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-      <div className="relative w-full sm:w-64">
+    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pb-2">
+      <div className="relative w-full sm:w-72">
         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
         <Input
           type="search"
           placeholder="Search records..."
-          className="pl-8"
+          className="pl-8 h-9"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
       </div>
       
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center space-x-2 w-full sm:w-auto justify-end">
         {selectedRecords.length > 0 && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" className="h-9">
                 Bulk Actions ({selectedRecords.length})
               </Button>
             </DropdownMenuTrigger>
@@ -52,11 +52,11 @@ export const RecordSearchToolbar: React.FC<RecordSearchToolbarProps> = ({
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
-                <Badge className="mr-2">Status</Badge>
+                <Badge className="mr-2 h-5">Status</Badge>
                 Mark as Active
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <Badge className="mr-2">Status</Badge>
+                <Badge className="mr-2 h-5">Status</Badge>
                 Mark as Closed
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -64,7 +64,7 @@ export const RecordSearchToolbar: React.FC<RecordSearchToolbarProps> = ({
         )}
         
         <Select defaultValue="updated-desc">
-          <SelectTrigger className="h-8 w-[180px]">
+          <SelectTrigger className="h-9 w-[165px]">
             <SelectValue placeholder="Sort by" />
           </SelectTrigger>
           <SelectContent>

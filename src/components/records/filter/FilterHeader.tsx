@@ -10,15 +10,16 @@ interface FilterHeaderProps {
 
 export const FilterHeader: React.FC<FilterHeaderProps> = ({ clearFilters }) => {
   return (
-    <CardHeader className="py-3 flex-shrink-0">
-      <CardTitle className="text-lg flex items-center justify-between">
+    <CardHeader className="py-2.5 px-4 border-b flex-shrink-0">
+      <CardTitle className="text-base flex items-center justify-between">
         Filters
         <Button 
           variant="ghost" 
           size="sm" 
           onClick={clearFilters}
+          className="h-7 px-2"
         >
-          <X className="h-4 w-4 mr-1" />
+          <X className="h-3.5 w-3.5 mr-1" />
           Clear
         </Button>
       </CardTitle>

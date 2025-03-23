@@ -16,15 +16,17 @@ export const AdvancedFiltersToggle: React.FC<AdvancedFiltersToggleProps> = ({
     <Button 
       variant="outline" 
       size="sm" 
-      className="h-8 bg-background hover:bg-accent"
+      className="h-8 bg-background hover:bg-accent w-full justify-between"
       onClick={() => setIsAdvancedSearchOpen(!isAdvancedSearchOpen)}
     >
-      <Filter className="h-4 w-4 mr-1" />
-      Advanced Filters
+      <div className="flex items-center">
+        <Filter className="h-3.5 w-3.5 mr-1.5" />
+        Advanced Filters
+      </div>
       {isAdvancedSearchOpen ? (
-        <ChevronUp className="h-4 w-4 ml-1" />
+        <ChevronUp className="h-3.5 w-3.5" />
       ) : (
-        <ChevronDown className="h-4 w-4 ml-1" />
+        <ChevronDown className="h-3.5 w-3.5" />
       )}
     </Button>
   );

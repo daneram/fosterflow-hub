@@ -33,7 +33,7 @@ export const RecordList: React.FC<RecordListProps> = ({
   }
   
   return (
-    <div className="space-y-4">
+    <div className="space-y-2.5">
       <RecordListHeader 
         selectedRecordsCount={selectedRecords.length}
         totalRecords={records.length}

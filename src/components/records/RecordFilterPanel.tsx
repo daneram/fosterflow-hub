@@ -35,12 +35,12 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
   clearFilters
 }) => {
   return (
-    <Card className="shadow-sm bg-card/80 backdrop-blur-sm">
+    <Card className="shadow-sm border border-border/60">
       <FilterHeader clearFilters={clearFilters} />
-      <CardContent className="py-3">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {/* Left column - Quick filters and favorites */}
-          <div className="md:col-span-1">
+      <CardContent className="p-3">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
+          {/* Quick filters and favorites - Takes less space */}
+          <div className="lg:col-span-3">
             <div className="space-y-3">
               <QuickFilterChips 
                 showFavoritesOnly={showFavoritesOnly}
@@ -53,9 +53,9 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
             </div>
           </div>
           
-          {/* Middle columns - Type and Status filters */}
-          <div className="md:col-span-2">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Type and Status filters - Takes more space */}
+          <div className="lg:col-span-7">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <TypeFilter 
                 selectedType={selectedType}
                 setSelectedType={setSelectedType}
@@ -68,9 +68,9 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
             </div>
           </div>
           
-          {/* Right column - Advanced toggle and filters */}
-          <div className="md:col-span-1 flex flex-col justify-between">
-            <div className="mt-auto">
+          {/* Advanced toggle - Takes less space */}
+          <div className="lg:col-span-2 flex items-end">
+            <div className="w-full">
               <AdvancedFiltersToggle 
                 isAdvancedSearchOpen={isAdvancedSearchOpen}
                 setIsAdvancedSearchOpen={setIsAdvancedSearchOpen}
@@ -80,7 +80,7 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
         </div>
         
         {/* Advanced Filters Panel */}
-        <div className="mt-4 animate-fade-in">
+        <div className={`mt-3 ${isAdvancedSearchOpen ? 'animate-fade-in' : ''}`}>
           <AdvancedFilters isOpen={isAdvancedSearchOpen} />
         </div>
       </CardContent>

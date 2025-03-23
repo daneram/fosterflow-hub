@@ -52,7 +52,7 @@ const RecordsExplorer: React.FC = () => {
         <div className="relative w-full max-w-md">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
-            type="search"
+            type="text"
             placeholder="Search records..."
             className="pl-8 h-9 pr-8"
             value={searchQuery}

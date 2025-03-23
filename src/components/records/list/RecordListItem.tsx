@@ -33,12 +33,15 @@ export const RecordListItem: React.FC<RecordListItemProps> = ({
     >
       <div className="flex items-center">
         <div className="flex flex-col flex-1 p-3">
-          <div className="font-medium mb-1.5">{record.title}</div>
+          <div className="flex justify-between items-center mb-1">
+            <div className="text-sm font-medium">{record.title}</div>
+            <div className="text-xs text-muted-foreground">{formatDate(record.updatedAt)}</div>
+          </div>
           
           <div className="flex justify-between items-center text-xs text-muted-foreground">
             <span>{formatUniqueIdentifier(record)}</span>
             <span>{record.owner || 'Unassigned'}</span>
-            <span>{formatDate(record.updatedAt)}</span>
+            <span>Linked</span>
           </div>
         </div>
       </div>

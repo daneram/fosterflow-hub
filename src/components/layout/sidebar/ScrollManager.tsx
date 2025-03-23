@@ -39,18 +39,17 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
     };
   }, [viewportRef.current]);
   
-  // When route changes, maintain scroll position in the sidebar
+  // When route changes, restore scroll position in the sidebar
+  // This is key to maintaining the scroll position
   useEffect(() => {
     const viewport = viewportRef.current;
     if (viewport && scrollPositionRef.current > 0) {
-      // Use a small delay to ensure the DOM has updated
-      const timer = setTimeout(() => {
+      // Use RAF to ensure we restore after the browser's layout calculations
+      requestAnimationFrame(() => {
         viewport.scrollTop = scrollPositionRef.current;
-      }, 10);
-      
-      return () => clearTimeout(timer);
+      });
     }
-  }, [location.pathname, viewportRef.current]);
+  }, [location.pathname]);
 
   return (
     <ScrollArea 

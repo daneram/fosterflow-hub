@@ -10,7 +10,7 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
 
   const handleClick = (e: React.MouseEvent) => {
     // If we're already on this page, prevent default navigation
-    if (location.pathname === to) {
+    if (isActive) {
       e.preventDefault();
     }
     

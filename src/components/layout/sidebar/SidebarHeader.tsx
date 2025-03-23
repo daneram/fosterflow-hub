@@ -16,6 +16,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
       )}
       onClick={onToggle}
     >
+      {/* Match the exact structure of NavItem's icon container */}
       <div className="flex items-center justify-center w-6 h-6 flex-shrink-0">
         <Avatar className="h-5 w-5">
           <AvatarImage 
@@ -28,7 +29,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
         </Avatar>
       </div>
       <div className={cn("ml-3 overflow-hidden transition-opacity duration-100", 
-                         isOpen ? "opacity-100" : "opacity-0 w-0")}>
+                       isOpen ? "opacity-100" : "opacity-0 w-0")}>
         <h2 className="text-base font-semibold whitespace-nowrap">Indigo Fostering</h2>
       </div>
     </div>

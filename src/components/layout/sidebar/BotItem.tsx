@@ -3,7 +3,6 @@ import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { BotItemProps } from './types';
-import { SidebarMenuButton } from '@/components/ui/sidebar';
 
 const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClick }) => {
   const location = useLocation();
@@ -43,7 +42,7 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
     >
       <div className={cn(
         "flex items-center justify-center", 
-        isOpen ? "w-5 ml-0.5" : "w-6" // Consistent width with the logo
+        isOpen ? "w-5 ml-0.5" : "w-6"
       )}>
         <Icon className="h-5 w-5 flex-shrink-0" />
       </div>

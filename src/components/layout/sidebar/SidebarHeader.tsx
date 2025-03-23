@@ -12,14 +12,14 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
   return (
     <div 
       className={cn(
-        "flex items-center cursor-pointer mb-4 py-2 h-10 overflow-hidden transition-all duration-300 ease-in-out",
-        isOpen ? "px-2.5" : "justify-center w-10 px-0"
+        "flex items-center cursor-pointer mb-4 h-10 overflow-hidden transition-all duration-300 ease-in-out",
+        isOpen ? "px-2.5 py-2" : "justify-center w-10 px-0 py-2"
       )}
       onClick={onToggle}
     >
       <div className={cn(
         "flex items-center justify-center",
-        isOpen ? "w-5 ml-0.5" : "w-6" // Ensure logo is centered like menu icons
+        isOpen ? "w-5 ml-0.5" : "w-6" // Match the exact sizing of the menu icons
       )}>
         <Avatar className="h-6 w-6 flex-shrink-0">
           <AvatarImage 

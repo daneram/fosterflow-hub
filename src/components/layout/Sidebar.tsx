@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { 
@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface NavItemProps {
   to: string;
@@ -100,6 +101,8 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
 };
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onNavItemClick, toggleAiChat, isMobile }) => {
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+
   return (
     <div className={cn(
       "h-full flex flex-col bg-sidebar py-3 transition-all duration-300 ease-in-out",
@@ -137,9 +140,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onNavItemClick, tog
         )}
       </div>
 
-      <div className={cn(
-        "mt-4 px-2 flex-1 overflow-y-auto",
-        !isOpen && "px-0"
+      <ScrollArea ref={scrollAreaRef} className={cn(
+        "mt-4 flex-1",
+        isOpen ? "px-2" : "px-0"
       )}>
         {isMobile && (
           <>
@@ -189,7 +192,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onNavItemClick, tog
           <NavItem to="/contacts" icon={Contact} label="Contacts" isOpen={isOpen} onClick={onNavItemClick} />
           <NavItem to="/settings" icon={Settings} label="Settings" isOpen={isOpen} onClick={onNavItemClick} />
         </nav>
-      </div>
+      </ScrollArea>
 
       {isOpen && (
         <div className="mt-auto px-2 py-2">

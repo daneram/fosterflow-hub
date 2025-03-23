@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronUp, ChevronDown, FileText } from 'lucide-react';
@@ -61,6 +60,7 @@ export const RecordTableView: React.FC<RecordTableViewProps> = ({
       month: '2-digit',
       year: '2-digit'
     }).replace(/\//g, '');
+    
     const uniqueId = record.id.split('-').pop() || record.id;
     
     return `${caseId}-${formId}-${dateString}-${uniqueId}`;

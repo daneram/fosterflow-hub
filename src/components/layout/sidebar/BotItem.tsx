@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { BotItemProps } from './types';
@@ -8,7 +8,8 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
   const location = useLocation();
   const isActive = location.pathname === to;
 
-  const handleClick = (e: React.MouseEvent) => {
+  // Use useCallback to prevent unnecessary re-renders
+  const handleClick = useCallback((e: React.MouseEvent) => {
     // Don't navigate if we're already on this page
     if (isActive) {
       e.preventDefault();
@@ -20,8 +21,9 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
       onClick();
     }
     
-    // Allow normal navigation to proceed - we'll handle scroll in ScrollManager
-  };
+    // We don't prevent default navigation, which allows the Link component
+    // to handle the navigation properly while ScrollManager preserves scroll
+  }, [isActive, onClick]);
 
   return (
     <Link

@@ -48,4 +48,4 @@ const ContentArea: React.FC<ContentAreaProps> = ({
   );
 };
 
-export default ContentArea;
+export default React.memo(ContentArea);

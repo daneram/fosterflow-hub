@@ -1,3 +1,4 @@
+
 import React, { useRef, useEffect, useState } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -17,9 +18,8 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
   const isMobile = useIsMobile();
   const location = useLocation();
   const [isInitialized, setIsInitialized] = useState(false);
-  const pathRef = useRef(location.pathname);
   
-  // Initialize viewport ref and store content element reference
+  // Get the viewport element once the component mounts
   useEffect(() => {
     if (!scrollAreaRef.current) return;
     
@@ -30,28 +30,39 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
     }
   }, []);
   
-  // Save scroll position when route changes
+  // Save scroll position before navigation
   useEffect(() => {
-    return () => {
+    const currentPath = location.pathname;
+    
+    // Save current scroll position when unmounting or changing routes
+    const saveScrollPosition = () => {
       if (viewportRef.current) {
-        // Save scroll position when unmounting
-        scrollPositions.set(location.pathname, viewportRef.current.scrollTop);
+        scrollPositions.set(currentPath, viewportRef.current.scrollTop);
       }
+    };
+    
+    // Save position before unmounting
+    return () => {
+      saveScrollPosition();
     };
   }, [location.pathname]);
   
-  // Restore scroll position when returning to a route
+  // Restore scroll position after navigation
   useEffect(() => {
+    // Only proceed if we have initialized and have a viewport reference
     if (!isInitialized || !viewportRef.current) return;
     
-    const savedPosition = scrollPositions.get(location.pathname);
+    const currentPath = location.pathname;
+    const savedPosition = scrollPositions.get(currentPath);
+    
+    // If we have a saved position, restore it in the next animation frame
+    // This ensures we wait for any DOM updates to complete
     if (savedPosition !== undefined) {
-      // Use setTimeout to ensure the DOM has updated before setting scroll position
-      setTimeout(() => {
+      requestAnimationFrame(() => {
         if (viewportRef.current) {
           viewportRef.current.scrollTop = savedPosition;
         }
-      }, 0);
+      });
     }
   }, [location.pathname, isInitialized]);
 

@@ -10,9 +10,15 @@ import { cn } from '@/lib/utils';
 
 interface AdvancedFiltersProps {
   isOpen: boolean;
+  selectedStatus: string | null;
+  setSelectedStatus: (status: string | null) => void;
 }
 
-export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ isOpen }) => {
+export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ 
+  isOpen, 
+  selectedStatus, 
+  setSelectedStatus 
+}) => {
   const [fromDate, setFromDate] = useState<Date | undefined>(undefined);
   const [toDate, setToDate] = useState<Date | undefined>(undefined);
   const [fromDateOpen, setFromDateOpen] = useState(false);
@@ -124,14 +130,28 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ isOpen }) => {
       <div className="space-y-2">
         <h3 className="text-sm font-medium">Compliance Status</h3>
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" size="sm">Complete</Button>
-          <Button variant="outline" size="sm">Incomplete</Button>
-          <Button variant="outline" size="sm">Overdue</Button>
+          <Button 
+            variant={selectedStatus === 'complete' ? 'default' : 'outline'} 
+            size="sm"
+            onClick={() => setSelectedStatus(selectedStatus === 'complete' ? null : 'complete')}
+          >
+            Complete
+          </Button>
+          <Button 
+            variant={selectedStatus === 'incomplete' ? 'default' : 'outline'} 
+            size="sm"
+            onClick={() => setSelectedStatus(selectedStatus === 'incomplete' ? null : 'incomplete')}
+          >
+            Incomplete
+          </Button>
+          <Button 
+            variant={selectedStatus === 'overdue' ? 'default' : 'outline'} 
+            size="sm"
+            onClick={() => setSelectedStatus(selectedStatus === 'overdue' ? null : 'overdue')}
+          >
+            Overdue
+          </Button>
         </div>
-      </div>
-      
-      <div className="pt-2">
-        <Button size="sm" className="w-full">Apply Filters</Button>
       </div>
     </div>
   );

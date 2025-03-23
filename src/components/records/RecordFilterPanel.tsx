@@ -85,7 +85,11 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
         
         {/* Advanced Filters Panel */}
         <div className={`mt-3 ${isAdvancedSearchOpen ? 'animate-fade-in' : ''}`}>
-          <AdvancedFilters isOpen={isAdvancedSearchOpen} />
+          <AdvancedFilters 
+            isOpen={isAdvancedSearchOpen}
+            selectedStatus={selectedStatus}
+            setSelectedStatus={setSelectedStatus}
+          />
         </div>
       </CardContent>
     </Card>

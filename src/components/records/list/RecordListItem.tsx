@@ -27,6 +27,8 @@ export const RecordListItem: React.FC<RecordListItemProps> = ({
   };
   
   const isMobile = useIsMobile();
+  // Derive linked status from record's relatedRecords property
+  const isLinked = record.relatedRecords && record.relatedRecords.length > 0;
 
   return (
     <Card 
@@ -43,7 +45,7 @@ export const RecordListItem: React.FC<RecordListItemProps> = ({
           
           <div className="flex justify-between items-center text-xs text-muted-foreground">
             <span>{record.owner || 'Unassigned'}</span>
-            <span>Linked</span>
+            <span>{isLinked ? 'Linked' : 'Not Linked'}</span>
           </div>
         </div>
       </div>

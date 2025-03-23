@@ -1,10 +1,10 @@
-
 import React, { Suspense, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { ContentLoader } from "./components/layout/content/ContentArea";
 
 // Import main pages directly (not lazy loaded)
 import Index from "./pages/Index";
@@ -31,13 +31,6 @@ const SettingsPanel = React.lazy(() => import("./components/settings/SettingsPan
 const EmailPage = React.lazy(() => import("./components/email/EmailPage"));
 const CalendarPage = React.lazy(() => import("./components/calendar/CalendarPage"));
 const TasksPage = React.lazy(() => import("./components/tasks/TasksPage"));
-
-// Updated loading fallback component with blur effect
-const PageLoader = () => (
-  <div className="absolute inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-background/40">
-    <div className="animate-pulse h-8 w-8 rounded-full bg-primary/40"></div>
-  </div>
-);
 
 // Component to preload routes based on user navigation
 const RoutePreloader = () => {
@@ -192,13 +185,6 @@ const App = () => (
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
-);
-
-// New ContentLoader component that only applies to the content area
-const ContentLoader = () => (
-  <div className="absolute inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-background/40">
-    <div className="animate-pulse h-8 w-8 rounded-full bg-primary/40"></div>
-  </div>
 );
 
 export default App;

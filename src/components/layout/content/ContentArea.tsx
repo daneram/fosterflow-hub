@@ -10,6 +10,13 @@ interface ContentAreaProps {
   isMobile: boolean;
 }
 
+// Separate component for the blur loader
+export const ContentLoader = () => (
+  <div className="absolute inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-background/40">
+    <div className="animate-pulse h-8 w-8 rounded-full bg-primary/40"></div>
+  </div>
+);
+
 const ContentArea: React.FC<ContentAreaProps> = ({ 
   children, 
   aiChatOpen, 

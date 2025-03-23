@@ -17,10 +17,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
       )}
       onClick={onToggle}
     >
-      <div className={cn(
-        "flex items-center justify-center w-6 h-6",
-        isOpen ? "mr-3" : ""
-      )}>
+      <div className="flex items-center justify-center w-6 h-6">
         <Avatar className="h-6 w-6">
           <AvatarImage 
             src="/lovable-uploads/6d655b66-ad8d-445b-93e9-36d9917768dc.png" 
@@ -32,7 +29,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
         </Avatar>
       </div>
       {isOpen && (
-        <div className="overflow-hidden">
+        <div className="ml-3 overflow-hidden">
           <h2 className="text-base font-semibold whitespace-nowrap">Indigo Fostering</h2>
         </div>
       )}

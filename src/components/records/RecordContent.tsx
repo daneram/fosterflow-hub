@@ -34,7 +34,7 @@ export const RecordContent: React.FC<RecordContentProps> = ({
   const isMobile = useIsMobile();
 
   return (
-    <div className="w-full">
+    <div className="w-full pb-4">
       {isMobile ? (
         <RecordListView
           records={filteredRecords}

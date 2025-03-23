@@ -38,6 +38,7 @@ export const useRecordsFiltering = (records: Record[]) => {
     setSelectedType(null);
     setSelectedStatus(null);
     setShowFavoritesOnly(false);
+    setSearchQuery('');
   };
 
   const filteringProps = {

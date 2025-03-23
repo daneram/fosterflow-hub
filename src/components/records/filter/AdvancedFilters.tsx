@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Calendar } from '@/components/ui/calendar';
@@ -17,12 +18,19 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ isOpen }) => {
   const [fromDateOpen, setFromDateOpen] = useState(false);
   const [toDateOpen, setToDateOpen] = useState(false);
   
+  // Reset state when component is closed (which happens after clear filters)
+  useEffect(() => {
+    if (!isOpen) {
+      setFromDate(undefined);
+      setToDate(undefined);
+    }
+  }, [isOpen]);
+  
   if (!isOpen) return null;
   
   return (
     <div className="space-y-2 pt-2">
       <div className="space-y-2">
-        <h3 className="text-sm font-medium">Date Range</h3>
         <div className="grid grid-cols-2 gap-2">
           <div>
             <Popover open={fromDateOpen} onOpenChange={setFromDateOpen}>
@@ -34,7 +42,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ isOpen }) => {
                     !fromDate && "text-muted-foreground"
                   )}
                 >
-                  <CalendarIcon className="mr-1 h-3.5 w-3.5 opacity-70" />
+                  <CalendarIcon className="mr-0.5 h-3.5 w-3.5 opacity-70" />
                   {fromDate ? (
                     <span className="truncate text-xs md:text-sm">{format(fromDate, "PPP")}</span>
                   ) : (
@@ -69,7 +77,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ isOpen }) => {
                     !toDate && "text-muted-foreground"
                   )}
                 >
-                  <CalendarIcon className="mr-1 h-3.5 w-3.5 opacity-70" />
+                  <CalendarIcon className="mr-0.5 h-3.5 w-3.5 opacity-70" />
                   {toDate ? (
                     <span className="truncate text-xs md:text-sm">{format(toDate, "PPP")}</span>
                   ) : (

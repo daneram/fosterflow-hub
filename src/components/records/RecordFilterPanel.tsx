@@ -23,15 +23,27 @@ interface RecordFilterPanelProps {
 export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
   selectedType,
   setSelectedType,
+  selectedStatus,
+  setSelectedStatus,
+  showFavoritesOnly,
+  setShowFavoritesOnly,
   isAdvancedSearchOpen,
   setIsAdvancedSearchOpen,
+  onSelectPreset,
   clearFilters
 }) => {
   const isMobile = useIsMobile();
+  
+  const handleClearFilters = () => {
+    clearFilters();
+    if (isAdvancedSearchOpen) {
+      setIsAdvancedSearchOpen(false);
+    }
+  };
 
   return (
     <Card className="shadow-sm border border-border/60">
-      <FilterHeader clearFilters={clearFilters} />
+      <FilterHeader clearFilters={handleClearFilters} />
       <CardContent className="p-3">
         {isMobile ? (
           <div className="space-y-3">

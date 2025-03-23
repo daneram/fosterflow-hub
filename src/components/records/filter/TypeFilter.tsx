@@ -12,31 +12,35 @@ export const TypeFilter: React.FC<TypeFilterProps> = ({
   setSelectedType
 }) => {
   return (
-    <div className="space-y-2">
-      <h3 className="text-sm font-medium">Record Type</h3>
-      <div className="flex flex-wrap gap-2">
-        <Button 
-          variant={selectedType === null ? 'default' : 'outline'} 
-          size="sm"
-          onClick={() => setSelectedType(null)}
-        >
-          All
-        </Button>
-        <Button 
-          variant={selectedType === 'children' ? 'default' : 'outline'} 
-          size="sm"
-          onClick={() => setSelectedType('children')}
-        >
-          Children
-        </Button>
-        <Button 
-          variant={selectedType === 'carers' ? 'default' : 'outline'} 
-          size="sm"
-          onClick={() => setSelectedType('carers')}
-        >
-          Carers
-        </Button>
-      </div>
+    <div className="flex flex-wrap gap-2">
+      <Button 
+        variant={selectedType === null ? 'default' : 'outline'} 
+        size="sm"
+        onClick={() => setSelectedType(null)}
+      >
+        All
+      </Button>
+      <Button 
+        variant={selectedType === 'children' ? 'default' : 'outline'} 
+        size="sm"
+        onClick={() => setSelectedType('children')}
+      >
+        Children
+      </Button>
+      <Button 
+        variant={selectedType === 'carers' ? 'default' : 'outline'} 
+        size="sm"
+        onClick={() => setSelectedType('carers')}
+      >
+        Carers
+      </Button>
+      <Button 
+        variant={selectedType === 'staff' ? 'default' : 'outline'} 
+        size="sm"
+        onClick={() => setSelectedType('staff')}
+      >
+        Staff
+      </Button>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { 
@@ -102,6 +102,25 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onNavItemClick, toggleAiChat, isMobile }) => {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
+  const lastScrollPositionRef = useRef(0);
+  
+  useEffect(() => {
+    const scrollArea = document.querySelector('[data-radix-scroll-area-viewport]');
+    if (scrollArea) {
+      lastScrollPositionRef.current = scrollArea.scrollTop;
+    }
+  }, [location.pathname]);
+  
+  useEffect(() => {
+    const scrollArea = document.querySelector('[data-radix-scroll-area-viewport]');
+    if (scrollArea) {
+      const timer = setTimeout(() => {
+        scrollArea.scrollTop = lastScrollPositionRef.current;
+      }, 0);
+      return () => clearTimeout(timer);
+    }
+  }, [location.pathname]);
 
   return (
     <div className={cn(
@@ -140,10 +159,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onNavItemClick, tog
         )}
       </div>
 
-      <ScrollArea ref={scrollAreaRef} className={cn(
-        "mt-4 flex-1",
-        isOpen ? "px-2" : "px-0"
-      )}>
+      <ScrollArea 
+        ref={scrollAreaRef} 
+        className={cn(
+          "mt-4 flex-1",
+          isOpen ? "px-2" : "px-0"
+        )}
+      >
         {isMobile && (
           <>
             {isOpen && <div className="text-xs font-medium text-muted-foreground mb-1.5">AI ASSISTANT</div>}

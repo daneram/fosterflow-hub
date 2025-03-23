@@ -162,10 +162,36 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen, sidebar
     };
   }, [isOpen, viewportReady, location.pathname]);
   
+  // Fix for the bottom content scrolling issue
+  useEffect(() => {
+    if (viewportReady && scrollAreaRef.current) {
+      const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]') as HTMLElement;
+      if (viewport) {
+        // Make sure the viewport has proper overflow & height styles
+        viewport.style.overflow = 'auto';
+        viewport.style.height = '100%';
+        
+        // Make sure the scrollbar is always enabled when content exceeds viewport
+        const resizeObserver = new ResizeObserver(() => {
+          // Force a recalculation of the scroll height
+          viewport.style.display = 'none';
+          void viewport.offsetHeight; // Force reflow
+          viewport.style.display = 'block';
+        });
+        
+        resizeObserver.observe(viewport);
+        
+        return () => {
+          resizeObserver.disconnect();
+        };
+      }
+    }
+  }, [viewportReady, isOpen]);
+  
   return (
     <ScrollArea 
       ref={scrollAreaRef} 
-      className="flex-1 overflow-hidden"
+      className="flex-1 overflow-y-auto"
       data-sidebar-scroll-area={sidebarId || 'main'}
       data-current-path={location.pathname}
     >

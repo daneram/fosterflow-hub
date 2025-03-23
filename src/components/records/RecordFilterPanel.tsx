@@ -43,21 +43,21 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
   
   return <Card className="shadow-sm border border-border/60">
       <FilterHeader clearFilters={handleClearFilters} />
-      <CardContent className="px-3 py-3.5">
+      <CardContent className="px-3">
         {isMobile ? (
-          <div className="flex flex-col justify-center space-y-4">
-            {/* Center type filters on mobile */}
+          <div className="flex flex-col justify-center h-[76px]">
+            {/* Center type filters on mobile with fixed height to ensure equal spacing */}
             <div className="flex justify-center">
               <TypeFilter selectedType={selectedType} setSelectedType={setSelectedType} />
             </div>
             
             {/* Advanced toggle - Full width on mobile */}
-            <div className="w-full">
+            <div className="w-full mt-4">
               <AdvancedFiltersToggle isAdvancedSearchOpen={isAdvancedSearchOpen} setIsAdvancedSearchOpen={setIsAdvancedSearchOpen} />
             </div>
           </div>
         ) : (
-          <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center justify-between gap-3 py-3.5">
             {/* Type filter */}
             <div>
               <TypeFilter selectedType={selectedType} setSelectedType={setSelectedType} />

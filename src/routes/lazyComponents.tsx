@@ -21,23 +21,63 @@ const createLazyComponent = (importFn: () => Promise<any>): LazyComponentWithIni
 };
 
 // Lazy load all components with preloading capability
-export const AIAssistantPage = createLazyComponent(() => import("../pages/AIAssistantPage"));
-export const RecordsExplorer = createLazyComponent(() => import("../components/records/RecordsExplorer"));
-export const ActivityLog = createLazyComponent(() => import("../components/activity/ActivityLog"));
-export const ComplianceTracker = createLazyComponent(() => import("../components/compliance/ComplianceTracker"));
-export const InsightsDashboard = createLazyComponent(() => import("../components/insights/InsightsDashboard"));
-export const FormFAssessment = createLazyComponent(() => import("../components/formf/FormFAssessment"));
-export const ChildrenProfiles = createLazyComponent(() => import("../components/children/ChildrenProfiles"));
-export const CarersDirectory = createLazyComponent(() => import("../components/carers/CarersDirectory"));
-export const TeamDirectory = createLazyComponent(() => import("../components/team/TeamDirectory"));
-export const PolicyLibrary = createLazyComponent(() => import("../components/policy/PolicyLibrary"));
-export const TrainingPlatform = createLazyComponent(() => import("../components/training/TrainingPlatform"));
-export const RecruitmentPipeline = createLazyComponent(() => import("../components/recruitment/RecruitmentPipeline"));
-export const FinanceManager = createLazyComponent(() => import("../components/finance/FinanceManager"));
-export const FormsLibrary = createLazyComponent(() => import("../components/forms/FormsLibrary"));
-export const WorkflowManager = createLazyComponent(() => import("../components/workflow/WorkflowManager"));
-export const ContactsDirectory = createLazyComponent(() => import("../components/contacts/ContactsDirectory"));
-export const SettingsPanel = createLazyComponent(() => import("../components/settings/SettingsPanel"));
-export const EmailPage = createLazyComponent(() => import("../components/email/EmailPage"));
-export const CalendarPage = createLazyComponent(() => import("../components/calendar/CalendarPage"));
-export const TasksPage = createLazyComponent(() => import("../components/tasks/TasksPage"));
+export const AIAssistantPage = createLazyComponent(() => 
+  import("../pages/AIAssistantPage").then(module => ({ default: module.default }))
+);
+export const RecordsExplorer = createLazyComponent(() => 
+  import("../components/records/RecordsExplorer").then(module => ({ default: module.default }))
+);
+export const ActivityLog = createLazyComponent(() => 
+  import("../components/activity/ActivityLog").then(module => ({ default: module.default }))
+);
+export const ComplianceTracker = createLazyComponent(() => 
+  import("../components/compliance/ComplianceTracker").then(module => ({ default: module.default }))
+);
+export const InsightsDashboard = createLazyComponent(() => 
+  import("../components/insights/InsightsDashboard").then(module => ({ default: module.default }))
+);
+export const FormFAssessment = createLazyComponent(() => 
+  import("../components/formf/FormFAssessment").then(module => ({ default: module.default }))
+);
+export const ChildrenProfiles = createLazyComponent(() => 
+  import("../components/children/ChildrenProfiles").then(module => ({ default: module.default }))
+);
+export const CarersDirectory = createLazyComponent(() => 
+  import("../components/carers/CarersDirectory").then(module => ({ default: module.default }))
+);
+export const TeamDirectory = createLazyComponent(() => 
+  import("../components/team/TeamDirectory").then(module => ({ default: module.default }))
+);
+export const PolicyLibrary = createLazyComponent(() => 
+  import("../components/policy/PolicyLibrary").then(module => ({ default: module.default }))
+);
+export const TrainingPlatform = createLazyComponent(() => 
+  import("../components/training/TrainingPlatform").then(module => ({ default: module.default }))
+);
+export const RecruitmentPipeline = createLazyComponent(() => 
+  import("../components/recruitment/RecruitmentPipeline").then(module => ({ default: module.default }))
+);
+export const FinanceManager = createLazyComponent(() => 
+  import("../components/finance/FinanceManager").then(module => ({ default: module.default }))
+);
+export const FormsLibrary = createLazyComponent(() => 
+  import("../components/forms/FormsLibrary").then(module => ({ default: module.default }))
+);
+export const WorkflowManager = createLazyComponent(() => 
+  import("../components/workflow/WorkflowManager").then(module => ({ default: module.default }))
+);
+export const ContactsDirectory = createLazyComponent(() => 
+  import("../components/contacts/ContactsDirectory").then(module => ({ default: module.default }))
+);
+export const SettingsPanel = createLazyComponent(() => 
+  import("../components/settings/SettingsPanel").then(module => ({ default: module.default }))
+);
+export const EmailPage = createLazyComponent(() => 
+  import("../components/email/EmailPage").then(module => ({ default: module.default }))
+);
+export const CalendarPage = createLazyComponent(() => 
+  import("../components/calendar/CalendarPage").then(module => ({ default: module.default }))
+);
+export const TasksPage = createLazyComponent(() => 
+  import("../components/tasks/TasksPage").then(module => ({ default: module.default }))
+);

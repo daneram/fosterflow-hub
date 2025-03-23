@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import AIAssistantPage from "./pages/AIAssistantPage";
 
 // Import components
 import RecordsExplorer from "./components/records/RecordsExplorer";
@@ -35,6 +36,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/ai-assistant" element={<AIAssistantPage />} />
           <Route path="/records" element={<RecordsExplorer />} />
           <Route path="/activity" element={<ActivityLog />} />
           <Route path="/compliance" element={<ComplianceTracker />} />

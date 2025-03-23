@@ -35,10 +35,11 @@ interface NavItemProps {
 }
 
 interface BotItemProps {
+  to: string;
   icon: React.ElementType;
   label: string;
   isOpen: boolean;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 interface SidebarProps {
@@ -72,12 +73,18 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
   );
 };
 
-const BotItem: React.FC<BotItemProps> = ({ icon: Icon, label, isOpen, onClick }) => {
+const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClick }) => {
+  const location = useLocation();
+  const isActive = location.pathname === to;
+
   return (
-    <button
+    <Link
+      to={to}
       className={cn(
         "flex items-center gap-2 px-2 py-1.5 rounded-md text-sm font-medium transition-all duration-200",
-        "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground",
+        isActive 
+          ? "bg-primary text-primary-foreground" 
+          : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground",
         !isOpen && "justify-center px-0",
         // Add centered styles when sidebar is closed to match NavItem
         !isOpen && "w-full flex justify-center"
@@ -87,7 +94,7 @@ const BotItem: React.FC<BotItemProps> = ({ icon: Icon, label, isOpen, onClick })
     >
       <Icon className="h-4 w-4" />
       {isOpen && <span>{label}</span>}
-    </button>
+    </Link>
   );
 };
 
@@ -139,7 +146,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onNavItemClick, tog
           <>
             {isOpen && <div className="text-xs font-medium text-muted-foreground mb-1.5">AI ASSISTANT</div>}
             <nav className="space-y-0.5 mb-4">
-              <BotItem icon={Bot} label="AI Assistant" isOpen={isOpen} onClick={toggleAiChat || (() => {})} />
+              <BotItem to="/ai-assistant" icon={Bot} label="AI Assistant" isOpen={isOpen} onClick={onNavItemClick} />
             </nav>
           </>
         )}

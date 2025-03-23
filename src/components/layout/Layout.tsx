@@ -2,11 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import { cn } from '@/lib/utils';
-import { Bot, X } from 'lucide-react';
+import { Bot } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
 import AIChat from '@/components/ai/AIChat';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useLocation } from 'react-router-dom';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -21,11 +22,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   
   const [aiChatOpen, setAiChatOpen] = useState(false);
   const isMobile = useIsMobile();
+  const location = useLocation();
+  const isAIAssistantPage = location.pathname === '/ai-assistant';
 
   // Set initial AI chat state based on screen size
   useEffect(() => {
-    setAiChatOpen(!isMobile);
-  }, [isMobile]);
+    setAiChatOpen(!isMobile && !isAIAssistantPage);
+  }, [isMobile, isAIAssistantPage]);
 
   // Save sidebar state to localStorage when it changes
   useEffect(() => {
@@ -42,17 +45,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   // This function will be called when a navigation item is clicked in the sidebar
   const closeSidebarOnMobile = () => {
-    console.log("closeSidebarOnMobile called, isMobile:", isMobile);
     if (isMobile) {
-      console.log("Setting sidebar closed on mobile");
       setSidebarOpen(false);
     }
   };
 
   return (
     <div className="min-h-screen flex bg-background overflow-hidden">
-      {/* Removed User button for toggling sidebar on desktop */}
-
       {/* Sidebar with optimized width */}
       <div className={cn(
         "h-screen transition-all duration-300 ease-in-out flex-shrink-0",
@@ -89,29 +88,17 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           )}
         </ResizablePanelGroup>
         
-        {/* Mobile AI Chat toggle button - now hidden on mobile */}
+        {/* Mobile AI Chat toggle button - now hidden */}
         <Button
           variant="ghost"
           size="icon"
-          className="hidden lg:hidden fixed right-3 top-3 z-50"
+          className="hidden" 
           onClick={toggleAiChat}
         >
           <Bot className="h-5 w-5" />
         </Button>
         
-        {/* Mobile AI Chat overlay - only rendered on mobile when open */}
-        {isMobile && aiChatOpen && (
-          <div className="fixed inset-0 z-40 bg-background">
-            <div className="absolute top-3 right-3">
-              <Button variant="ghost" size="icon" onClick={toggleAiChat}>
-                <X className="h-5 w-5" />
-              </Button>
-            </div>
-            <div className="h-full pt-12">
-              <AIChat />
-            </div>
-          </div>
-        )}
+        {/* Removed mobile AI Chat overlay - now it's a separate page */}
       </div>
     </div>
   );

@@ -35,15 +35,12 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
         isActive 
           ? "bg-primary text-primary-foreground" 
           : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground",
-        isOpen ? "px-2.5" : "px-0 justify-center w-full"
+        isOpen ? "px-2.5" : "px-0 justify-center"
       )}
       onClick={handleClick}
       title={!isOpen ? label : undefined}
     >
-      <div className={cn(
-        "flex items-center justify-center", 
-        isOpen ? "w-5 h-5" : "w-6 h-6"
-      )}>
+      <div className="flex items-center justify-center w-6 h-6">
         <Icon className="h-5 w-5" />
       </div>
       <div 

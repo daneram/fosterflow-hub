@@ -3,6 +3,7 @@ import React from 'react';
 import { Record } from '../types';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { formatUniqueIdentifier } from './RecordIdFormatter';
+import { format } from 'date-fns';
 
 interface RecordTableRowProps {
   record: Record;
@@ -18,6 +19,11 @@ export const RecordTableRow: React.FC<RecordTableRowProps> = ({
   onClick
 }) => {
   const isMobile = useIsMobile();
+  
+  // Format date based on device type
+  const displayDate = isMobile 
+    ? format(record.updatedAt, 'dd/MM/yy')
+    : formatDate(record.updatedAt);
 
   return (
     <tr 
@@ -40,7 +46,7 @@ export const RecordTableRow: React.FC<RecordTableRowProps> = ({
                 </span>
                 
                 <span className="text-xs text-muted-foreground">
-                  {formatDate(record.updatedAt)}
+                  {displayDate}
                 </span>
               </div>
             </div>
@@ -62,7 +68,7 @@ export const RecordTableRow: React.FC<RecordTableRowProps> = ({
             )}
           </td>
           <td className="py-2 px-4">{record.owner || 'Unassigned'}</td>
-          <td className="py-2 px-4">{formatDate(record.updatedAt)}</td>
+          <td className="py-2 px-4">{displayDate}</td>
         </>
       )}
     </tr>

@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/card';
 import { Record } from '../types';
 import { formatUniqueIdentifier } from '../table/RecordIdFormatter';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { format } from 'date-fns';
 
 interface RecordListItemProps {
   record: Record;
@@ -30,6 +31,11 @@ export const RecordListItem: React.FC<RecordListItemProps> = ({
   // Derive linked status from record's relatedRecords property
   const isLinked = record.relatedRecords && record.relatedRecords.length > 0;
 
+  // Format date based on device type
+  const displayDate = isMobile 
+    ? format(record.updatedAt, 'dd/MM/yy')
+    : formatDate(record.updatedAt);
+
   return (
     <Card 
       key={record.id} 
@@ -40,7 +46,7 @@ export const RecordListItem: React.FC<RecordListItemProps> = ({
         <div className="flex flex-col flex-1 p-3">
           <div className="flex justify-between items-center mb-1">
             <div className="text-sm font-medium">{record.title}</div>
-            <div className="text-xs text-muted-foreground">{formatDate(record.updatedAt)}</div>
+            <div className="text-xs text-muted-foreground">{displayDate}</div>
           </div>
           
           <div className="flex justify-between items-center text-xs text-muted-foreground">

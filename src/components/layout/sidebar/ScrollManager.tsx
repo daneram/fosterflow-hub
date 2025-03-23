@@ -1,203 +1,152 @@
-import React, { useRef, useEffect, useState } from 'react';
+
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { useLocation } from 'react-router-dom';
 
 interface ScrollManagerProps {
   children: React.ReactNode;
   isOpen: boolean;
-  sidebarId?: string;
 }
 
-const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen, sidebarId }) => {
+// A unique key for storing scroll position in localStorage
+const SCROLL_POSITION_KEY = 'sidebar-scroll-position';
+
+const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const viewportRef = useRef<HTMLElement | null>(null);
+  const contentRef = useRef<HTMLElement | null>(null);
+  const isMobile = useIsMobile();
   const location = useLocation();
-  const [viewportReady, setViewportReady] = useState(false);
-  const locationPathRef = useRef(location.pathname);
-  const restoreAttempts = useRef(0);
-  const frameRef = useRef<number | null>(null);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const [isScrolling, setIsScrolling] = useState(false);
+  const [viewportHeight, setViewportHeight] = useState(0);
   
-  // Find viewport element and set it as ready when found
+  // Position the last menu item at the bottom of the screen on mobile
+  const positionLastItemAtBottom = useCallback(() => {
+    if (!isMobile || !viewportRef.current || !contentRef.current) return;
+    
+    const viewport = viewportRef.current;
+    const content = contentRef.current;
+    
+    // Find the last navigation item in the sidebar
+    const allNavSections = content.querySelectorAll('nav');
+    const lastNavSection = allNavSections[allNavSections.length - 1];
+    
+    if (!lastNavSection) return;
+    
+    const lastItem = lastNavSection.querySelector('a:last-child');
+    if (!lastItem) return;
+    
+    // Get heights and positions
+    const viewportHeight = viewport.clientHeight;
+    const lastItemHeight = (lastItem as HTMLElement).offsetHeight;
+    const lastItemTop = (lastItem as HTMLElement).offsetTop;
+    const contentScrollHeight = content.scrollHeight;
+    const currentPadding = parseInt(content.style.paddingBottom || '0', 10);
+    
+    // Calculate how much padding we need to add to push the last item to the bottom
+    // This is: viewport height - (last item's position from top + its height)
+    const desiredPadding = Math.max(0, viewportHeight - (lastItemTop + lastItemHeight));
+    
+    // Apply the padding if it's different from current padding
+    if (desiredPadding !== currentPadding) {
+      content.style.paddingBottom = `${desiredPadding}px`;
+    }
+  }, [isMobile]);
+  
+  // Initialize viewport ref, content ref and restore scroll position
   useEffect(() => {
     if (!scrollAreaRef.current) return;
     
-    const findViewport = () => {
-      if (scrollAreaRef.current) {
-        const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
-        
-        if (viewport instanceof HTMLElement) {
-          console.log(`Viewport found for ${location.pathname}`);
-          setViewportReady(true);
-        } else if (restoreAttempts.current < 20) {
-          // Retry more aggressively
-          restoreAttempts.current++;
-          setTimeout(findViewport, 50);
-        }
-      }
-    };
-    
-    findViewport();
-    
-    return () => {
-      if (frameRef.current) {
-        cancelAnimationFrame(frameRef.current);
-      }
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, []);
-  
-  // When the location changes, save the scroll position for the previous path 
-  // and attempt to restore the scroll position for the new path
-  useEffect(() => {
-    if (!viewportReady || !scrollAreaRef.current) return;
-    
-    const saveScrollPosition = () => {
-      const viewport = scrollAreaRef.current?.querySelector('[data-radix-scroll-area-viewport]');
-      if (viewport instanceof HTMLElement) {
-        const scrollPos = viewport.scrollTop;
-        const key = `sidebar-scroll-${locationPathRef.current}`;
-        
-        console.log(`Saving scroll position for ${locationPathRef.current}: ${scrollPos}`);
-        sessionStorage.setItem(key, scrollPos.toString());
-      }
-    };
-    
-    // Save the scroll position of the previous path
-    saveScrollPosition();
-    
-    // Update the ref to the new location path
-    locationPathRef.current = location.pathname;
-    
-    // Reset attempts counter
-    restoreAttempts.current = 0;
-    
-    // Set up persistent restoration attempts
-    const attemptToRestoreScroll = () => {
-      const viewport = scrollAreaRef.current?.querySelector('[data-radix-scroll-area-viewport]');
+    const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+    if (viewport instanceof HTMLElement) {
+      viewportRef.current = viewport;
       
-      if (viewport instanceof HTMLElement) {
-        // Get the saved scroll position for this route
-        const key = `sidebar-scroll-${location.pathname}`;
-        const savedScrollPosition = sessionStorage.getItem(key);
-        
-        if (savedScrollPosition) {
-          const scrollPos = parseInt(savedScrollPosition, 10);
-          
-          console.log(`Attempting to restore scroll for ${location.pathname} to ${scrollPos}`);
-          
-          // Use requestAnimationFrame for smoother restoration
-          const applyScroll = () => {
-            if (viewport.scrollTop !== scrollPos) {
-              viewport.scrollTop = scrollPos;
-              
-              // If we haven't reached the target position, try again
-              if (Math.abs(viewport.scrollTop - scrollPos) > 1 && restoreAttempts.current < 15) {
-                restoreAttempts.current++;
-                frameRef.current = requestAnimationFrame(applyScroll);
-              } else {
-                console.log(`Scroll position ${viewport.scrollTop === scrollPos ? 'successfully' : 'not'} restored to ${viewport.scrollTop}`);
-              }
-            }
-          };
-          
-          frameRef.current = requestAnimationFrame(applyScroll);
-        }
+      // Store content element reference
+      if (viewport.firstElementChild instanceof HTMLElement) {
+        contentRef.current = viewport.firstElementChild;
       }
-    };
-    
-    // Immediately try to restore
-    setTimeout(attemptToRestoreScroll, 50);
-    
-    // And also set up an interval to keep trying for a short time
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-    }
-    
-    intervalRef.current = setInterval(() => {
-      if (restoreAttempts.current < 10) {
-        attemptToRestoreScroll();
-      } else {
-        // Clear the interval after a number of attempts
-        if (intervalRef.current) {
-          clearInterval(intervalRef.current);
-          intervalRef.current = null;
-        }
-      }
-    }, 100);
-    
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [location.pathname, viewportReady]);
-  
-  // Additionally restore scroll when isOpen changes
-  useEffect(() => {
-    if (!viewportReady || !scrollAreaRef.current) return;
-    
-    const restoreScrollPosition = () => {
-      const viewport = scrollAreaRef.current?.querySelector('[data-radix-scroll-area-viewport]');
       
-      if (viewport instanceof HTMLElement) {
-        // Get the saved scroll position for this route
-        const key = `sidebar-scroll-${location.pathname}`;
-        const savedScrollPosition = sessionStorage.getItem(key);
-        
-        if (savedScrollPosition) {
-          const scrollPos = parseInt(savedScrollPosition, 10);
-          console.log(`Attempting to restore scroll after sidebar toggle: ${scrollPos}`);
-          viewport.scrollTop = scrollPos;
+      // Only restore scroll position on desktop
+      if (!isMobile) {
+        const savedPosition = localStorage.getItem(SCROLL_POSITION_KEY);
+        if (savedPosition) {
+          viewport.scrollTop = parseInt(savedPosition, 10);
         }
       }
-    };
-    
-    // Wait a bit for the UI to settle after opening/closing
-    const timer = setTimeout(restoreScrollPosition, 150);
-    
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [isOpen, viewportReady, location.pathname]);
-  
-  // Fix for the bottom content scrolling issue
-  useEffect(() => {
-    if (viewportReady && scrollAreaRef.current) {
-      const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]') as HTMLElement;
-      if (viewport) {
-        // Make sure the viewport has proper overflow & height styles
-        viewport.style.overflow = 'auto';
-        viewport.style.height = '100%';
-        
-        // Make sure the scrollbar is always enabled when content exceeds viewport
-        const resizeObserver = new ResizeObserver(() => {
-          // Force a recalculation of the scroll height
-          viewport.style.display = 'none';
-          void viewport.offsetHeight; // Force reflow
-          viewport.style.display = 'block';
-        });
-        
-        resizeObserver.observe(viewport);
-        
-        return () => {
-          resizeObserver.disconnect();
-        };
-      }
+      
+      // Position the last item on mobile
+      positionLastItemAtBottom();
     }
-  }, [viewportReady, isOpen]);
+  }, [isMobile, positionLastItemAtBottom]);
   
+  // Recalculate when children or sidebar open state changes
+  useEffect(() => {
+    // Use a short delay to ensure DOM is fully rendered
+    const timeoutId = setTimeout(() => {
+      positionLastItemAtBottom();
+    }, 200);
+    
+    return () => clearTimeout(timeoutId);
+  }, [children, isOpen, positionLastItemAtBottom]);
+  
+  // Set up resize observer
+  useEffect(() => {
+    if (!contentRef.current || !viewportRef.current) return;
+    
+    const resizeObserver = new ResizeObserver(() => {
+      positionLastItemAtBottom();
+    });
+    
+    resizeObserver.observe(contentRef.current);
+    resizeObserver.observe(viewportRef.current);
+    
+    return () => resizeObserver.disconnect();
+  }, [positionLastItemAtBottom]);
+  
+  // Reset scroll to top on navigation changes for mobile 
+  useEffect(() => {
+    if (isMobile && viewportRef.current && !isScrolling) {
+      viewportRef.current.scrollTop = 0;
+      
+      // Reposition after scrolling to top
+      const timeoutId = setTimeout(() => {
+        positionLastItemAtBottom();
+      }, 100);
+      
+      return () => clearTimeout(timeoutId);
+    }
+  }, [location.pathname, isMobile, isScrolling, positionLastItemAtBottom]);
+  
+  // Save scroll position to localStorage with debounce
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    if (!viewport || isMobile) return;
+    
+    const handleScroll = () => {
+      if (!isScrolling) {
+        setIsScrolling(true);
+        setTimeout(() => {
+          if (viewport && !isMobile) {
+            localStorage.setItem(SCROLL_POSITION_KEY, viewport.scrollTop.toString());
+          }
+          setIsScrolling(false);
+        }, 200);
+      }
+    };
+    
+    viewport.addEventListener('scroll', handleScroll);
+    return () => viewport.removeEventListener('scroll', handleScroll);
+  }, [isMobile, isScrolling]);
+
   return (
     <ScrollArea 
       ref={scrollAreaRef} 
-      className="flex-1 overflow-y-auto"
-      data-sidebar-scroll-area={sidebarId || 'main'}
-      data-current-path={location.pathname}
+      className="flex-1 overflow-hidden"
     >
       {children}
     </ScrollArea>
   );
 };
 
-export default React.memo(ScrollManager);
+export default ScrollManager;

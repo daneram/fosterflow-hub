@@ -20,7 +20,10 @@ const ContentArea: React.FC<ContentAreaProps> = ({
   isTransitioning = false
 }) => {
   return (
-    <div className="flex-1 overflow-hidden">
+    <div className={cn(
+      "flex-1 overflow-hidden", 
+      isTransitioning ? "opacity-90 transition-opacity duration-100" : "opacity-100"
+    )}>
       <ResizablePanelGroup direction="horizontal" className="min-h-screen">
         {/* Main content panel */}
         <ResizablePanel 
@@ -35,17 +38,20 @@ const ContentArea: React.FC<ContentAreaProps> = ({
 
         {/* AI Assistant panel - only show on desktop and when open */}
         {!isMobile && aiChatOpen && (
-          <ResizablePanel 
-            defaultSize={40} 
-            minSize={30}
-            className="border-l"
-          >
-            <AIChat />
-          </ResizablePanel>
+          <>
+            <ResizablePanel 
+              defaultSize={40} 
+              minSize={30}
+              className="border-l"
+            >
+              {/* Remove the toggleAiChat prop if AIChat doesn't accept it */}
+              <AIChat />
+            </ResizablePanel>
+          </>
         )}
       </ResizablePanelGroup>
     </div>
   );
 };
 
-export default React.memo(ContentArea);
+export default ContentArea;

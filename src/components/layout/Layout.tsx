@@ -19,10 +19,31 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
   const isAIAssistantPage = location.pathname === '/ai-assistant';
   
+  // Tracking content transitions instead of sidebar transitions
+  const [isContentTransitioning, setIsContentTransitioning] = useState(false);
+
   // Set initial AI chat state based on screen size
   useEffect(() => {
     setAiChatOpen(!isMobile && !isAIAssistantPage);
   }, [isMobile, isAIAssistantPage, setAiChatOpen]);
+
+  // Handle page transition effects for content area
+  useEffect(() => {
+    // Mark content as transitioning
+    setIsContentTransitioning(true);
+    
+    // Close sidebar on mobile during navigation if needed
+    if (isMobile && sidebarOpen) {
+      setSidebarOpen(false);
+    }
+    
+    // Reset transition state after a shorter delay
+    const timer = setTimeout(() => {
+      setIsContentTransitioning(false);
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, [location.pathname, isMobile]);
 
   // Close the sidebar on mobile when a navigation item is clicked
   const closeSidebarOnMobile = useCallback(() => {
@@ -31,28 +52,30 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     }
   }, [isMobile, setSidebarOpen, sidebarOpen]);
 
-  // Use a stable sidebar key to ensure the sidebar doesn't remount
-  // This is CRITICAL for maintaining scroll position
-  const stableSidebarKey = "sidebar-stable-instance";
+  // Memoize the Sidebar component to prevent unnecessary re-renders
+  const memoizedSidebar = useMemo(() => (
+    <Sidebar 
+      isOpen={sidebarOpen} 
+      onToggle={toggleSidebar} 
+      onNavItemClick={closeSidebarOnMobile} 
+      toggleAiChat={toggleAiChat} 
+      isMobile={isMobile}
+      isTransitioning={false} // Never hide sidebar completely on transitions
+    />
+  ), [sidebarOpen, toggleSidebar, closeSidebarOnMobile, toggleAiChat, isMobile]);
 
   return (
     <SidebarProvider>
       <div className="h-screen flex bg-background overflow-hidden">
-        {/* Use a key prop directly on Sidebar instead of Fragment */}
-        <Sidebar 
-          key={stableSidebarKey}
-          isOpen={sidebarOpen} 
-          onToggle={toggleSidebar} 
-          onNavItemClick={closeSidebarOnMobile} 
-          isMobile={isMobile}
-          isTransitioning={false}
-        />
+        {/* Always render the sidebar, never completely hide it during transitions */}
+        {memoizedSidebar}
 
+        {/* Main content and AI assistant */}
         <ContentArea 
           aiChatOpen={aiChatOpen} 
           toggleAiChat={toggleAiChat} 
           isMobile={isMobile}
-          isTransitioning={false}
+          isTransitioning={isContentTransitioning}
         >
           {children}
         </ContentArea>
@@ -61,9 +84,4 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   );
 };
 
-// Use React.memo with a custom comparison that ignores children changes
-// This prevents Layout from re-rendering when only the children change
-export default React.memo(Layout, (prevProps, nextProps) => {
-  // We only care about the children's identity, not their content
-  return true;
-});
+export default React.memo(Layout);

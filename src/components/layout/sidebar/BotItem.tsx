@@ -1,5 +1,5 @@
 
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { BotItemProps } from './types';
@@ -8,51 +8,25 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
   const location = useLocation();
   const navigate = useNavigate();
   const isActive = location.pathname === to;
-  const linkRef = useRef<HTMLAnchorElement>(null);
 
-  // Use useCallback to prevent unnecessary re-renders
   const handleClick = useCallback((e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent default link behavior
+    // Prevent default navigation
+    e.preventDefault();
     
     // Don't navigate if we're already on this page
-    if (isActive) {
-      return;
-    }
+    if (isActive) return;
     
-    // Run the onClick handler if provided
+    // Run the onClick handler first
     if (onClick) {
       onClick();
     }
     
-    // Store the current scroll position before navigation
-    const sidebarElement = document.getElementById('sidebar-container');
-    if (sidebarElement) {
-      const scrollArea = sidebarElement.querySelector('[data-radix-scroll-area-viewport]') as HTMLElement;
-      if (scrollArea) {
-        // Get the current scroll position
-        const scrollPos = scrollArea.scrollTop;
-        console.log(`Saving pre-navigation scroll position for ${location.pathname}: ${scrollPos}`);
-        
-        // Save the scroll position to sessionStorage keyed by current route
-        sessionStorage.setItem(`sidebar-scroll-${location.pathname}`, scrollPos.toString());
-      }
-    }
-    
-    // Use navigate instead of letting the link handle it
-    navigate(to, { 
-      replace: false, 
-      state: { 
-        preserveScroll: true,
-        sidebarScroll: true,
-        from: location.pathname,
-        timestamp: Date.now() // Add timestamp to ensure state is always unique
-      } 
-    });
-  }, [isActive, onClick, navigate, to, location.pathname]);
+    // Navigate immediately without delay
+    navigate(to);
+  }, [isActive, onClick, navigate, to]);
 
   return (
     <Link
-      ref={linkRef}
       to={to}
       className={cn(
         "flex items-center h-10 text-sm font-medium",
@@ -64,13 +38,12 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
       )}
       onClick={handleClick}
       title={!isOpen ? label : undefined}
-      data-testid={`bot-item-${label.toLowerCase()}`}
     >
       <div className="flex items-center justify-center w-5 h-5 flex-shrink-0">
         <Icon className="h-5 w-5" />
       </div>
-      <div className={cn("ml-3 overflow-hidden", 
-                       isOpen ? "opacity-100" : "opacity-0 w-0")}>
+      <div className={cn("ml-3 overflow-hidden transition-opacity duration-100", 
+                         isOpen ? "opacity-100" : "opacity-0 w-0")}>
         <span className="truncate">{label}</span>
       </div>
     </Link>

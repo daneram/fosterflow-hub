@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React from 'react';
 import { cn } from '@/lib/utils';
 import SidebarHeader from './sidebar/SidebarHeader';
 import SidebarFooter from './sidebar/SidebarFooter';
@@ -14,7 +14,7 @@ import {
   toolsSection
 } from './sidebar/sidebarSections';
 
-// Memoize the sidebar sections to prevent re-creation on each render
+// Create a memoized list of sections to prevent re-creation on each render
 const sidebarSections = [
   { key: 'dashboard', section: dashboardSection },
   { key: 'core', section: coreSection },
@@ -30,7 +30,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   isMobile,
   isTransitioning = false
 }) => {
-  // Render a fixed-width placeholder during transitions
+  // Render a fixed-width placeholder instead of not rendering at all
   if (isMobile && isTransitioning) {
     return (
       <div 
@@ -39,19 +39,10 @@ const Sidebar: React.FC<SidebarProps> = ({
           !isOpen ? "w-14" : "w-52"
         )} 
         aria-hidden="true"
-        id="sidebar-container"
       />
     );
   }
 
-  // Memoize the nav click handler to prevent re-creation
-  const handleNavClick = useCallback(() => {
-    if (onNavItemClick) {
-      onNavItemClick();
-    }
-  }, [onNavItemClick]);
-
-  // Use a stable ID for the sidebar
   return (
     <div 
       className={cn(
@@ -64,15 +55,13 @@ const Sidebar: React.FC<SidebarProps> = ({
         // Never completely hide the sidebar
         isMobile && isTransitioning ? "opacity-90" : "opacity-100"
       )}
-      // Add an ID for easier DOM targeting
-      id="sidebar-container"
     >
       <SidebarHeader isOpen={isOpen} onToggle={onToggle} />
 
-      <ScrollManager isOpen={isOpen} sidebarId="sidebar-container">
+      <ScrollManager isOpen={isOpen}>
         <div className="flex flex-col space-y-0">
           {isMobile && (
-            <AIChatSection isOpen={isOpen} onNavItemClick={handleNavClick} />
+            <AIChatSection isOpen={isOpen} onNavItemClick={onNavItemClick} />
           )}
           
           {sidebarSections.map(({ key, section }) => (
@@ -81,7 +70,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               title={section.title} 
               isOpen={isOpen} 
               items={section.items} 
-              onNavItemClick={handleNavClick} 
+              onNavItemClick={onNavItemClick} 
             />
           ))}
         </div>

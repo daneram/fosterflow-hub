@@ -34,6 +34,7 @@ export const RecordTableView: React.FC<RecordTableViewProps> = ({
   toggleSort
 }) => {
   const handleRowClick = (id: string) => {
+    // If already selected, deselect it
     const isSelected = selectedRecords.includes(id);
     handleSelectRecord(id, !isSelected);
   };

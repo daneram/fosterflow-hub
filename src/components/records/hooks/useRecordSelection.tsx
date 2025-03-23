@@ -7,15 +7,18 @@ export const useRecordSelection = (records: Record[]) => {
 
   const handleSelectRecord = (id: string, checked: boolean) => {
     if (checked) {
-      setSelectedRecords(prev => [...prev, id]);
+      // Only allow one selection at a time
+      setSelectedRecords([id]);
     } else {
-      setSelectedRecords(prev => prev.filter(recordId => recordId !== id));
+      setSelectedRecords([]);
     }
   };
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
-      setSelectedRecords(records.map(record => record.id));
+      // Since we only allow one selection, this could select the first record
+      // or just clear the selection depending on the desired behavior
+      setSelectedRecords(records.length > 0 ? [records[0].id] : []);
     } else {
       setSelectedRecords([]);
     }

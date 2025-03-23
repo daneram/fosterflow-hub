@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Filter, ChevronDown, X } from 'lucide-react';
@@ -31,7 +32,7 @@ export const AdvancedFiltersToggle: React.FC<AdvancedFiltersToggleProps> = ({
     >
       <div className="flex items-center">
         <Filter className="h-3.5 w-3.5 mr-1.5" />
-        Advanced Filters
+        Management Filters
       </div>
       {isAdvancedSearchOpen ? (
         <X className="h-3.5 w-3.5" />

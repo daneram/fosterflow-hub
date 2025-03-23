@@ -83,7 +83,7 @@ export const RecordTableView: React.FC<RecordTableViewProps> = ({
                   </td>
                   <td className="p-4">
                     {record.client && (
-                      <span className="text-sm text-gray-700 hover:underline cursor-pointer">
+                      <span className="text-sm text-muted-foreground hover:underline cursor-pointer">
                         {record.client}
                       </span>
                     )}

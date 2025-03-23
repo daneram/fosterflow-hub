@@ -3,6 +3,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { ChevronRight } from 'lucide-react';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 interface SidebarHeaderProps {
   isOpen: boolean;
@@ -20,12 +21,17 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
     >
       {isOpen ? (
         <>
-          <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center mr-2">
-            <span className="text-primary font-medium text-xs">FF</span>
-          </div>
-          <div>
-            <h2 className="text-base font-semibold mb-0">FosterFlow</h2>
-            <p className="text-xs text-muted-foreground">Case Management</p>
+          <Avatar className="w-7 h-7 mr-2">
+            <AvatarImage 
+              src="/lovable-uploads/6d655b66-ad8d-445b-93e9-36d9917768dc.png" 
+              alt="Indigo Fostering"
+            />
+            <AvatarFallback className="bg-primary/10 text-primary text-xs font-medium">
+              IF
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex-1 min-w-0">
+            <h2 className="text-base font-semibold mb-0 truncate">Indigo Fostering</h2>
           </div>
           <Button 
             variant="ghost" 
@@ -37,9 +43,15 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
           </Button>
         </>
       ) : (
-        <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center">
-          <span className="text-primary font-medium text-xs">FF</span>
-        </div>
+        <Avatar className="w-7 h-7">
+          <AvatarImage 
+            src="/lovable-uploads/6d655b66-ad8d-445b-93e9-36d9917768dc.png" 
+            alt="Indigo Fostering"
+          />
+          <AvatarFallback className="bg-primary/10 text-primary text-xs font-medium">
+            IF
+          </AvatarFallback>
+        </Avatar>
       )}
     </div>
   );

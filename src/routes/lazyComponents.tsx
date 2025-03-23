@@ -1,16 +1,23 @@
 
 import React from "react";
 
+// Define a type for our enhanced lazy component that includes the _init method
+type LazyComponentWithInit = React.LazyExoticComponent<React.ComponentType<any>> & {
+  _init: () => void;
+};
+
 // Helper to add _init() method to lazy components for preloading
-const createLazyComponent = (importFn: () => Promise<any>) => {
+const createLazyComponent = (importFn: () => Promise<any>): LazyComponentWithInit => {
   const LazyComponent = React.lazy(importFn);
+  
   // Add an _init method that triggers the import but doesn't render
-  (LazyComponent as any)._init = () => {
+  (LazyComponent as LazyComponentWithInit)._init = () => {
     importFn().catch(() => {
       // Silent catch - just for preloading
     });
   };
-  return LazyComponent;
+  
+  return LazyComponent as LazyComponentWithInit;
 };
 
 // Lazy load all components with preloading capability

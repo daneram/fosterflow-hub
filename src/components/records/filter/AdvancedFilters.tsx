@@ -1,12 +1,7 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { format } from 'date-fns';
-import { CalendarIcon } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface AdvancedFiltersProps {
@@ -20,29 +15,9 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
   selectedStatus, 
   setSelectedStatus 
 }) => {
-  const [fromDate, setFromDate] = useState<Date | undefined>(undefined);
-  const [toDate, setToDate] = useState<Date | undefined>(undefined);
-  const [fromDateOpen, setFromDateOpen] = useState(false);
-  const [toDateOpen, setToDateOpen] = useState(false);
   const isMobile = useIsMobile();
   
-  // Reset state when component is closed (which happens after clear filters)
-  useEffect(() => {
-    if (!isOpen) {
-      setFromDate(undefined);
-      setToDate(undefined);
-    }
-  }, [isOpen]);
-  
   if (!isOpen) return null;
-  
-  // Format date based on device type
-  const formatDateDisplay = (date: Date) => {
-    if (isMobile) {
-      return format(date, "dd/MM/yy");
-    }
-    return format(date, "dd MMMM yyyy");
-  };
 
   // Function to handle status button click
   const handleStatusButtonClick = (status: string) => {
@@ -54,83 +29,8 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
   return (
     <div className="space-y-4 py-2">
       <div className="space-y-2">
-        <div className="grid grid-cols-2 gap-2">
-          <div>
-            <Popover open={fromDateOpen} onOpenChange={setFromDateOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn(
-                    "w-full h-8 justify-start text-left font-normal text-xs md:text-sm",
-                    !fromDate && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon className="mr-0.5 h-3.5 w-3.5 opacity-70" />
-                  {fromDate ? (
-                    <span className="truncate text-xs md:text-sm">{formatDateDisplay(fromDate)}</span>
-                  ) : (
-                    "From"
-                  )}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar
-                  mode="single"
-                  selected={fromDate}
-                  onSelect={(date) => {
-                    setFromDate(date);
-                    setFromDateOpen(false);
-                  }}
-                  initialFocus
-                  className="pointer-events-auto"
-                  classNames={{
-                    day_selected: "bg-neutral-900 text-white hover:bg-neutral-800 hover:text-white focus:bg-neutral-900 focus:text-white"
-                  }}
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
-          <div>
-            <Popover open={toDateOpen} onOpenChange={setToDateOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn(
-                    "w-full h-8 justify-start text-left font-normal text-xs md:text-sm",
-                    !toDate && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon className="mr-0.5 h-3.5 w-3.5 opacity-70" />
-                  {toDate ? (
-                    <span className="truncate text-xs md:text-sm">{formatDateDisplay(toDate)}</span>
-                  ) : (
-                    "To"
-                  )}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar
-                  mode="single"
-                  selected={toDate}
-                  onSelect={(date) => {
-                    setToDate(date);
-                    setToDateOpen(false);
-                  }}
-                  initialFocus
-                  className="pointer-events-auto"
-                  classNames={{
-                    day_selected: "bg-neutral-900 text-white hover:bg-neutral-800 hover:text-white focus:bg-neutral-900 focus:text-white"
-                  }}
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
-        </div>
-      </div>
-      
-      <div className="space-y-2">
         <Select>
-          <SelectTrigger className="h-8">
+          <SelectTrigger className="h-9">
             <SelectValue placeholder="Assigned to" />
           </SelectTrigger>
           <SelectContent>

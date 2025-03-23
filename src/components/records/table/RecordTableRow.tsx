@@ -2,7 +2,6 @@
 import React from 'react';
 import { Record } from '../types';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { formatUniqueIdentifier } from './RecordIdFormatter';
 import { format } from 'date-fns';
 
 interface RecordTableRowProps {
@@ -38,10 +37,6 @@ export const RecordTableRow: React.FC<RecordTableRowProps> = ({
               
               <div className="flex justify-between items-center mt-1.5">
                 <span className="text-xs text-muted-foreground">
-                  {formatUniqueIdentifier(record)}
-                </span>
-                
-                <span className="text-xs text-muted-foreground">
                   {record.owner || 'Unassigned'}
                 </span>
                 
@@ -54,7 +49,6 @@ export const RecordTableRow: React.FC<RecordTableRowProps> = ({
         ) : (
           <div className="flex flex-col">
             <span>{record.title}</span>
-            <div className="text-xs text-muted-foreground">{formatUniqueIdentifier(record)}</div>
           </div>
         )}
       </td>

@@ -2,7 +2,6 @@
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Record } from '../types';
-import { formatUniqueIdentifier } from '../table/RecordIdFormatter';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { format } from 'date-fns';
 

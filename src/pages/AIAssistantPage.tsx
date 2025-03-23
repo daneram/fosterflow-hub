@@ -1,13 +1,13 @@
 
 import React from 'react';
 import Layout from '@/components/layout/Layout';
-import AIChat from '@/components/ai/AIChat';
+import AIAssistant from '@/components/ai/AIAssistant';
 
 const AIAssistantPage = () => {
   return (
     <Layout>
       <div className="h-full">
-        <AIChat />
+        <AIAssistant />
       </div>
     </Layout>
   );

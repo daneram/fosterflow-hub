@@ -8,6 +8,10 @@ import ScrollManager from './sidebar/ScrollManager';
 import AIChatSection from './sidebar/AIChatSection';
 import { SidebarProps } from './sidebar/types';
 import {
+  Sidebar as ShadcnSidebar,
+  SidebarContent
+} from '@/components/ui/sidebar';
+import {
   dashboardSection,
   coreSection,
   fosteringSection,

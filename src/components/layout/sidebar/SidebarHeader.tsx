@@ -17,7 +17,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
       )}
       onClick={onToggle}
     >
-      <div className="w-5 h-5 flex items-center justify-center">
+      <div className="flex items-center justify-center w-5 h-5">
         <Avatar className="h-5 w-5">
           <AvatarImage 
             src="/lovable-uploads/6d655b66-ad8d-445b-93e9-36d9917768dc.png" 

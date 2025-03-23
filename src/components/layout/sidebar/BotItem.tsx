@@ -40,7 +40,7 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
       onClick={handleClick}
       title={!isOpen ? label : undefined}
     >
-      <div className="w-5 h-5 flex items-center justify-center">
+      <div className="flex items-center justify-center w-5 h-5">
         <Icon className="h-5 w-5" />
       </div>
       <div 

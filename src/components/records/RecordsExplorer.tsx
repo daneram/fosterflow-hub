@@ -101,7 +101,7 @@ const RecordsExplorer: React.FC = () => {
         
         {/* Records Card - Full width */}
         <div className="w-full">
-          <Card className="border-muted">
+          <Card className="border-0">
             <CardHeader className="pb-0 pt-2">
               <RecordSearchToolbar
                 selectedRecords={selectedRecords}

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Link, Users, ChevronUp, ChevronDown, FileText } from 'lucide-react';
+import { ChevronUp, ChevronDown, FileText } from 'lucide-react';
 import { Record } from './types';
 import {
   Table,
@@ -49,10 +49,7 @@ export const RecordTableView: React.FC<RecordTableViewProps> = ({
                 </div>
               </th>
               <th className="h-10 px-4 text-left">
-                <div className="flex items-center space-x-1">
-                  <span>Linked</span>
-                  <Link className="h-4 w-4 ml-1 text-muted-foreground" />
-                </div>
+                <span>Linked</span>
               </th>
               <th className="h-10 px-4 text-left">Staff</th>
               <th className="h-10 px-4 text-left" onClick={() => toggleSort('updatedAt')}>
@@ -79,20 +76,16 @@ export const RecordTableView: React.FC<RecordTableViewProps> = ({
               records.map((record) => (
                 <tr key={record.id} className="border-b hover:bg-muted/50">
                   <td className="p-4 font-medium">
-                    <div className="flex items-center">
-                      {getTypeIcon(record.type)}
-                      <span className="ml-2">{record.title}</span>
-                      <div className="text-xs text-muted-foreground ml-2">{record.id}</div>
+                    <div className="flex flex-col">
+                      <span>{record.title}</span>
+                      <div className="text-xs text-muted-foreground">{record.id}</div>
                     </div>
                   </td>
                   <td className="p-4">
                     {record.client && (
-                      <div className="flex items-center">
-                        <Users className="h-4 w-4 mr-1.5 text-muted-foreground" />
-                        <span className="text-sm text-blue-600 hover:underline cursor-pointer">
-                          {record.client}
-                        </span>
-                      </div>
+                      <span className="text-sm text-gray-700 hover:underline cursor-pointer">
+                        {record.client}
+                      </span>
                     )}
                   </td>
                   <td className="p-4">{record.owner || 'Unassigned'}</td>

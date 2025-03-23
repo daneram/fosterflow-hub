@@ -15,11 +15,11 @@ export const RecordSearchToolbar: React.FC<RecordSearchToolbarProps> = ({
   recordCount
 }) => {
   return (
-    <div className="flex justify-end items-center">
+    <div className="flex justify-end items-center py-1">
       {selectedRecords.length > 0 && (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm" className="h-9">
+            <Button variant="outline" size="sm" className="h-8">
               Bulk Actions ({selectedRecords.length})
             </Button>
           </DropdownMenuTrigger>

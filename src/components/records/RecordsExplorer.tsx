@@ -102,7 +102,7 @@ const RecordsExplorer: React.FC = () => {
         {/* Records Card - Full width */}
         <div className="w-full">
           <Card className="shadow-md border-muted">
-            <CardHeader className="pb-2">
+            <CardHeader className="pb-0 pt-3">
               <RecordSearchToolbar
                 selectedRecords={selectedRecords}
                 recordCount={filteredRecords.length}

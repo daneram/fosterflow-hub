@@ -9,10 +9,9 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
   const isActive = location.pathname === to;
 
   const handleClick = (e: React.MouseEvent) => {
-    // If we're already on this page, completely prevent navigation
+    // If we're already on this page, prevent navigation completely
     if (isActive) {
       e.preventDefault();
-      e.stopPropagation();
       
       // Still call the onClick handler if provided (for mobile sidebar closing, etc.)
       if (onClick) {

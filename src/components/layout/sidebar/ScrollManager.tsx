@@ -1,5 +1,5 @@
 
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
@@ -11,6 +11,7 @@ interface ScrollManagerProps {
 const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLElement | null>(null);
+  const scrollPositionRef = useRef<number>(0);
   const location = useLocation();
   
   // Find the viewport element and store a reference to it
@@ -20,12 +21,26 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
     const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
     if (viewport instanceof HTMLElement) {
       viewportRef.current = viewport;
+      
+      // Restore the previous scroll position if we have one
+      if (scrollPositionRef.current > 0) {
+        viewport.scrollTop = scrollPositionRef.current;
+      }
     }
-  }, []);
+  }, [location.pathname]); // Re-run when pathname changes
   
-  // Don't add any scroll restoration logic
-  // We want the scroll position to remain exactly as the user left it
-  // The NavItem and BotItem components will prevent navigation for active items
+  // Store scroll position whenever it changes
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    if (!viewport) return;
+    
+    const handleScroll = () => {
+      scrollPositionRef.current = viewport.scrollTop;
+    };
+    
+    viewport.addEventListener('scroll', handleScroll);
+    return () => viewport.removeEventListener('scroll', handleScroll);
+  }, [viewportRef.current]);
 
   return (
     <ScrollArea 

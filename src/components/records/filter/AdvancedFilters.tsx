@@ -36,6 +36,14 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
   
   if (!isOpen) return null;
   
+  // Format date based on device type
+  const formatDateDisplay = (date: Date) => {
+    if (isMobile) {
+      return format(date, "dd/MM/yy");
+    }
+    return format(date, "PPP");
+  };
+  
   return (
     <div className="space-y-4 py-2">
       <div className="space-y-2">
@@ -52,7 +60,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                 >
                   <CalendarIcon className="mr-0.5 h-3.5 w-3.5 opacity-70" />
                   {fromDate ? (
-                    <span className="truncate text-xs md:text-sm">{format(fromDate, "PPP")}</span>
+                    <span className="truncate text-xs md:text-sm">{formatDateDisplay(fromDate)}</span>
                   ) : (
                     "From"
                   )}
@@ -87,7 +95,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
                 >
                   <CalendarIcon className="mr-0.5 h-3.5 w-3.5 opacity-70" />
                   {toDate ? (
-                    <span className="truncate text-xs md:text-sm">{format(toDate, "PPP")}</span>
+                    <span className="truncate text-xs md:text-sm">{formatDateDisplay(toDate)}</span>
                   ) : (
                     "To"
                   )}

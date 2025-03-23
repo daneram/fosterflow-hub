@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Layout from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card';
@@ -113,7 +114,7 @@ const RecordsExplorer: React.FC = () => {
                 toggleSort={toggleSort}
               />
             </CardContent>
-            <CardFooter className="border-0 shadow-none p-4 bg-transparent">
+            <CardFooter className="border-0 shadow-none p-2 bg-transparent">
               <RecordPagination
                 currentPage={currentPage}
                 totalPages={Math.ceil(filteredRecords.length / 10)}

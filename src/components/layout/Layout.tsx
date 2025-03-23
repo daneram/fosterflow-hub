@@ -1,26 +1,19 @@
 
 import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
-import { cn } from '@/lib/utils';
-import { Bot } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
-import AIChat from '@/components/ai/AIChat';
+import ContentArea from './layout/content/ContentArea';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useLocation } from 'react-router-dom';
+import { useSidebarState } from './layout/hooks/useSidebarState';
+import { useAIChatState } from './layout/hooks/useAIChatState';
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const [sidebarOpen, setSidebarOpen] = useState(() => {
-    // Get saved state from localStorage, default to true if not found
-    const saved = localStorage.getItem('sidebar-state');
-    return saved ? saved === 'open' : true;
-  });
-  
-  const [aiChatOpen, setAiChatOpen] = useState(false);
+  const { sidebarOpen, setSidebarOpen, toggleSidebar } = useSidebarState();
+  const { aiChatOpen, setAiChatOpen, toggleAiChat } = useAIChatState();
   const isMobile = useIsMobile();
   const location = useLocation();
   const isAIAssistantPage = location.pathname === '/ai-assistant';
@@ -28,20 +21,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   // Set initial AI chat state based on screen size
   useEffect(() => {
     setAiChatOpen(!isMobile && !isAIAssistantPage);
-  }, [isMobile, isAIAssistantPage]);
-
-  // Save sidebar state to localStorage when it changes
-  useEffect(() => {
-    localStorage.setItem('sidebar-state', sidebarOpen ? 'open' : 'closed');
-  }, [sidebarOpen]);
-
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
-
-  const toggleAiChat = () => {
-    setAiChatOpen(!aiChatOpen);
-  };
+  }, [isMobile, isAIAssistantPage, setAiChatOpen]);
 
   // This function will be called when a navigation item is clicked in the sidebar
   const closeSidebarOnMobile = () => {
@@ -52,54 +32,23 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className="min-h-screen flex bg-background overflow-hidden">
-      {/* Sidebar with optimized width */}
-      <div className={cn(
-        "h-screen transition-all duration-300 ease-in-out flex-shrink-0",
-        sidebarOpen ? "w-56" : "w-14"
-      )}>
-        <Sidebar 
-          isOpen={sidebarOpen} 
-          onToggle={toggleSidebar} 
-          onNavItemClick={closeSidebarOnMobile}
-          toggleAiChat={toggleAiChat} 
-          isMobile={isMobile}
-        />
-      </div>
+      {/* Sidebar */}
+      <Sidebar 
+        isOpen={sidebarOpen} 
+        onToggle={toggleSidebar} 
+        onNavItemClick={closeSidebarOnMobile}
+        toggleAiChat={toggleAiChat} 
+        isMobile={isMobile}
+      />
 
-      {/* Main content and AI assistant with better spacing */}
-      <div className="flex-1 flex overflow-hidden h-screen">
-        <ResizablePanelGroup
-          direction="horizontal"
-          className="min-h-screen w-full"
-        >
-          {/* Main content panel with proper overflow handling */}
-          <ResizablePanel defaultSize={75} minSize={50} id="main-content">
-            <div className="h-screen overflow-y-auto p-3 sm:p-4 md:p-5">{children}</div>
-          </ResizablePanel>
-          
-          {/* Resizable handle - only visible on desktop when AI chat is open */}
-          {!isMobile && aiChatOpen && <ResizableHandle withHandle />}
-          
-          {/* AI Assistant panel - only rendered on desktop when open, with reduced default size */}
-          {!isMobile && aiChatOpen && (
-            <ResizablePanel defaultSize={25} minSize={20} id="ai-chat">
-              <AIChat />
-            </ResizablePanel>
-          )}
-        </ResizablePanelGroup>
-        
-        {/* Mobile AI Chat toggle button - now hidden */}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="hidden" 
-          onClick={toggleAiChat}
-        >
-          <Bot className="h-5 w-5" />
-        </Button>
-        
-        {/* Removed mobile AI Chat overlay - now it's a separate page */}
-      </div>
+      {/* Main content and AI assistant */}
+      <ContentArea 
+        aiChatOpen={aiChatOpen} 
+        toggleAiChat={toggleAiChat} 
+        isMobile={isMobile}
+      >
+        {children}
+      </ContentArea>
     </div>
   );
 };

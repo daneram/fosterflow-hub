@@ -10,11 +10,15 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
   const isActive = location.pathname === to;
 
   const handleClick = useCallback((e: React.MouseEvent) => {
-    // Prevent default navigation
+    // Prevent default navigation and any scroll position changes
     e.preventDefault();
+    e.stopPropagation();
     
     // Don't navigate if we're already on this page
     if (isActive) return;
+    
+    // Store current scroll position to prevent jumping
+    const scrollY = window.scrollY;
     
     // Run the onClick handler (which will close the sidebar on mobile) first
     if (onClick) {
@@ -23,6 +27,9 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
     
     // Navigate immediately, removing the delay that was causing flicker
     navigate(to);
+    
+    // Reset scroll after navigation to prevent jumps
+    window.scrollTo(0, scrollY);
   }, [isActive, onClick, navigate, to]);
 
   return (

@@ -18,6 +18,8 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
   const isMobile = useIsMobile();
   const location = useLocation();
   const [isScrolling, setIsScrolling] = useState(false);
+  const [contentHeight, setContentHeight] = useState(0);
+  const [viewportHeight, setViewportHeight] = useState(0);
   
   // Initialize viewport ref and restore scroll position from localStorage
   useEffect(() => {
@@ -34,20 +36,34 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
           viewport.scrollTop = parseInt(savedPosition, 10);
         }
       }
+      
+      // Store viewport height for calculations
+      setViewportHeight(viewport.clientHeight);
     }
   }, [isMobile]);
   
-  // Reset scroll to top on navigation changes for mobile
+  // Calculate content height to determine if we need to add padding
   useEffect(() => {
-    if (isMobile && viewportRef.current) {
-      // Small delay to ensure DOM updates have completed
-      setTimeout(() => {
+    if (viewportRef.current && viewportRef.current.firstElementChild) {
+      const contentEl = viewportRef.current.firstElementChild as HTMLElement;
+      setContentHeight(contentEl.scrollHeight);
+    }
+  }, [children, isOpen]);
+  
+  // Reset scroll to top on navigation changes for mobile 
+  // but make sure we don't reset during scrolling
+  useEffect(() => {
+    if (isMobile && viewportRef.current && !isScrolling) {
+      // Clear any pending timeouts to prevent race conditions
+      const timeoutId = setTimeout(() => {
         if (viewportRef.current) {
           viewportRef.current.scrollTop = 0;
         }
-      }, 50);
+      }, 100);
+      
+      return () => clearTimeout(timeoutId);
     }
-  }, [location.pathname, isMobile]);
+  }, [location.pathname, isMobile, isScrolling]);
   
   // Save scroll position to localStorage with debounce
   useEffect(() => {
@@ -62,7 +78,7 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
             localStorage.setItem(SCROLL_POSITION_KEY, viewport.scrollTop.toString());
           }
           setIsScrolling(false);
-        }, 100);
+        }, 200); // Increased debounce time
       }
     };
     
@@ -70,14 +86,24 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
     return () => viewport.removeEventListener('scroll', handleScroll);
   }, [isMobile, isScrolling]);
 
+  // Calculate how much padding we need to add at the bottom
+  // This ensures the last item is fully visible and not cut off
+  const getBottomPadding = () => {
+    if (!isMobile) return 0;
+    
+    // Add extra padding to ensure the last item is fully visible 
+    // and doesn't cause scroll jumping behavior
+    return Math.max(32, viewportHeight * 0.2); // At least 32px or 20% of viewport height
+  };
+
   return (
     <ScrollArea 
       ref={scrollAreaRef} 
       className="flex-1 overflow-hidden"
     >
       {children}
-      {/* Add padding at the bottom to prevent last items from being cut off */}
-      {isMobile && <div className="h-16" />}
+      {/* Add dynamic padding to ensure last items are fully visible */}
+      {isMobile && <div style={{ height: `${getBottomPadding()}px` }} />}
     </ScrollArea>
   );
 };

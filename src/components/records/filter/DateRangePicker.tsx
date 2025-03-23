@@ -50,7 +50,7 @@ const DatePickerButton: React.FC<DatePickerButtonProps> = ({
             !date && "text-muted-foreground"
           )}
         >
-          <CalendarIcon className="mr-2 h-4 w-4 opacity-70" />
+          <CalendarIcon className={cn("mr-2 h-4 w-4", date ? "text-primary-foreground" : "opacity-70")} />
           {date ? (
             <span>{formatDateDisplay(date)}</span>
           ) : (
@@ -61,7 +61,7 @@ const DatePickerButton: React.FC<DatePickerButtonProps> = ({
               className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer z-10"
               onClick={clearDate}
             >
-              <X className="h-4 w-4 text-muted-foreground hover:text-foreground" />
+              <X className="h-4 w-4 text-primary-foreground" />
             </div>
           )}
         </Button>

@@ -2,7 +2,6 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { ChevronRight } from 'lucide-react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 interface SidebarHeaderProps {
@@ -33,14 +32,6 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
           <div className="flex-1 min-w-0 transition-opacity duration-300 ease-in-out">
             <h2 className="text-base font-semibold mb-0 truncate">Indigo Fostering</h2>
           </div>
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="h-5 w-5 ml-auto transition-opacity duration-300 ease-in-out"
-            onClick={onToggle}
-          >
-            <ChevronRight className="h-3 w-3 transition-transform duration-300 ease-in-out" />
-          </Button>
         </>
       ) : (
         <Avatar className="w-7 h-7 transition-all duration-300 ease-in-out">

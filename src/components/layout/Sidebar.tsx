@@ -18,7 +18,7 @@ import {
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onNavItemClick, isMobile }) => {
   return (
     <div className={cn(
-      "h-full flex flex-col bg-sidebar py-3 transition-all duration-300 ease-in-out",
+      "h-screen flex flex-col bg-sidebar py-3 transition-all duration-300 ease-in-out overflow-hidden",
       isOpen ? "w-56" : "w-14"
     )}>
       <SidebarHeader isOpen={isOpen} onToggle={onToggle} />

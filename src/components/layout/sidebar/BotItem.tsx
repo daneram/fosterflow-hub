@@ -8,6 +8,18 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
   const location = useLocation();
   const isActive = location.pathname === to;
 
+  const handleClick = (e: React.MouseEvent) => {
+    // If we're already on this page, prevent default navigation
+    if (location.pathname === to) {
+      e.preventDefault();
+    }
+    
+    // Call the original onClick handler if provided
+    if (onClick) {
+      onClick();
+    }
+  };
+
   return (
     <Link
       to={to}
@@ -19,7 +31,7 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
         !isOpen && "justify-center px-0",
         !isOpen && "w-full flex justify-center"
       )}
-      onClick={onClick}
+      onClick={handleClick}
       title={!isOpen ? label : undefined}
     >
       <Icon className="h-4 w-4" />

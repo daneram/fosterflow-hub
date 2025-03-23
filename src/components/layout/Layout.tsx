@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Sidebar from './Sidebar';
 import ContentArea from './content/ContentArea';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -28,10 +28,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     if (isMobile) {
       setSidebarOpen(false);
     }
+    // Removed the scrolling behavior - it will be handled in NavItem
   };
 
   return (
-    <div className="min-h-screen flex bg-background overflow-hidden">
+    <div className="h-screen flex bg-background overflow-hidden">
       {/* Sidebar */}
       <Sidebar 
         isOpen={sidebarOpen} 

@@ -1,5 +1,5 @@
 
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
@@ -11,45 +11,51 @@ interface ScrollManagerProps {
 const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const scrollPositionRef = useRef<number>(0);
-  const [scrollAreaViewport, setScrollAreaViewport] = useState<HTMLElement | null>(null);
+  const viewportRef = useRef<HTMLElement | null>(null);
   const location = useLocation();
   
+  // Find the viewport element and store a reference to it
   useEffect(() => {
     if (scrollAreaRef.current) {
       const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
       if (viewport instanceof HTMLElement) {
-        setScrollAreaViewport(viewport);
+        viewportRef.current = viewport;
       }
     }
   }, [scrollAreaRef.current]);
   
+  // Save scroll position when scrolling
   useEffect(() => {
-    if (!scrollAreaViewport) return;
+    const viewport = viewportRef.current;
+    if (!viewport) return;
     
     const handleScroll = () => {
-      scrollPositionRef.current = scrollAreaViewport.scrollTop;
+      scrollPositionRef.current = viewport.scrollTop;
     };
     
-    scrollAreaViewport.addEventListener('scroll', handleScroll);
+    viewport.addEventListener('scroll', handleScroll);
     return () => {
-      scrollAreaViewport.removeEventListener('scroll', handleScroll);
+      viewport.removeEventListener('scroll', handleScroll);
     };
-  }, [scrollAreaViewport]);
+  }, [viewportRef.current]);
   
+  // When route changes, maintain scroll position in the sidebar
   useEffect(() => {
-    if (scrollAreaViewport && scrollPositionRef.current > 0) {
-      const restoreScroll = () => {
-        scrollAreaViewport.scrollTop = scrollPositionRef.current;
-      };
+    const viewport = viewportRef.current;
+    if (viewport && scrollPositionRef.current > 0) {
+      // Use a small delay to ensure the DOM has updated
+      const timer = setTimeout(() => {
+        viewport.scrollTop = scrollPositionRef.current;
+      }, 10);
       
-      requestAnimationFrame(restoreScroll);
+      return () => clearTimeout(timer);
     }
-  }, [location.pathname, scrollAreaViewport]);
+  }, [location.pathname, viewportRef.current]);
 
   return (
     <ScrollArea 
       ref={scrollAreaRef} 
-      className={isOpen ? "px-2 mt-4 flex-1" : "px-0 mt-4 flex-1"}
+      className={isOpen ? "px-2 mt-4 flex-1 overflow-hidden" : "px-0 mt-4 flex-1 overflow-hidden"}
     >
       {children}
     </ScrollArea>

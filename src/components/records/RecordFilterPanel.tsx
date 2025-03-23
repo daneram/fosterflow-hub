@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Filter, Star, Plus } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { SavedFilterPresets } from './SavedFilterPresets';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
 interface RecordFilterPanelProps {
   selectedType: string | null;

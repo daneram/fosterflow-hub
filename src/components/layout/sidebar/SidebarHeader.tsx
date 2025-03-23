@@ -12,8 +12,8 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
   return (
     <div 
       className={cn(
-        "flex items-center cursor-pointer mb-4 transition-all duration-300 ease-in-out h-10",
-        isOpen ? "px-2.5" : "px-0 justify-center"
+        "flex items-center cursor-pointer mb-4 h-10",
+        isOpen ? "px-2.5" : "justify-center"
       )}
       onClick={onToggle}
     >
@@ -28,14 +28,11 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
           </AvatarFallback>
         </Avatar>
       </div>
-      <div 
-        className={cn(
-          "ml-3 transition-all duration-300 ease-in-out overflow-hidden",
-          isOpen ? "opacity-100 max-w-full" : "opacity-0 max-w-0"
-        )}
-      >
-        <h2 className="text-base font-semibold whitespace-nowrap">Indigo Fostering</h2>
-      </div>
+      {isOpen && (
+        <div className="ml-3 overflow-hidden">
+          <h2 className="text-base font-semibold whitespace-nowrap">Indigo Fostering</h2>
+        </div>
+      )}
     </div>
   );
 };

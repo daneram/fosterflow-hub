@@ -1,7 +1,9 @@
+
 import React from 'react';
 import { Record } from '../types';
 import { RecordListItem } from './RecordListItem';
 import { EmptyRecordList } from './EmptyRecordList';
+
 interface RecordListProps {
   records: Record[];
   selectedRecords: string[];
@@ -13,6 +15,7 @@ interface RecordListProps {
   getPriorityBadge: (priority?: string) => React.ReactNode;
   getComplianceIcon: (compliance?: string) => React.ReactNode;
 }
+
 export const RecordList: React.FC<RecordListProps> = ({
   records,
   selectedRecords,
@@ -26,7 +29,22 @@ export const RecordList: React.FC<RecordListProps> = ({
   if (records.length === 0) {
     return <EmptyRecordList />;
   }
-  return <div className="space-y-2.5 pb-2">
-      {records.map(record => <RecordListItem key={record.id} record={record} isSelected={selectedRecords.includes(record.id)} onSelectRecord={handleSelectRecord} formatDate={formatDate} getTypeIcon={getTypeIcon} getStatusBadge={getStatusBadge} getPriorityBadge={getPriorityBadge} getComplianceIcon={getComplianceIcon} />)}
-    </div>;
+  
+  return (
+    <div className="space-y-2.5">
+      {records.map((record) => (
+        <RecordListItem
+          key={record.id}
+          record={record}
+          isSelected={selectedRecords.includes(record.id)}
+          onSelectRecord={handleSelectRecord}
+          formatDate={formatDate}
+          getTypeIcon={getTypeIcon}
+          getStatusBadge={getStatusBadge}
+          getPriorityBadge={getPriorityBadge}
+          getComplianceIcon={getComplianceIcon}
+        />
+      ))}
+    </div>
+  );
 };

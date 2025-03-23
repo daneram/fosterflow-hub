@@ -32,7 +32,7 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
     <Link
       to={to}
       className={cn(
-        "flex items-center gap-2 px-2 py-1.5 text-sm font-medium transition-all duration-200",
+        "flex items-center gap-2 px-2 py-1.5 text-sm font-medium transition-all duration-300 ease-in-out",
         isActive 
           ? "bg-primary text-primary-foreground" 
           : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground",
@@ -45,8 +45,8 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
       onClick={handleClick}
       title={!isOpen ? label : undefined}
     >
-      <Icon className={cn("h-4 w-4", !isOpen && "h-5 w-5")} />
-      {isOpen && <span>{label}</span>}
+      <Icon className={cn("h-4 w-4 transition-all duration-300", !isOpen && "h-5 w-5")} />
+      {isOpen && <span className="transition-all duration-300 opacity-100">{label}</span>}
     </Link>
   );
 };

@@ -8,10 +8,6 @@ import ScrollManager from './sidebar/ScrollManager';
 import AIChatSection from './sidebar/AIChatSection';
 import { SidebarProps } from './sidebar/types';
 import {
-  Sidebar as ShadcnSidebar,
-  SidebarContent
-} from '@/components/ui/sidebar';
-import {
   dashboardSection,
   coreSection,
   fosteringSection,
@@ -22,8 +18,8 @@ import {
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onNavItemClick, isMobile }) => {
   return (
     <div className={cn(
-      "h-screen flex flex-col bg-sidebar py-4 transition-all duration-300 ease-in-out overflow-hidden",
-      isOpen ? "w-52" : "w-14"
+      "h-screen flex flex-col bg-sidebar py-4 transition-all duration-300 ease-in-out",
+      isOpen ? "w-52" : "w-10" // Narrower when closed for better alignment
     )}>
       <SidebarHeader isOpen={isOpen} onToggle={onToggle} />
 

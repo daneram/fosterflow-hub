@@ -43,6 +43,13 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
     }
     return format(date, "dd MMMM yyyy");
   };
+
+  // Function to handle status button click
+  const handleStatusButtonClick = (status: string) => {
+    // If the same status is clicked, don't reset to null
+    // Only change the status to the new one that was clicked
+    setSelectedStatus(status);
+  };
   
   return (
     <div className="space-y-4 py-2">
@@ -142,21 +149,21 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
             <Button 
               variant={selectedStatus === 'complete' ? 'default' : 'outline'} 
               size="sm"
-              onClick={() => setSelectedStatus(selectedStatus === 'complete' ? null : 'complete')}
+              onClick={() => handleStatusButtonClick('complete')}
             >
               Compliant
             </Button>
             <Button 
               variant={selectedStatus === 'incomplete' ? 'default' : 'outline'} 
               size="sm"
-              onClick={() => setSelectedStatus(selectedStatus === 'incomplete' ? null : 'incomplete')}
+              onClick={() => handleStatusButtonClick('incomplete')}
             >
               Non-Compliant
             </Button>
             <Button 
               variant={selectedStatus === 'overdue' ? 'default' : 'outline'} 
               size="sm"
-              onClick={() => setSelectedStatus(selectedStatus === 'overdue' ? null : 'overdue')}
+              onClick={() => handleStatusButtonClick('overdue')}
             >
               Overdue
             </Button>

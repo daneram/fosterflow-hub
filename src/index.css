@@ -102,6 +102,17 @@
   *:focus-within {
     @apply ring-0 outline-none;
   }
+
+  /* Hide scrollbar for all elements while maintaining functionality */
+  * {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  *::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @layer components {

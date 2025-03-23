@@ -1,27 +1,26 @@
 
 import React from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { NavItemProps } from './types';
 
 const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClick }) => {
   const location = useLocation();
-  const navigate = useNavigate();
   const isActive = location.pathname === to;
 
   const handleClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    
     // Don't navigate if we're already on this page
-    if (isActive) return;
+    if (isActive) {
+      e.preventDefault();
+      return;
+    }
     
     // Run the onClick handler if provided
     if (onClick) {
       onClick();
     }
     
-    // Navigate programmatically without causing a scroll reset
-    navigate(to, { replace: false });
+    // Allow normal navigation to proceed - we'll handle scroll in ScrollManager
   };
 
   return (
@@ -41,7 +40,7 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
       <div className="flex items-center justify-center w-5 h-5 flex-shrink-0">
         <Icon className="h-5 w-5" />
       </div>
-      <div className={cn("ml-3 overflow-hidden transition-opacity duration-100", 
+      <div className={cn("ml-3 overflow-hidden", 
                        isOpen ? "opacity-100" : "opacity-0 w-0")}>
         <span className="truncate">{label}</span>
       </div>

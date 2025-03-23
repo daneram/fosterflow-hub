@@ -1,4 +1,3 @@
-
 import React, { useRef, useEffect, useState } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -18,6 +17,7 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
   const isMobile = useIsMobile();
   const location = useLocation();
   const [isInitialized, setIsInitialized] = useState(false);
+  const pathRef = useRef(location.pathname);
   
   // Initialize viewport ref and store content element reference
   useEffect(() => {

@@ -15,6 +15,15 @@ import {
   toolsSection
 } from './sidebar/sidebarSections';
 
+// Create a memoized list of sections to prevent re-creation on each render
+const sidebarSections = [
+  { key: 'dashboard', section: dashboardSection },
+  { key: 'core', section: coreSection },
+  { key: 'fostering', section: fosteringSection },
+  { key: 'organization', section: organizationSection },
+  { key: 'tools', section: toolsSection }
+];
+
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onNavItemClick, isMobile }) => {
   return (
     <div className={cn(
@@ -29,40 +38,15 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onNavItemClick, isM
             <AIChatSection isOpen={isOpen} onNavItemClick={onNavItemClick} />
           )}
           
-          <SidebarSection 
-            title={dashboardSection.title} 
-            isOpen={isOpen} 
-            items={dashboardSection.items} 
-            onNavItemClick={onNavItemClick} 
-          />
-          
-          <SidebarSection 
-            title={coreSection.title} 
-            isOpen={isOpen} 
-            items={coreSection.items} 
-            onNavItemClick={onNavItemClick} 
-          />
-          
-          <SidebarSection 
-            title={fosteringSection.title} 
-            isOpen={isOpen} 
-            items={fosteringSection.items} 
-            onNavItemClick={onNavItemClick} 
-          />
-          
-          <SidebarSection 
-            title={organizationSection.title} 
-            isOpen={isOpen} 
-            items={organizationSection.items} 
-            onNavItemClick={onNavItemClick} 
-          />
-          
-          <SidebarSection 
-            title={toolsSection.title} 
-            isOpen={isOpen} 
-            items={toolsSection.items} 
-            onNavItemClick={onNavItemClick} 
-          />
+          {sidebarSections.map(({ key, section }) => (
+            <SidebarSection 
+              key={key}
+              title={section.title} 
+              isOpen={isOpen} 
+              items={section.items} 
+              onNavItemClick={onNavItemClick} 
+            />
+          ))}
         </div>
       </ScrollManager>
 
@@ -71,4 +55,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onNavItemClick, isM
   );
 };
 
-export default Sidebar;
+// Use React.memo with custom comparison to prevent unnecessary re-renders
+export default React.memo(Sidebar, (prevProps, nextProps) => {
+  // Only re-render if these specific props change
+  return (
+    prevProps.isOpen === nextProps.isOpen &&
+    prevProps.isMobile === nextProps.isMobile
+  );
+});

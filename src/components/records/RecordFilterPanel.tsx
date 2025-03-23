@@ -33,6 +33,13 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
 }) => {
   const isMobile = useIsMobile();
   
+  const clearAdvancedFilters = () => {
+    // Clear filters but only status for now as it's part of advanced filters
+    if (selectedStatus) {
+      setSelectedStatus(null);
+    }
+  };
+  
   return (
     <Card className="shadow-sm border border-border/60">
       <CardContent className={isMobile ? "px-3 pb-3 pt-4" : "px-3 py-3"}>
@@ -45,7 +52,11 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
             
             {/* Advanced toggle - Full width on mobile */}
             <div className="w-full">
-              <AdvancedFiltersToggle isAdvancedSearchOpen={isAdvancedSearchOpen} setIsAdvancedSearchOpen={setIsAdvancedSearchOpen} />
+              <AdvancedFiltersToggle 
+                isAdvancedSearchOpen={isAdvancedSearchOpen} 
+                setIsAdvancedSearchOpen={setIsAdvancedSearchOpen} 
+                clearAdvancedFilters={clearAdvancedFilters}
+              />
             </div>
           </div>
         ) : (
@@ -57,7 +68,11 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
             
             {/* Advanced toggle - Right side on desktop */}
             <div>
-              <AdvancedFiltersToggle isAdvancedSearchOpen={isAdvancedSearchOpen} setIsAdvancedSearchOpen={setIsAdvancedSearchOpen} />
+              <AdvancedFiltersToggle 
+                isAdvancedSearchOpen={isAdvancedSearchOpen} 
+                setIsAdvancedSearchOpen={setIsAdvancedSearchOpen}
+                clearAdvancedFilters={clearAdvancedFilters} 
+              />
             </div>
           </div>
         )}

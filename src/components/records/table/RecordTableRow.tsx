@@ -1,8 +1,8 @@
+
 import React from 'react';
 import { Record } from '../types';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { formatUniqueIdentifier } from './RecordIdFormatter';
-import { Users, Calendar } from 'lucide-react';
 
 interface RecordTableRowProps {
   record: Record;
@@ -26,21 +26,22 @@ export const RecordTableRow: React.FC<RecordTableRowProps> = ({
     >
       <td className="py-2 px-4 font-medium">
         {isMobile ? (
-          <div className="flex flex-col space-y-2">
+          <div className="flex flex-col space-y-1">
             <div className="flex flex-col">
               <div className="font-medium">{record.title}</div>
-              <div className="text-xs text-muted-foreground">{formatUniqueIdentifier(record)}</div>
-            </div>
-            
-            <div className="flex flex-col space-y-2">
-              <div className="flex items-center">
-                <Users className="h-4 w-4 mr-1" />
-                <span>{record.owner || 'Unassigned'}</span>
-              </div>
               
-              <div className="flex items-center">
-                <Calendar className="h-4 w-4 mr-1" />
-                <span>Updated: {formatDate(record.updatedAt)}</span>
+              <div className="flex justify-between items-center mt-1">
+                <div className="text-xs text-muted-foreground">
+                  {formatUniqueIdentifier(record)}
+                </div>
+                
+                <div className="text-xs text-muted-foreground">
+                  {record.owner || 'Unassigned'}
+                </div>
+                
+                <div className="text-xs text-muted-foreground">
+                  {formatDate(record.updatedAt)}
+                </div>
               </div>
             </div>
           </div>

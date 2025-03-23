@@ -24,44 +24,46 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onNavItemClick, isM
       <SidebarHeader isOpen={isOpen} onToggle={onToggle} />
 
       <ScrollManager isOpen={isOpen}>
-        {isMobile && (
-          <AIChatSection isOpen={isOpen} onNavItemClick={onNavItemClick} />
-        )}
-        
-        <SidebarSection 
-          title={dashboardSection.title} 
-          isOpen={isOpen} 
-          items={dashboardSection.items} 
-          onNavItemClick={onNavItemClick} 
-        />
-        
-        <SidebarSection 
-          title={coreSection.title} 
-          isOpen={isOpen} 
-          items={coreSection.items} 
-          onNavItemClick={onNavItemClick} 
-        />
-        
-        <SidebarSection 
-          title={fosteringSection.title} 
-          isOpen={isOpen} 
-          items={fosteringSection.items} 
-          onNavItemClick={onNavItemClick} 
-        />
-        
-        <SidebarSection 
-          title={organizationSection.title} 
-          isOpen={isOpen} 
-          items={organizationSection.items} 
-          onNavItemClick={onNavItemClick} 
-        />
-        
-        <SidebarSection 
-          title={toolsSection.title} 
-          isOpen={isOpen} 
-          items={toolsSection.items} 
-          onNavItemClick={onNavItemClick} 
-        />
+        <div className="flex flex-col space-y-0">
+          {isMobile && (
+            <AIChatSection isOpen={isOpen} onNavItemClick={onNavItemClick} />
+          )}
+          
+          <SidebarSection 
+            title={dashboardSection.title} 
+            isOpen={isOpen} 
+            items={dashboardSection.items} 
+            onNavItemClick={onNavItemClick} 
+          />
+          
+          <SidebarSection 
+            title={coreSection.title} 
+            isOpen={isOpen} 
+            items={coreSection.items} 
+            onNavItemClick={onNavItemClick} 
+          />
+          
+          <SidebarSection 
+            title={fosteringSection.title} 
+            isOpen={isOpen} 
+            items={fosteringSection.items} 
+            onNavItemClick={onNavItemClick} 
+          />
+          
+          <SidebarSection 
+            title={organizationSection.title} 
+            isOpen={isOpen} 
+            items={organizationSection.items} 
+            onNavItemClick={onNavItemClick} 
+          />
+          
+          <SidebarSection 
+            title={toolsSection.title} 
+            isOpen={isOpen} 
+            items={toolsSection.items} 
+            onNavItemClick={onNavItemClick} 
+          />
+        </div>
       </ScrollManager>
 
       <SidebarFooter isOpen={isOpen} />

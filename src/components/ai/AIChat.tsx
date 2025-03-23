@@ -64,7 +64,7 @@ const AIChat: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full border-l bg-card">
-      <CardHeader className="pb-2 border-b px-3 py-2">
+      <CardHeader className="pb-2 border-b px-3 py-3">
         <div className="flex items-center">
           <Bot className="mr-2 h-4 w-4 text-primary" />
           <CardTitle className="text-sm">AI Assistant</CardTitle>

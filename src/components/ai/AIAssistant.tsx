@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
@@ -89,7 +90,7 @@ const AIAssistant: React.FC = () => {
   return (
     <Layout>
       <div className="space-y-4 animate-fade-in">
-        <div>
+        <div className="pt-1">
           <h1 className="text-2xl font-bold tracking-tight">AI Assistant</h1>
           <p className="text-muted-foreground text-sm">Ask me questions about cases, policies, or get help with forms and workflows.</p>
         </div>

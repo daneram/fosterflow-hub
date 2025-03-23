@@ -14,7 +14,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
   return (
     <div 
       className={cn(
-        "px-2 py-1.5 flex items-center cursor-pointer",
+        "px-2 py-3 flex items-center cursor-pointer",
         !isOpen && "justify-center"
       )}
       onClick={onToggle}

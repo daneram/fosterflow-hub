@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import Sidebar from './Sidebar';
 import ContentArea from './content/ContentArea';
 import { useIsMobile } from '@/hooks/use-mobile';

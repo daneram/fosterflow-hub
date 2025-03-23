@@ -45,7 +45,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
       <div className="space-y-2">
         <Select 
           onValueChange={handleAssigneeChange} 
-          value={selectedAssignee || undefined}
+          value={selectedAssignee || ""}
           open={isDropdownOpen}
           onOpenChange={setIsDropdownOpen}
         >
@@ -53,7 +53,12 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
             className={cn("h-9", selectedAssignee ? "bg-primary text-primary-foreground hover:bg-primary/90" : "")}
             onClear={selectedAssignee ? clearAssignee : undefined}
           >
-            <SelectValue placeholder="Assigned to" />
+            <SelectValue placeholder="Assigned to">
+              {selectedAssignee === "sarah" && "Sarah Wilson"}
+              {selectedAssignee === "michael" && "Michael Brown"}
+              {selectedAssignee === "emily" && "Emily Davis"}
+              {selectedAssignee === "robert" && "Robert Johnson"}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="any">Anyone</SelectItem>

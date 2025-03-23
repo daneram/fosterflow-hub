@@ -1,4 +1,3 @@
-
 import * as React from "react"
 import * as SelectPrimitive from "@radix-ui/react-select"
 import { Check, ChevronDown, ChevronUp, X } from "lucide-react"
@@ -17,10 +16,8 @@ const SelectTrigger = React.forwardRef<
     onClear?: () => void;
   }
 >(({ className, children, onClear, ...props }, ref) => {
-  // Check if the select has a value by looking for the presence of a value attribute
-  const hasValue = React.Children.toArray(children).some(
-    child => React.isValidElement(child) && child.type === SelectValue && child.props.children
-  );
+  // Check if the select has a value by looking at the props.value directly
+  const hasValue = props.value !== undefined && props.value !== "";
   
   return (
     <SelectPrimitive.Trigger

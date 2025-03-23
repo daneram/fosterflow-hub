@@ -10,9 +10,9 @@ interface ContentAreaProps {
   isMobile: boolean;
 }
 
-// Separate component for the blur loader
+// Content loader with semi-transparent blur effect
 export const ContentLoader = () => (
-  <div className="absolute inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-background/40">
+  <div className="absolute inset-0 z-50 flex items-center justify-center bg-background/40 backdrop-blur-sm">
     <div className="animate-pulse h-8 w-8 rounded-full bg-primary/40"></div>
   </div>
 );
@@ -29,7 +29,7 @@ const ContentArea: React.FC<ContentAreaProps> = ({
         className="min-h-screen w-full"
       >
         {/* Main content panel with proper overflow handling */}
-        <ResizablePanel defaultSize={75} minSize={50} id="main-content">
+        <ResizablePanel defaultSize={100} minSize={50} id="main-content">
           <div className="h-screen overflow-y-auto p-3 sm:p-4 md:p-5 pt-3 relative">
             {children}
           </div>

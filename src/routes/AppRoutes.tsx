@@ -13,11 +13,7 @@ import * as LazyComponents from "./lazyComponents";
 const AppRoutes: React.FC = () => {
   return (
     <Routes>
-      <Route path="/" element={
-        <Suspense fallback={null}>
-          <Index />
-        </Suspense>
-      } />
+      <Route path="/" element={<Index />} />
       <Route path="/ai-assistant" element={
         <Suspense fallback={<ContentLoader />}>
           <LazyComponents.AIAssistantPage />

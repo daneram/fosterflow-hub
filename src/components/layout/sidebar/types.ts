@@ -1,9 +1,9 @@
 
-import { ReactElement } from 'react';
+import { LucideIcon } from 'lucide-react';
 
 export interface NavItemProps {
   to: string;
-  icon: React.ElementType;
+  icon: LucideIcon;
   label: string;
   isOpen: boolean;
   onClick?: () => void;
@@ -11,10 +11,21 @@ export interface NavItemProps {
 
 export interface BotItemProps {
   to: string;
-  icon: React.ElementType;
+  icon: LucideIcon;
   label: string;
   isOpen: boolean;
   onClick?: () => void;
+}
+
+export interface SidebarSectionProps {
+  title: string;
+  items: {
+    to: string;
+    icon: LucideIcon;
+    label: string;
+  }[];
+  isOpen: boolean;
+  onNavItemClick?: () => void;
 }
 
 export interface SidebarProps {
@@ -22,16 +33,6 @@ export interface SidebarProps {
   onToggle: () => void;
   onNavItemClick?: () => void;
   toggleAiChat?: () => void;
-  isMobile?: boolean;
-}
-
-export interface SidebarSectionProps {
-  title: string;
-  isOpen: boolean;
-  onNavItemClick?: () => void;
-  items: Array<{
-    to: string;
-    icon: React.ElementType;
-    label: string;
-  }>;
+  isMobile: boolean;
+  isTransitioning?: boolean;
 }

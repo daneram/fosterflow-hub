@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { NavItemProps } from './types';
@@ -9,23 +9,23 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
   const navigate = useNavigate();
   const isActive = location.pathname === to;
 
-  const handleClick = (e: React.MouseEvent) => {
+  const handleClick = useCallback((e: React.MouseEvent) => {
     // Prevent default navigation
     e.preventDefault();
     
+    // Don't navigate if we're already on this page
+    if (isActive) return;
+    
+    // Run the onClick handler (which will close the sidebar on mobile)
     if (onClick) {
-      // First close the sidebar if on mobile
       onClick();
     }
     
-    // Only navigate if this isn't the current page
-    if (!isActive) {
-      // Add a slight delay to ensure the animation starts before navigation
-      setTimeout(() => {
-        navigate(to);
-      }, 50); // Small delay to let animation start
-    }
-  };
+    // Navigate with a small delay to allow sidebar transitions to start
+    setTimeout(() => {
+      navigate(to);
+    }, 10);
+  }, [isActive, onClick, navigate, to]);
 
   return (
     <Link
@@ -36,7 +36,6 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
           ? "bg-primary text-primary-foreground" 
           : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground",
         "pl-4 pr-3", // Adjusted padding for icon alignment
-        // Add custom rounded corners - square on left, rounded on right
         "rounded-r-md rounded-l-none"
       )}
       onClick={handleClick}
@@ -46,11 +45,11 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
         <Icon className="h-5 w-5" />
       </div>
       <div className={cn("ml-3 overflow-hidden transition-opacity duration-100", 
-                         isOpen ? "opacity-100" : "opacity-0 w-0")}>
+                       isOpen ? "opacity-100" : "opacity-0 w-0")}>
         <span className="truncate">{label}</span>
       </div>
     </Link>
   );
 };
 
-export default NavItem;
+export default React.memo(NavItem);

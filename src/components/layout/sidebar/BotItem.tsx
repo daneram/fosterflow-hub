@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { BotItemProps } from './types';
@@ -9,23 +9,23 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
   const navigate = useNavigate();
   const isActive = location.pathname === to;
 
-  const handleClick = (e: React.MouseEvent) => {
+  const handleClick = useCallback((e: React.MouseEvent) => {
     // Prevent default navigation
     e.preventDefault();
     
+    // Don't navigate if we're already on this page
+    if (isActive) return;
+    
+    // Run the onClick handler (which will close the sidebar on mobile)
     if (onClick) {
-      // First close the sidebar if on mobile
       onClick();
     }
     
-    // Only navigate if this isn't the current page
-    if (!isActive) {
-      // Add a slight delay to ensure the animation starts before navigation
-      setTimeout(() => {
-        navigate(to);
-      }, 50); // Small delay to let animation start
-    }
-  };
+    // Navigate with a small delay to allow sidebar transitions to start
+    setTimeout(() => {
+      navigate(to);
+    }, 10);
+  }, [isActive, onClick, navigate, to]);
 
   return (
     <Link
@@ -53,4 +53,4 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
   );
 };
 
-export default BotItem;
+export default React.memo(BotItem);

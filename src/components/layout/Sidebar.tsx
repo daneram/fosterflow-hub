@@ -24,12 +24,26 @@ const sidebarSections = [
   { key: 'tools', section: toolsSection }
 ];
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onNavItemClick, isMobile }) => {
+const Sidebar: React.FC<SidebarProps> = ({ 
+  isOpen, 
+  onToggle, 
+  onNavItemClick, 
+  isMobile,
+  isTransitioning = false
+}) => {
   return (
-    <div className={cn(
-      "h-screen flex flex-col bg-sidebar py-4 px-0", // Removed horizontal padding
-      isOpen ? "w-52" : "w-14" // Fixed width without transitions
-    )}>
+    <div 
+      className={cn(
+        "h-screen flex flex-col bg-sidebar py-4 px-0", // Base styles
+        isOpen ? "w-52" : "w-14", // Width based on open state
+        
+        // Hide sidebar during transitions on mobile to prevent flicker
+        isMobile && isTransitioning ? "opacity-0" : "opacity-100",
+        
+        // Add transition but only for opacity, not width
+        "transition-opacity duration-75"
+      )}
+    >
       <SidebarHeader isOpen={isOpen} onToggle={onToggle} />
 
       <ScrollManager isOpen={isOpen}>
@@ -55,11 +69,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onNavItemClick, isM
   );
 };
 
-// Use React.memo with custom comparison to prevent unnecessary re-renders
+// Update memo comparison to include the new isTransitioning prop
 export default React.memo(Sidebar, (prevProps, nextProps) => {
-  // Only re-render if these specific props change
   return (
     prevProps.isOpen === nextProps.isOpen &&
-    prevProps.isMobile === nextProps.isMobile
+    prevProps.isMobile === nextProps.isMobile &&
+    prevProps.isTransitioning === nextProps.isTransitioning
   );
 });

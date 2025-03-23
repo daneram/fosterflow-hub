@@ -19,46 +19,36 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
   const isAIAssistantPage = location.pathname === '/ai-assistant';
   
-  // Track if we're in a page transition for handling sidebar visibility
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  // Tracking content transitions instead of sidebar transitions
+  const [isContentTransitioning, setIsContentTransitioning] = useState(false);
 
   // Set initial AI chat state based on screen size
   useEffect(() => {
     setAiChatOpen(!isMobile && !isAIAssistantPage);
   }, [isMobile, isAIAssistantPage, setAiChatOpen]);
 
-  // Handle page transition effects - with improved timing
+  // Handle page transition effects for content area
   useEffect(() => {
-    // Mark as transitioning
-    setIsTransitioning(true);
+    // Mark content as transitioning
+    setIsContentTransitioning(true);
     
-    // Close sidebar on mobile during navigation
+    // Close sidebar on mobile during navigation if needed
     if (isMobile && sidebarOpen) {
       setSidebarOpen(false);
     }
     
     // Reset transition state after a shorter delay
     const timer = setTimeout(() => {
-      setIsTransitioning(false);
-    }, 150); // Reduced transition time to minimize perceived flicker
+      setIsContentTransitioning(false);
+    }, 100);
     
     return () => clearTimeout(timer);
   }, [location.pathname, isMobile]);
 
   // Close the sidebar on mobile when a navigation item is clicked
   const closeSidebarOnMobile = useCallback(() => {
-    // Only proceed if sidebar is open and on mobile
     if (isMobile && sidebarOpen) {
-      // Set transition state to true to prevent flicker
-      setIsTransitioning(true);
-      
-      // Set sidebar state to closed
       setSidebarOpen(false);
-      
-      // Reset transition state after animation completes - shorter timing
-      setTimeout(() => {
-        setIsTransitioning(false);
-      }, 150);
     }
   }, [isMobile, setSidebarOpen, sidebarOpen]);
 
@@ -70,14 +60,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       onNavItemClick={closeSidebarOnMobile} 
       toggleAiChat={toggleAiChat} 
       isMobile={isMobile}
-      isTransitioning={isTransitioning}
+      isTransitioning={false} // Never hide sidebar completely on transitions
     />
-  ), [sidebarOpen, toggleSidebar, closeSidebarOnMobile, toggleAiChat, isMobile, isTransitioning]);
+  ), [sidebarOpen, toggleSidebar, closeSidebarOnMobile, toggleAiChat, isMobile]);
 
   return (
     <SidebarProvider>
       <div className="h-screen flex bg-background overflow-hidden">
-        {/* Sidebar - now memoized */}
+        {/* Always render the sidebar, never completely hide it during transitions */}
         {memoizedSidebar}
 
         {/* Main content and AI assistant */}
@@ -85,6 +75,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           aiChatOpen={aiChatOpen} 
           toggleAiChat={toggleAiChat} 
           isMobile={isMobile}
+          isTransitioning={isContentTransitioning}
         >
           {children}
         </ContentArea>

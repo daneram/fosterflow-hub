@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { cn } from '@/lib/utils';
 import SidebarHeader from './sidebar/SidebarHeader';
@@ -31,9 +30,17 @@ const Sidebar: React.FC<SidebarProps> = ({
   isMobile,
   isTransitioning = false
 }) => {
-  // Don't render during transitions on mobile to prevent flickering
+  // Render a fixed-width placeholder instead of not rendering at all
   if (isMobile && isTransitioning) {
-    return <div className="w-0 transition-none" aria-hidden="true" />;
+    return (
+      <div 
+        className={cn(
+          "h-screen flex flex-col bg-sidebar py-4 px-0",
+          !isOpen ? "w-14" : "w-52"
+        )} 
+        aria-hidden="true"
+      />
+    );
   }
 
   return (
@@ -42,11 +49,11 @@ const Sidebar: React.FC<SidebarProps> = ({
         "h-screen flex flex-col bg-sidebar py-4 px-0", // Base styles
         isOpen ? "w-52" : "w-14", // Width based on open state
         
-        // Add transition for non-mobile
-        !isMobile ? "transition-all duration-200" : "", 
+        // Add only opacity transition, keep width fixed during transitions
+        "transition-opacity duration-200",
         
-        // Don't transition width on mobile
-        isMobile ? "transition-none" : ""
+        // Never completely hide the sidebar
+        isMobile && isTransitioning ? "opacity-90" : "opacity-100"
       )}
     >
       <SidebarHeader isOpen={isOpen} onToggle={onToggle} />

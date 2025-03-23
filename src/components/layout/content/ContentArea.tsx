@@ -1,39 +1,52 @@
 
 import React from 'react';
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
+import { cn } from '@/lib/utils';
 import AIChat from '@/components/ai/AIChat';
+import { ResizablePanelGroup, ResizablePanel } from '@/components/ui/resizable';
 
 interface ContentAreaProps {
   children: React.ReactNode;
   aiChatOpen: boolean;
   toggleAiChat: () => void;
   isMobile: boolean;
+  isTransitioning?: boolean;
 }
 
 const ContentArea: React.FC<ContentAreaProps> = ({ 
   children, 
   aiChatOpen, 
-  isMobile 
+  toggleAiChat, 
+  isMobile,
+  isTransitioning = false
 }) => {
   return (
-    <div className="flex-1 flex overflow-hidden h-screen">
-      <ResizablePanelGroup
-        direction="horizontal"
-        className="min-h-screen w-full"
-      >
-        {/* Main content panel with proper overflow handling */}
-        <ResizablePanel defaultSize={75} minSize={50} id="main-content">
-          <div className="h-screen overflow-y-auto p-3 sm:p-4 md:p-5 pt-3">{children}</div>
+    <div className={cn(
+      "flex-1 overflow-hidden", 
+      isTransitioning ? "opacity-90 transition-opacity duration-100" : "opacity-100"
+    )}>
+      <ResizablePanelGroup direction="horizontal" className="min-h-screen">
+        {/* Main content panel */}
+        <ResizablePanel 
+          defaultSize={100} 
+          minSize={25}
+          className="overflow-auto"
+        >
+          <div className="p-6">
+            {children}
+          </div>
         </ResizablePanel>
-        
-        {/* Resizable handle - only visible on desktop when AI chat is open */}
-        {!isMobile && aiChatOpen && <ResizableHandle withHandle />}
-        
-        {/* AI Assistant panel - only rendered on desktop when open, with reduced default size */}
+
+        {/* AI Assistant panel - only show on desktop and when open */}
         {!isMobile && aiChatOpen && (
-          <ResizablePanel defaultSize={25} minSize={20} id="ai-chat">
-            <AIChat />
-          </ResizablePanel>
+          <>
+            <ResizablePanel 
+              defaultSize={40} 
+              minSize={30}
+              className="border-l"
+            >
+              <AIChat toggleAiChat={toggleAiChat} />
+            </ResizablePanel>
+          </>
         )}
       </ResizablePanelGroup>
     </div>

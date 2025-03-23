@@ -15,7 +15,6 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
       <div 
         className={cn(
           "flex items-center cursor-pointer h-10 text-sm font-medium rounded-md",
-          "hover:bg-sidebar-accent hover:text-sidebar-foreground",
           "px-2.5"
         )}
         onClick={onToggle}

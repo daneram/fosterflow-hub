@@ -39,7 +39,7 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
   return <Card className="shadow-sm border border-border/60">
       <FilterHeader clearFilters={handleClearFilters} />
       <CardContent className="px-3 py-[5px]">
-        {isMobile ? <div className="space-y-3">
+        {isMobile ? <div className="space-y-3 py-px">
             {/* Center type filters on mobile */}
             <div className="flex justify-center">
               <TypeFilter selectedType={selectedType} setSelectedType={setSelectedType} />

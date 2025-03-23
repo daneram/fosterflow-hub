@@ -41,37 +41,52 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
   return (
     <Card>
       <FilterHeader clearFilters={clearFilters} />
-      <CardContent className="space-y-4">
-        {/* Quick Filter Chips */}
-        <QuickFilterChips 
-          showFavoritesOnly={showFavoritesOnly}
-          setShowFavoritesOnly={setShowFavoritesOnly}
-          setSelectedStatus={setSelectedStatus}
-          setSelectedType={setSelectedType}
-        />
-        
-        {/* Saved Filters Section */}
-        <SavedFiltersSection onSelectPreset={onSelectPreset} />
-        
-        {/* Standard Filter Sections */}
-        <TypeFilter 
-          selectedType={selectedType}
-          setSelectedType={setSelectedType}
-        />
-        
-        <StatusFilter
-          selectedStatus={selectedStatus}
-          setSelectedStatus={setSelectedStatus}
-        />
-        
-        {/* Advanced Filters Toggle */}
-        <AdvancedFiltersToggle 
-          isAdvancedSearchOpen={isAdvancedSearchOpen}
-          setIsAdvancedSearchOpen={setIsAdvancedSearchOpen}
-        />
+      <CardContent>
+        <div className="flex flex-wrap gap-4">
+          {/* Quick Filter Chips */}
+          <div className="flex-shrink-0">
+            <QuickFilterChips 
+              showFavoritesOnly={showFavoritesOnly}
+              setShowFavoritesOnly={setShowFavoritesOnly}
+              setSelectedStatus={setSelectedStatus}
+              setSelectedType={setSelectedType}
+            />
+          </div>
+          
+          {/* Type Filter */}
+          <div className="flex-shrink-0">
+            <TypeFilter 
+              selectedType={selectedType}
+              setSelectedType={setSelectedType}
+            />
+          </div>
+          
+          {/* Status Filter */}
+          <div className="flex-shrink-0">
+            <StatusFilter
+              selectedStatus={selectedStatus}
+              setSelectedStatus={setSelectedStatus}
+            />
+          </div>
+          
+          {/* Saved Filters Section */}
+          <div className="flex-shrink-0">
+            <SavedFiltersSection onSelectPreset={onSelectPreset} />
+          </div>
+          
+          {/* Advanced Filters Toggle */}
+          <div className="flex-shrink-0 flex items-end">
+            <AdvancedFiltersToggle 
+              isAdvancedSearchOpen={isAdvancedSearchOpen}
+              setIsAdvancedSearchOpen={setIsAdvancedSearchOpen}
+            />
+          </div>
+        </div>
         
         {/* Advanced Filters Panel */}
-        <AdvancedFilters isOpen={isAdvancedSearchOpen} />
+        <div className="mt-4">
+          <AdvancedFilters isOpen={isAdvancedSearchOpen} />
+        </div>
       </CardContent>
     </Card>
   );

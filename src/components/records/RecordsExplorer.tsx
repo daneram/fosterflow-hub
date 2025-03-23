@@ -101,112 +101,112 @@ const RecordsExplorer: React.FC = () => {
           <RecordViewSelector viewMode={viewMode} setViewMode={setViewMode} />
         </div>
         
-        <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
-          <div className="w-full md:w-1/3 lg:w-1/4">
-            <RecordFilterPanel
-              selectedType={selectedType}
-              setSelectedType={setSelectedType}
-              selectedStatus={selectedStatus}
-              setSelectedStatus={setSelectedStatus}
-              showFavoritesOnly={showFavoritesOnly}
-              setShowFavoritesOnly={setShowFavoritesOnly}
-              isAdvancedSearchOpen={isAdvancedSearchOpen}
-              setIsAdvancedSearchOpen={setIsAdvancedSearchOpen}
-              onSelectPreset={onSelectPreset}
-            />
-          </div>
-          
-          <div className="w-full md:w-2/3 lg:w-3/4">
-            <Card>
-              <CardHeader className="pb-2">
-                <RecordSearchToolbar
-                  searchQuery={searchQuery}
-                  setSearchQuery={setSearchQuery}
-                  selectedRecords={selectedRecords}
-                  recordCount={sortedRecords.length}
-                />
-                <CardDescription>
-                  {sortedRecords.length} {sortedRecords.length === 1 ? 'record' : 'records'} found
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Tabs value={viewMode} className="w-full">
-                  <TabsContent value="list" className="mt-0">
-                    <div className="space-y-4">
-                      {sortedRecords.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center h-40 text-muted-foreground">
-                          <FileText className="h-8 w-8 mb-2" />
-                          <p>No records found</p>
-                        </div>
-                      ) : (
-                        <>
-                          {/* Select All Checkbox */}
-                          <div className="flex items-center pb-2">
-                            <Checkbox 
-                              id="select-all" 
-                              checked={selectedRecords.length === sortedRecords.length && sortedRecords.length > 0}
-                              onCheckedChange={(checked) => handleSelectAll(checked as boolean)}
-                            />
-                            <label htmlFor="select-all" className="ml-2 text-sm font-medium">
-                              Select All
-                            </label>
-                          </div>
-                          
-                          <RecordListView
-                            records={sortedRecords}
-                            selectedRecords={selectedRecords}
-                            handleSelectRecord={handleSelectRecord}
-                            handleSelectAll={handleSelectAll}
-                            formatDate={formatDate}
-                            getTypeIcon={getTypeIcon}
-                            getStatusBadge={getStatusBadge}
-                            getPriorityBadge={getPriorityBadge}
-                            getComplianceIcon={getComplianceIcon}
+        {/* Filter Panel - Now horizontal across the top */}
+        <div className="w-full">
+          <RecordFilterPanel
+            selectedType={selectedType}
+            setSelectedType={setSelectedType}
+            selectedStatus={selectedStatus}
+            setSelectedStatus={setSelectedStatus}
+            showFavoritesOnly={showFavoritesOnly}
+            setShowFavoritesOnly={setShowFavoritesOnly}
+            isAdvancedSearchOpen={isAdvancedSearchOpen}
+            setIsAdvancedSearchOpen={setIsAdvancedSearchOpen}
+            onSelectPreset={onSelectPreset}
+          />
+        </div>
+        
+        {/* Records Card - Now full width */}
+        <div className="w-full">
+          <Card>
+            <CardHeader className="pb-2">
+              <RecordSearchToolbar
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                selectedRecords={selectedRecords}
+                recordCount={sortedRecords.length}
+              />
+              <CardDescription>
+                {sortedRecords.length} {sortedRecords.length === 1 ? 'record' : 'records'} found
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Tabs value={viewMode} className="w-full">
+                <TabsContent value="list" className="mt-0">
+                  <div className="space-y-4">
+                    {sortedRecords.length === 0 ? (
+                      <div className="flex flex-col items-center justify-center h-40 text-muted-foreground">
+                        <FileText className="h-8 w-8 mb-2" />
+                        <p>No records found</p>
+                      </div>
+                    ) : (
+                      <>
+                        {/* Select All Checkbox */}
+                        <div className="flex items-center pb-2">
+                          <Checkbox 
+                            id="select-all" 
+                            checked={selectedRecords.length === sortedRecords.length && sortedRecords.length > 0}
+                            onCheckedChange={(checked) => handleSelectAll(checked as boolean)}
                           />
-                        </>
-                      )}
-                    </div>
-                  </TabsContent>
-                  
-                  <TabsContent value="grid" className="mt-0">
-                    <RecordGridView
-                      records={sortedRecords}
-                      selectedRecords={selectedRecords}
-                      handleSelectRecord={handleSelectRecord}
-                      formatDate={formatDate}
-                      getTypeIcon={getTypeIcon}
-                      getStatusBadge={getStatusBadge}
-                      getPriorityBadge={getPriorityBadge}
-                      getComplianceIcon={getComplianceIcon}
-                    />
-                  </TabsContent>
-                  
-                  <TabsContent value="table" className="mt-0">
-                    <RecordTableView
-                      records={sortedRecords}
-                      selectedRecords={selectedRecords}
-                      handleSelectRecord={handleSelectRecord}
-                      handleSelectAll={handleSelectAll}
-                      formatDate={formatDate}
-                      getTypeIcon={getTypeIcon}
-                      getStatusBadge={getStatusBadge}
-                      getComplianceIcon={getComplianceIcon}
-                      sortField={sortField}
-                      sortDirection={sortDirection}
-                      toggleSort={toggleSort}
-                    />
-                  </TabsContent>
-                </Tabs>
-              </CardContent>
-              <CardFooter className="border-t">
-                <RecordPagination
-                  currentPage={currentPage}
-                  totalPages={Math.ceil(sortedRecords.length / 10)}
-                  onPageChange={setCurrentPage}
-                />
-              </CardFooter>
-            </Card>
-          </div>
+                          <label htmlFor="select-all" className="ml-2 text-sm font-medium">
+                            Select All
+                          </label>
+                        </div>
+                        
+                        <RecordListView
+                          records={sortedRecords}
+                          selectedRecords={selectedRecords}
+                          handleSelectRecord={handleSelectRecord}
+                          handleSelectAll={handleSelectAll}
+                          formatDate={formatDate}
+                          getTypeIcon={getTypeIcon}
+                          getStatusBadge={getStatusBadge}
+                          getPriorityBadge={getPriorityBadge}
+                          getComplianceIcon={getComplianceIcon}
+                        />
+                      </>
+                    )}
+                  </div>
+                </TabsContent>
+                
+                <TabsContent value="grid" className="mt-0">
+                  <RecordGridView
+                    records={sortedRecords}
+                    selectedRecords={selectedRecords}
+                    handleSelectRecord={handleSelectRecord}
+                    formatDate={formatDate}
+                    getTypeIcon={getTypeIcon}
+                    getStatusBadge={getStatusBadge}
+                    getPriorityBadge={getPriorityBadge}
+                    getComplianceIcon={getComplianceIcon}
+                  />
+                </TabsContent>
+                
+                <TabsContent value="table" className="mt-0">
+                  <RecordTableView
+                    records={sortedRecords}
+                    selectedRecords={selectedRecords}
+                    handleSelectRecord={handleSelectRecord}
+                    handleSelectAll={handleSelectAll}
+                    formatDate={formatDate}
+                    getTypeIcon={getTypeIcon}
+                    getStatusBadge={getStatusBadge}
+                    getComplianceIcon={getComplianceIcon}
+                    sortField={sortField}
+                    sortDirection={sortDirection}
+                    toggleSort={toggleSort}
+                  />
+                </TabsContent>
+              </Tabs>
+            </CardContent>
+            <CardFooter className="border-t">
+              <RecordPagination
+                currentPage={currentPage}
+                totalPages={Math.ceil(sortedRecords.length / 10)}
+                onPageChange={setCurrentPage}
+              />
+            </CardFooter>
+          </Card>
         </div>
       </div>
     </Layout>

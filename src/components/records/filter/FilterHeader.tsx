@@ -9,7 +9,7 @@ interface FilterHeaderProps {
 
 export const FilterHeader: React.FC<FilterHeaderProps> = ({ clearFilters }) => {
   return (
-    <CardHeader className="py-3">
+    <CardHeader className="py-3 flex-shrink-0">
       <CardTitle className="text-lg flex items-center justify-between">
         Filters
         <Button 

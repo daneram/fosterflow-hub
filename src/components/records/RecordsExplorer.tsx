@@ -1,7 +1,7 @@
 
 import React from 'react';
 import Layout from '@/components/layout/Layout';
-import { Card, CardContent, CardHeader, CardDescription, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card';
 import { RecordFilterPanel } from './RecordFilterPanel';
 import { RecordSearchToolbar } from './RecordSearchToolbar';
 import { RecordPagination } from './RecordPagination';
@@ -71,9 +71,7 @@ const RecordsExplorer: React.FC = () => {
                 selectedRecords={selectedRecords}
                 recordCount={filteredRecords.length}
               />
-              <CardDescription>
-                {filteredRecords.length} {filteredRecords.length === 1 ? 'record' : 'records'} found
-              </CardDescription>
+              {/* Removed the CardDescription with "n records found" text */}
             </CardHeader>
             <CardContent className="p-4">
               <RecordContent 

@@ -19,7 +19,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onNavItemClick, isM
   return (
     <div className={cn(
       "h-screen flex flex-col bg-sidebar py-4 transition-all duration-300 ease-in-out overflow-hidden",
-      isOpen ? "w-52 opacity-100" : "w-14 opacity-90"
+      isOpen ? "w-52" : "w-14"
     )}>
       <SidebarHeader isOpen={isOpen} onToggle={onToggle} />
 

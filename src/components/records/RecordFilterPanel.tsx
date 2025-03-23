@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface RecordFilterPanelProps {
@@ -48,6 +48,18 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
     if (selectedStatus) {
       setSelectedStatus(null);
     }
+  };
+
+  // Clear from date handler
+  const clearFromDate = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent popover from opening
+    setFromDate(undefined);
+  };
+
+  // Clear to date handler
+  const clearToDate = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent popover from opening
+    setToDate(undefined);
   };
 
   // Format date based on device type
@@ -89,7 +101,7 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
                   <Button
                     variant="outline"
                     className={cn(
-                      "w-full h-9 justify-start text-left font-normal",
+                      "w-full h-9 justify-start text-left font-normal relative",
                       !fromDate && "text-muted-foreground"
                     )}
                   >
@@ -98,6 +110,12 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
                       <span>{formatDateDisplay(fromDate)}</span>
                     ) : (
                       "From"
+                    )}
+                    {fromDate && (
+                      <X 
+                        className="h-4 w-4 absolute right-2 text-muted-foreground hover:text-foreground cursor-pointer"
+                        onClick={clearFromDate}
+                      />
                     )}
                   </Button>
                 </PopoverTrigger>
@@ -121,7 +139,7 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
                   <Button
                     variant="outline"
                     className={cn(
-                      "w-full h-9 justify-start text-left font-normal",
+                      "w-full h-9 justify-start text-left font-normal relative",
                       !toDate && "text-muted-foreground"
                     )}
                   >
@@ -130,6 +148,12 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
                       <span>{formatDateDisplay(toDate)}</span>
                     ) : (
                       "To"
+                    )}
+                    {toDate && (
+                      <X 
+                        className="h-4 w-4 absolute right-2 text-muted-foreground hover:text-foreground cursor-pointer"
+                        onClick={clearToDate}
+                      />
                     )}
                   </Button>
                 </PopoverTrigger>

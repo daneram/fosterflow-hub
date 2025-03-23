@@ -9,14 +9,14 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
   const isActive = location.pathname === to;
 
   const handleClick = (e: React.MouseEvent) => {
-    // Call onClick if provided
+    // If we're on mobile and an onClick handler is provided, call it first
     if (onClick) {
       onClick();
-    }
-    
-    // If we're already on this page, prevent the navigation
-    if (isActive) {
-      e.preventDefault();
+      
+      // If we're already on this page, prevent the navigation
+      if (isActive) {
+        e.preventDefault();
+      }
     }
   };
 

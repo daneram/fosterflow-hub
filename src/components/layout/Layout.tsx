@@ -23,9 +23,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     setAiChatOpen(!isMobile && !isAIAssistantPage);
   }, [isMobile, isAIAssistantPage, setAiChatOpen]);
 
-  // This function will be called when a navigation item is clicked in the sidebar
+  // This function will immediately close the sidebar on mobile when a navigation item is clicked
   const closeSidebarOnMobile = () => {
     if (isMobile) {
+      // Immediately close the sidebar when this is called from a nav item click
       setSidebarOpen(false);
     }
   };

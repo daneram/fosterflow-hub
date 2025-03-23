@@ -1,11 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
-import ContentArea from './layout/content/ContentArea';
+import ContentArea from './content/ContentArea';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useLocation } from 'react-router-dom';
-import { useSidebarState } from './layout/hooks/useSidebarState';
-import { useAIChatState } from './layout/hooks/useAIChatState';
+import { useSidebarState } from './hooks/useSidebarState';
+import { useAIChatState } from './hooks/useAIChatState';
 
 interface LayoutProps {
   children: React.ReactNode;

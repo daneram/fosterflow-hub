@@ -119,7 +119,7 @@ const RecordsExplorer: React.FC = () => {
                 toggleSort={toggleSort}
               />
             </CardContent>
-            <CardFooter className="border-t p-4">
+            <CardFooter className="border-t-0 p-4">
               <RecordPagination
                 currentPage={currentPage}
                 totalPages={Math.ceil(filteredRecords.length / 10)}

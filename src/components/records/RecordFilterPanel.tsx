@@ -54,12 +54,14 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
   const clearFromDate = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent popover from opening
     setFromDate(undefined);
+    setFromDateOpen(false); // Also ensure the popover is closed
   };
 
   // Clear to date handler
   const clearToDate = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent popover from opening
     setToDate(undefined);
+    setToDateOpen(false); // Also ensure the popover is closed
   };
 
   // Format date based on device type
@@ -112,10 +114,12 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
                       "From"
                     )}
                     {fromDate && (
-                      <X 
-                        className="h-4 w-4 absolute right-2 text-muted-foreground hover:text-foreground cursor-pointer"
+                      <div 
+                        className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer z-10"
                         onClick={clearFromDate}
-                      />
+                      >
+                        <X className="h-4 w-4 text-muted-foreground hover:text-foreground" />
+                      </div>
                     )}
                   </Button>
                 </PopoverTrigger>
@@ -150,10 +154,12 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
                       "To"
                     )}
                     {toDate && (
-                      <X 
-                        className="h-4 w-4 absolute right-2 text-muted-foreground hover:text-foreground cursor-pointer"
+                      <div 
+                        className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer z-10"
                         onClick={clearToDate}
-                      />
+                      >
+                        <X className="h-4 w-4 text-muted-foreground hover:text-foreground" />
+                      </div>
                     )}
                   </Button>
                 </PopoverTrigger>

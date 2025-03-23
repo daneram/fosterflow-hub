@@ -60,7 +60,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       <SidebarHeader isOpen={isOpen} onToggle={onToggle} />
 
       <ScrollManager isOpen={isOpen}>
-        <div className="flex flex-col space-y-0 mt-1">
+        <div className="flex flex-col space-y-0 mt-0.5">
           {isMobile && (
             <AIChatSection isOpen={isOpen} onNavItemClick={onNavItemClick} />
           )}

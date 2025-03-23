@@ -80,7 +80,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
           <span className="truncate font-bold">Indigo Fostering</span>
         </div>
       </div>
-      {isOpen && <Separator className="my-1 bg-sidebar-border" />}
+      {isOpen && <Separator className="my-0.5 bg-sidebar-border" />}
     </div>
   );
 };

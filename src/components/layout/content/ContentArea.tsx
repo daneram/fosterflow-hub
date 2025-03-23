@@ -10,9 +10,9 @@ interface ContentAreaProps {
   isMobile: boolean;
 }
 
-// Content loader that only covers the main content area
+// Content loader that only covers the main content area with reduced opacity
 export const ContentLoader = () => (
-  <div className="absolute inset-0 bg-white z-40 pointer-events-none">
+  <div className="absolute inset-0 bg-white/40 backdrop-blur-sm z-40 pointer-events-none">
     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
       <div className="animate-pulse h-6 w-6 rounded-full bg-primary/30"></div>
     </div>

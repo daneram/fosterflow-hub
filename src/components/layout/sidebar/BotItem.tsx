@@ -21,6 +21,14 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
       onClick();
     }
     
+    // Save current scroll position before navigation
+    const viewport = document.querySelector('[data-radix-scroll-area-viewport]');
+    if (viewport instanceof HTMLElement) {
+      const isMobileView = window.innerWidth < 768;
+      const storageKey = isMobileView ? 'sidebar-mobile-scroll-position' : 'sidebar-scroll-position';
+      localStorage.setItem(storageKey, viewport.scrollTop.toString());
+    }
+    
     // Navigate immediately without delay
     navigate(to);
   }, [isActive, onClick, navigate, to]);

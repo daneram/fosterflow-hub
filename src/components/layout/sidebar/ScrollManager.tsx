@@ -11,6 +11,7 @@ interface ScrollManagerProps {
 
 // A unique key for storing scroll position in localStorage
 const SCROLL_POSITION_KEY = 'sidebar-scroll-position';
+const MOBILE_SCROLL_POSITION_KEY = 'sidebar-mobile-scroll-position';
 
 const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -19,7 +20,6 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
   const isMobile = useIsMobile();
   const location = useLocation();
   const [isScrolling, setIsScrolling] = useState(false);
-  const [viewportHeight, setViewportHeight] = useState(0);
   
   // Position the last menu item at the bottom of the screen on mobile
   const positionLastItemAtBottom = useCallback(() => {
@@ -54,6 +54,28 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
     }
   }, [isMobile]);
   
+  // Save scroll position based on device type
+  const saveScrollPosition = useCallback(() => {
+    if (!viewportRef.current) return;
+    
+    const scrollPosition = viewportRef.current.scrollTop;
+    const storageKey = isMobile ? MOBILE_SCROLL_POSITION_KEY : SCROLL_POSITION_KEY;
+    
+    localStorage.setItem(storageKey, scrollPosition.toString());
+  }, [isMobile]);
+  
+  // Restore scroll position based on device type
+  const restoreScrollPosition = useCallback(() => {
+    if (!viewportRef.current) return;
+    
+    const storageKey = isMobile ? MOBILE_SCROLL_POSITION_KEY : SCROLL_POSITION_KEY;
+    const savedPosition = localStorage.getItem(storageKey);
+    
+    if (savedPosition) {
+      viewportRef.current.scrollTop = parseInt(savedPosition, 10);
+    }
+  }, [isMobile]);
+  
   // Initialize viewport ref, content ref and restore scroll position
   useEffect(() => {
     if (!scrollAreaRef.current) return;
@@ -67,18 +89,15 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
         contentRef.current = viewport.firstElementChild;
       }
       
-      // Only restore scroll position on desktop
-      if (!isMobile) {
-        const savedPosition = localStorage.getItem(SCROLL_POSITION_KEY);
-        if (savedPosition) {
-          viewport.scrollTop = parseInt(savedPosition, 10);
-        }
-      }
+      // Restore scroll position after component mounts
+      restoreScrollPosition();
       
       // Position the last item on mobile
-      positionLastItemAtBottom();
+      if (isMobile) {
+        positionLastItemAtBottom();
+      }
     }
-  }, [isMobile, positionLastItemAtBottom]);
+  }, [isMobile, positionLastItemAtBottom, restoreScrollPosition]);
   
   // Recalculate when children or sidebar open state changes
   useEffect(() => {
@@ -104,32 +123,16 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
     return () => resizeObserver.disconnect();
   }, [positionLastItemAtBottom]);
   
-  // Reset scroll to top on navigation changes for mobile 
-  useEffect(() => {
-    if (isMobile && viewportRef.current && !isScrolling) {
-      viewportRef.current.scrollTop = 0;
-      
-      // Reposition after scrolling to top
-      const timeoutId = setTimeout(() => {
-        positionLastItemAtBottom();
-      }, 100);
-      
-      return () => clearTimeout(timeoutId);
-    }
-  }, [location.pathname, isMobile, isScrolling, positionLastItemAtBottom]);
-  
   // Save scroll position to localStorage with debounce
   useEffect(() => {
     const viewport = viewportRef.current;
-    if (!viewport || isMobile) return;
+    if (!viewport) return;
     
     const handleScroll = () => {
       if (!isScrolling) {
         setIsScrolling(true);
         setTimeout(() => {
-          if (viewport && !isMobile) {
-            localStorage.setItem(SCROLL_POSITION_KEY, viewport.scrollTop.toString());
-          }
+          saveScrollPosition();
           setIsScrolling(false);
         }, 200);
       }
@@ -137,7 +140,7 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
     
     viewport.addEventListener('scroll', handleScroll);
     return () => viewport.removeEventListener('scroll', handleScroll);
-  }, [isMobile, isScrolling]);
+  }, [isScrolling, saveScrollPosition]);
 
   return (
     <ScrollArea 

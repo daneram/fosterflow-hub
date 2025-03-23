@@ -12,12 +12,12 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
   return (
     <div 
       className={cn(
-        "flex items-center cursor-pointer mb-4 px-2.5 py-2",
-        !isOpen ? "justify-center w-10 px-0" : ""
+        "flex items-center cursor-pointer mb-4 py-2",
+        isOpen ? "px-2.5" : "justify-center w-10 px-0"
       )}
       onClick={onToggle}
     >
-      <Avatar className="w-7 h-7 flex-shrink-0">
+      <Avatar className="h-5 w-5 flex-shrink-0">
         <AvatarImage 
           src="/lovable-uploads/6d655b66-ad8d-445b-93e9-36d9917768dc.png" 
           alt="Indigo Fostering"
@@ -27,7 +27,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
         </AvatarFallback>
       </Avatar>
       {isOpen && (
-        <div className="flex-1 min-w-0 ml-2">
+        <div className="flex-1 min-w-0 ml-3">
           <h2 className="text-base font-semibold mb-0 truncate">Indigo Fostering</h2>
         </div>
       )}

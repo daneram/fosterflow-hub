@@ -31,16 +31,16 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
     <Link
       to={to}
       className={cn(
-        "flex items-center px-2.5 py-2 text-sm font-medium rounded-md transition-colors duration-300 ease-in-out",
+        "flex items-center py-2 text-sm font-medium rounded-md transition-colors duration-300 ease-in-out",
         isActive 
           ? "bg-primary text-primary-foreground" 
           : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground",
-        !isOpen ? "justify-center w-10 px-0" : ""
+        isOpen ? "px-2.5" : "justify-center w-10 px-0"
       )}
       onClick={handleClick}
       title={!isOpen ? label : undefined}
     >
-      <Icon className={cn("h-4 w-4 flex-shrink-0", !isOpen && "h-5 w-5")} />
+      <Icon className="h-4 w-4 flex-shrink-0" />
       {isOpen && <span className="ml-3 truncate">{label}</span>}
     </Link>
   );

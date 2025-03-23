@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card';
@@ -43,11 +42,9 @@ const RecordsExplorer: React.FC = () => {
     onSelectPreset(preset, setSelectedType, setSelectedStatus);
   };
 
-  // New function to handle clearing search and potentially advanced filters
   const handleClearSearch = () => {
     setSearchQuery('');
     
-    // If advanced search is open, also clear advanced filters and close the panel
     if (isAdvancedSearchOpen) {
       if (selectedStatus) {
         setSelectedStatus(null);
@@ -61,7 +58,6 @@ const RecordsExplorer: React.FC = () => {
       <div className="space-y-2">
         <RecordsHeader />
         
-        {/* Search Input with Clear button */}
         <div className="relative w-full max-w-md">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
@@ -83,7 +79,6 @@ const RecordsExplorer: React.FC = () => {
           )}
         </div>
         
-        {/* Filter Panel - Horizontal across the top */}
         <div className="w-full">
           <RecordFilterPanel
             selectedType={selectedType}
@@ -99,9 +94,8 @@ const RecordsExplorer: React.FC = () => {
           />
         </div>
         
-        {/* Records Card - Full width */}
         <div className="w-full">
-          <Card className="border-0">
+          <Card className="border-0 shadow-none">
             <CardHeader className="pb-0 pt-2">
               <RecordSearchToolbar
                 selectedRecords={selectedRecords}
@@ -119,7 +113,7 @@ const RecordsExplorer: React.FC = () => {
                 toggleSort={toggleSort}
               />
             </CardContent>
-            <CardFooter className="border-t-0 p-4">
+            <CardFooter className="border-0 shadow-none p-4 bg-transparent">
               <RecordPagination
                 currentPage={currentPage}
                 totalPages={Math.ceil(filteredRecords.length / 10)}

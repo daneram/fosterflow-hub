@@ -14,7 +14,7 @@ export const RecordPagination: React.FC<RecordPaginationProps> = ({
   onPageChange
 }) => {
   return (
-    <div className="flex justify-between items-center w-full pt-2 border-0">
+    <div className="flex justify-between items-center w-full pt-2 border-0 shadow-none bg-transparent">
       <Button 
         variant="outline" 
         size="sm"

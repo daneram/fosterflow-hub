@@ -19,6 +19,7 @@ interface RecordFilterPanelProps {
   isAdvancedSearchOpen: boolean;
   setIsAdvancedSearchOpen: (open: boolean) => void;
   onSelectPreset: (preset: string) => void;
+  clearFilters: () => void;
 }
 
 export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
@@ -30,14 +31,9 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
   setShowFavoritesOnly,
   isAdvancedSearchOpen,
   setIsAdvancedSearchOpen,
-  onSelectPreset
+  onSelectPreset,
+  clearFilters
 }) => {
-  const clearFilters = () => {
-    setSelectedType(null);
-    setSelectedStatus(null);
-    setShowFavoritesOnly(false);
-  };
-
   return (
     <Card className="shadow-sm bg-card/80 backdrop-blur-sm">
       <FilterHeader clearFilters={clearFilters} />

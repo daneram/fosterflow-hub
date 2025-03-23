@@ -21,46 +21,36 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
   const [isScrolling, setIsScrolling] = useState(false);
   const [viewportHeight, setViewportHeight] = useState(0);
   
-  // Calculate the size of scrollable content and available space
-  const calculateScrollMetrics = useCallback(() => {
-    if (!viewportRef.current || !contentRef.current) return;
+  // Position the last menu item at the bottom of the screen on mobile
+  const positionLastItemAtBottom = useCallback(() => {
+    if (!isMobile || !viewportRef.current || !contentRef.current) return;
     
     const viewport = viewportRef.current;
     const content = contentRef.current;
-    setViewportHeight(viewport.clientHeight);
     
-    if (isMobile) {
-      const lastNavSection = content.querySelector('nav:last-child');
-      const lastItem = lastNavSection?.querySelector('a:last-child');
-      
-      if (lastItem) {
-        // Get the height of the last item
-        const lastItemHeight = (lastItem as HTMLElement).offsetHeight;
-        
-        // Calculate the space needed to push the last item to the bottom of the viewport
-        const contentHeight = content.scrollHeight - parseInt(content.style.paddingBottom || '0', 10);
-        const lastItemPosition = (lastItem as HTMLElement).offsetTop;
-        
-        // Calculate needed padding: viewport height - (lastItemPosition + lastItemHeight)
-        // This will position the last item at the bottom of the viewport
-        const neededPadding = Math.max(
-          0,
-          viewport.clientHeight - ((lastItemPosition - content.offsetTop) + lastItemHeight)
-        );
-        
-        // Apply padding to position the last item at the bottom
-        if (neededPadding > 0) {
-          content.style.paddingBottom = `${neededPadding}px`;
-        } else {
-          // If content is taller than viewport, use a default padding
-          content.style.paddingBottom = '16px';
-        }
-      }
-    } else {
-      // Reset padding on desktop
-      if (content.style.paddingBottom) {
-        content.style.paddingBottom = '0px';
-      }
+    // Find the last navigation item in the sidebar
+    const allNavSections = content.querySelectorAll('nav');
+    const lastNavSection = allNavSections[allNavSections.length - 1];
+    
+    if (!lastNavSection) return;
+    
+    const lastItem = lastNavSection.querySelector('a:last-child');
+    if (!lastItem) return;
+    
+    // Get heights and positions
+    const viewportHeight = viewport.clientHeight;
+    const lastItemHeight = (lastItem as HTMLElement).offsetHeight;
+    const lastItemTop = (lastItem as HTMLElement).offsetTop;
+    const contentScrollHeight = content.scrollHeight;
+    const currentPadding = parseInt(content.style.paddingBottom || '0', 10);
+    
+    // Calculate how much padding we need to add to push the last item to the bottom
+    // This is: viewport height - (last item's position from top + its height)
+    const desiredPadding = Math.max(0, viewportHeight - (lastItemTop + lastItemHeight));
+    
+    // Apply the padding if it's different from current padding
+    if (desiredPadding !== currentPadding) {
+      content.style.paddingBottom = `${desiredPadding}px`;
     }
   }, [isMobile]);
   
@@ -72,7 +62,7 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
     if (viewport instanceof HTMLElement) {
       viewportRef.current = viewport;
       
-      // Store content element reference to apply padding
+      // Store content element reference
       if (viewport.firstElementChild instanceof HTMLElement) {
         contentRef.current = viewport.firstElementChild;
       }
@@ -85,52 +75,48 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
         }
       }
       
-      // Calculate initial metrics
-      calculateScrollMetrics();
+      // Position the last item on mobile
+      positionLastItemAtBottom();
     }
-  }, [isMobile, calculateScrollMetrics]);
+  }, [isMobile, positionLastItemAtBottom]);
   
   // Recalculate when children or sidebar open state changes
   useEffect(() => {
-    calculateScrollMetrics();
+    // Use a short delay to ensure DOM is fully rendered
+    const timeoutId = setTimeout(() => {
+      positionLastItemAtBottom();
+    }, 200);
     
-    // Add resize observer to handle dynamic content changes
+    return () => clearTimeout(timeoutId);
+  }, [children, isOpen, positionLastItemAtBottom]);
+  
+  // Set up resize observer
+  useEffect(() => {
+    if (!contentRef.current || !viewportRef.current) return;
+    
     const resizeObserver = new ResizeObserver(() => {
-      calculateScrollMetrics();
+      positionLastItemAtBottom();
     });
     
-    if (contentRef.current) {
-      resizeObserver.observe(contentRef.current);
-    }
+    resizeObserver.observe(contentRef.current);
+    resizeObserver.observe(viewportRef.current);
     
-    if (viewportRef.current) {
-      resizeObserver.observe(viewportRef.current);
-    }
-    
-    // Force recalculation after a small delay to ensure all elements are rendered
-    const timeoutId = setTimeout(() => {
-      calculateScrollMetrics();
-    }, 300);
-    
-    return () => {
-      resizeObserver.disconnect();
-      clearTimeout(timeoutId);
-    };
-  }, [children, isOpen, calculateScrollMetrics]);
+    return () => resizeObserver.disconnect();
+  }, [positionLastItemAtBottom]);
   
   // Reset scroll to top on navigation changes for mobile 
   useEffect(() => {
     if (isMobile && viewportRef.current && !isScrolling) {
+      viewportRef.current.scrollTop = 0;
+      
+      // Reposition after scrolling to top
       const timeoutId = setTimeout(() => {
-        if (viewportRef.current) {
-          viewportRef.current.scrollTop = 0;
-          calculateScrollMetrics();
-        }
+        positionLastItemAtBottom();
       }, 100);
       
       return () => clearTimeout(timeoutId);
     }
-  }, [location.pathname, isMobile, isScrolling, calculateScrollMetrics]);
+  }, [location.pathname, isMobile, isScrolling, positionLastItemAtBottom]);
   
   // Save scroll position to localStorage with debounce
   useEffect(() => {

@@ -41,7 +41,7 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
       title={!isOpen ? label : undefined}
     >
       <div className={isOpen ? "ml-0.5" : "ml-0"}>
-        <Icon className="h-4 w-4 flex-shrink-0" />
+        <Icon className="h-5 w-5 flex-shrink-0" />
       </div>
       {isOpen && <span className="ml-3 truncate">{label}</span>}
     </Link>

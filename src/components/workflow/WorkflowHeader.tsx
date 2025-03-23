@@ -13,15 +13,15 @@ const WorkflowHeader: React.FC = () => {
       <CardContent className="pt-0">
         <div className="flex flex-wrap gap-2">
           <Button size="sm" className="h-9 text-xs flex items-center gap-1">
-            <FilePlus className="h-4 w-4 mr-1" />
+            <FilePlus className="h-5 w-5 mr-1" />
             New Workflow
           </Button>
           <Button size="sm" variant="outline" className="h-9 text-xs">
-            <Share2 className="h-4 w-4 mr-1" />
+            <Share2 className="h-5 w-5 mr-1" />
             Share
           </Button>
           <Button size="sm" variant="outline" className="h-9 text-xs">
-            <Users className="h-4 w-4 mr-1" />
+            <Users className="h-5 w-5 mr-1" />
             Assign
           </Button>
         </div>

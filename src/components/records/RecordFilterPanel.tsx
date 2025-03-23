@@ -44,7 +44,7 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
   return (
     <Card className="shadow-sm border border-border/60">
       <FilterHeader clearFilters={handleClearFilters} />
-      <CardContent className={`p-3 ${!isAdvancedSearchOpen ? 'pb-2' : ''}`}>
+      <CardContent className={`py-4 px-3 ${!isAdvancedSearchOpen ? '' : 'pb-2'}`}>
         {isMobile ? (
           <div className="space-y-3">
             {/* Center type filters on mobile */}

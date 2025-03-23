@@ -9,16 +9,14 @@ interface SidebarHeaderProps {
   onToggle: () => void;
 }
 
-const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
-  // Preload image with a static reference that won't change between renders
-  const logoUrl = "/lovable-uploads/6d655b66-ad8d-445b-93e9-36d9917768dc.png";
-  
-  // Preload image
-  React.useEffect(() => {
-    const img = new Image();
-    img.src = logoUrl;
-  }, [logoUrl]);
+// Global constant to ensure the URL is consistent across renders and component mounts
+const LOGO_URL = "/lovable-uploads/6d655b66-ad8d-445b-93e9-36d9917768dc.png";
 
+// Preload the image at the module level
+const preloadedImage = new Image();
+preloadedImage.src = LOGO_URL;
+
+const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
   return (
     <div className="px-2 mb-1">
       <div 
@@ -31,11 +29,12 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
         <div className="flex items-center justify-center w-6 h-6 flex-shrink-0">
           <Avatar className="h-6 w-6">
             <AvatarImage 
-              src={logoUrl}
+              src={LOGO_URL}
               alt="Indigo Fostering"
               loading="eager"
               fetchPriority="high"
-              className="object-contain"
+              className="object-contain bg-white"
+              draggable={false}
             />
             <AvatarFallback className="bg-primary/10 text-primary text-xs font-medium">
               IF

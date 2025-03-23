@@ -1,5 +1,5 @@
 
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useMemo } from 'react';
 import Sidebar from './Sidebar';
 import ContentArea from './content/ContentArea';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -36,17 +36,22 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     }
   }, [isMobile, setSidebarOpen, sidebarOpen]);
 
+  // Memoize the Sidebar component to prevent unnecessary re-renders
+  const memoizedSidebar = useMemo(() => (
+    <Sidebar 
+      isOpen={sidebarOpen} 
+      onToggle={toggleSidebar} 
+      onNavItemClick={closeSidebarOnMobile} 
+      toggleAiChat={toggleAiChat} 
+      isMobile={isMobile}
+    />
+  ), [sidebarOpen, toggleSidebar, closeSidebarOnMobile, toggleAiChat, isMobile]);
+
   return (
     <SidebarProvider>
       <div className="h-screen flex bg-background overflow-hidden">
-        {/* Sidebar */}
-        <Sidebar 
-          isOpen={sidebarOpen} 
-          onToggle={toggleSidebar} 
-          onNavItemClick={closeSidebarOnMobile} 
-          toggleAiChat={toggleAiChat} 
-          isMobile={isMobile}
-        />
+        {/* Sidebar - now memoized */}
+        {memoizedSidebar}
 
         {/* Main content and AI assistant */}
         <ContentArea 
@@ -61,4 +66,4 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   );
 };
 
-export default Layout;
+export default React.memo(Layout);

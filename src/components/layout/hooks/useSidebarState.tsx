@@ -13,6 +13,7 @@ export const useSidebarState = () => {
     localStorage.setItem('sidebar-state', sidebarOpen ? 'open' : 'closed');
   }, [sidebarOpen]);
 
+  // Ensure this function is stable across renders
   const toggleSidebar = useCallback(() => {
     setSidebarOpen(prev => !prev);
   }, []);

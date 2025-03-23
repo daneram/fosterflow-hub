@@ -10,13 +10,20 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
 
   const handleClick = (e: React.MouseEvent) => {
     if (onClick) {
-      // Call the onClick handler (closeSidebarOnMobile) first
+      // First call the onClick handler to close the sidebar if on mobile
       onClick();
-    }
-    
-    // If this is the current page, prevent default navigation
-    if (isActive) {
-      e.preventDefault();
+      
+      // If this is the current page, prevent default navigation
+      if (isActive) {
+        e.preventDefault();
+      }
+      
+      // If we're not on the current page, let navigation happen naturally
+      // but delay slightly to allow state updates to process
+      if (!isActive) {
+        // We don't need to manually navigate since Link will do that for us
+        // We just need to make sure onClick completes first
+      }
     }
   };
 

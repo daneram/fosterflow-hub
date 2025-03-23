@@ -24,11 +24,18 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   }, [isMobile, isAIAssistantPage, setAiChatOpen]);
 
   // Immediately close the sidebar on mobile when a navigation item is clicked
-  const closeSidebarOnMobile = () => {
-    if (isMobile && sidebarOpen) {
+  const closeSidebarOnMobile = useCallback(() => {
+    // Force close the sidebar immediately on mobile devices
+    if (isMobile) {
+      // Use a more direct approach to ensure immediate closure
       setSidebarOpen(false);
+      
+      // Ensure the DOM updates immediately
+      requestAnimationFrame(() => {
+        document.body.style.overflow = '';
+      });
     }
-  };
+  }, [isMobile, setSidebarOpen]);
 
   return (
     <div className="h-screen flex bg-background overflow-hidden">
@@ -36,7 +43,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <Sidebar 
         isOpen={sidebarOpen} 
         onToggle={toggleSidebar} 
-        onNavItemClick={closeSidebarOnMobile}
+        onNavItemClick={closeSidebarOnMobile} 
         toggleAiChat={toggleAiChat} 
         isMobile={isMobile}
       />

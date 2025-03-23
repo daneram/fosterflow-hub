@@ -1,3 +1,4 @@
+
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
@@ -21,10 +22,12 @@ const preloadLogo = () => {
     // Set image source to trigger loading
     img.src = LOGO_URL;
     
-    // Force browser to keep the image in memory
-    document.head.appendChild(document.createElement('link')).setAttribute('rel', 'preload');
-    document.head.lastChild?.setAttribute('as', 'image');
-    document.head.lastChild?.setAttribute('href', LOGO_URL);
+    // Create preload link element properly
+    const preloadLink = document.createElement('link');
+    preloadLink.rel = 'preload';
+    preloadLink.as = 'image';
+    preloadLink.href = LOGO_URL;
+    document.head.appendChild(preloadLink);
   });
 };
 

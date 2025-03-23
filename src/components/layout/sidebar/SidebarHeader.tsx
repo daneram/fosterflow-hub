@@ -12,12 +12,12 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
   return (
     <div 
       className={cn(
-        "flex items-center cursor-pointer h-10 px-2.5 my-0", /* Removed mb-4, ensuring vertical spacing is identical to NavItem */
+        "flex items-center cursor-pointer h-10 px-2.5",
         "hover:bg-sidebar-accent hover:text-sidebar-foreground rounded-md"
       )}
       onClick={onToggle}
     >
-      {/* Exactly mirroring the NavItem's icon container structure */}
+      {/* This structure must exactly match NavItem's icon container */}
       <div className="flex items-center justify-center w-6 h-6 flex-shrink-0">
         <Avatar className="h-5 w-5">
           <AvatarImage 

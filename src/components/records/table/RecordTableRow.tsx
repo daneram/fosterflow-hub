@@ -30,7 +30,7 @@ export const RecordTableRow: React.FC<RecordTableRowProps> = ({
             <div className="flex flex-col">
               <div className="font-medium">{record.title}</div>
               
-              <div className="flex justify-between items-center mt-1">
+              <div className="flex justify-between items-center mt-1.5">
                 <div className="text-xs text-muted-foreground">
                   {formatUniqueIdentifier(record)}
                 </div>

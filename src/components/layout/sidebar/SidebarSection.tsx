@@ -5,7 +5,7 @@ import { SidebarSectionProps } from './types';
 
 const SidebarSection: React.FC<SidebarSectionProps> = ({ title, isOpen, items, onNavItemClick }) => {
   return (
-    <div className="mb-6">
+    <div className="mb-4">
       <nav className="space-y-1 px-2">
         {items.map((item) => (
           <NavItem

@@ -19,7 +19,7 @@ export const FilterHeader: React.FC<FilterHeaderProps> = ({ clearFilters }) => {
           onClick={clearFilters}
           className="h-7 px-2"
         >
-          <X className="h-3.5 w-3.5 mr-0" />
+          <X className="h-3.5 w-3.5 mr-[-4px]" />
           Clear
         </Button>
       </CardTitle>

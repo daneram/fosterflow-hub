@@ -7,7 +7,6 @@ import { useLocation } from 'react-router-dom';
 import { useSidebarState } from './hooks/useSidebarState';
 import { useAIChatState } from './hooks/useAIChatState';
 import { SidebarProvider } from '@/components/ui/sidebar';
-import { cn } from '@/lib/utils';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -61,17 +60,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       onNavItemClick={closeSidebarOnMobile} 
       toggleAiChat={toggleAiChat} 
       isMobile={isMobile}
-      isTransitioning={false}
+      isTransitioning={false} // Never hide sidebar completely on transitions
     />
   ), [sidebarOpen, toggleSidebar, closeSidebarOnMobile, toggleAiChat, isMobile]);
 
   return (
     <SidebarProvider>
-      <div className={cn(
-        "h-screen flex bg-background overflow-hidden",
-        isMobile && sidebarOpen && "overflow-x-visible" // Allow horizontal overflow when sidebar is open on mobile
-      )}>
-        {/* Always render the sidebar */}
+      <div className="h-screen flex bg-background overflow-hidden">
+        {/* Always render the sidebar, never completely hide it during transitions */}
         {memoizedSidebar}
 
         {/* Main content and AI assistant */}
@@ -80,7 +76,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           toggleAiChat={toggleAiChat} 
           isMobile={isMobile}
           isTransitioning={isContentTransitioning}
-          sidebarOpen={sidebarOpen}
         >
           {children}
         </ContentArea>

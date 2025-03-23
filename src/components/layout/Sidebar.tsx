@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { 
@@ -102,25 +102,41 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onNavItemClick, toggleAiChat, isMobile }) => {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const scrollPositionRef = useRef<number>(0);
+  const [scrollAreaViewport, setScrollAreaViewport] = useState<HTMLElement | null>(null);
   const location = useLocation();
-  const lastScrollPositionRef = useRef(0);
   
   useEffect(() => {
-    const scrollArea = document.querySelector('[data-radix-scroll-area-viewport]');
-    if (scrollArea) {
-      lastScrollPositionRef.current = scrollArea.scrollTop;
+    if (scrollAreaRef.current) {
+      const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+      if (viewport instanceof HTMLElement) {
+        setScrollAreaViewport(viewport);
+      }
     }
-  }, [location.pathname]);
+  }, [scrollAreaRef.current]);
   
   useEffect(() => {
-    const scrollArea = document.querySelector('[data-radix-scroll-area-viewport]');
-    if (scrollArea) {
-      const timer = setTimeout(() => {
-        scrollArea.scrollTop = lastScrollPositionRef.current;
-      }, 0);
-      return () => clearTimeout(timer);
+    if (!scrollAreaViewport) return;
+    
+    const handleScroll = () => {
+      scrollPositionRef.current = scrollAreaViewport.scrollTop;
+    };
+    
+    scrollAreaViewport.addEventListener('scroll', handleScroll);
+    return () => {
+      scrollAreaViewport.removeEventListener('scroll', handleScroll);
+    };
+  }, [scrollAreaViewport]);
+  
+  useEffect(() => {
+    if (scrollAreaViewport && scrollPositionRef.current > 0) {
+      const restoreScroll = () => {
+        scrollAreaViewport.scrollTop = scrollPositionRef.current;
+      };
+      
+      requestAnimationFrame(restoreScroll);
     }
-  }, [location.pathname]);
+  }, [location.pathname, scrollAreaViewport]);
 
   return (
     <div className={cn(

@@ -19,11 +19,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, onNavItemClick, isM
   return (
     <div className={cn(
       "h-screen flex flex-col bg-sidebar py-4",
-      isOpen ? "w-52" : "w-14", // Fixed width without transitions
+      isOpen ? "w-52" : "w-14" // Fixed width without transitions
     )}>
-      <div className="px-2.5">
-        <SidebarHeader isOpen={isOpen} onToggle={onToggle} />
-      </div>
+      <SidebarHeader isOpen={isOpen} onToggle={onToggle} />
 
       <ScrollManager isOpen={isOpen}>
         <div className="flex flex-col space-y-0">

@@ -62,21 +62,23 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
     <Card className="shadow-sm border border-border/60">
       <CardContent className={isMobile ? "px-3 pb-3 pt-4" : "px-3 py-3"}>
         <div className="flex flex-col space-y-4">
-          {/* Top row with type filters and advanced toggle */}
+          {/* Top row with type filters */}
           <div className={isMobile ? "flex flex-col justify-center space-y-4" : "flex items-center justify-between gap-3"}>
             {/* Type filter */}
             <div className={isMobile ? "flex justify-center" : ""}>
               <TypeFilter selectedType={selectedType} setSelectedType={setSelectedType} />
             </div>
             
-            {/* Advanced toggle */}
-            <div className={isMobile ? "w-full" : ""}>
-              <AdvancedFiltersToggle 
-                isAdvancedSearchOpen={isAdvancedSearchOpen} 
-                setIsAdvancedSearchOpen={setIsAdvancedSearchOpen}
-                clearAdvancedFilters={clearAdvancedFilters} 
-              />
-            </div>
+            {/* Advanced toggle - only shown on desktop here */}
+            {!isMobile && (
+              <div>
+                <AdvancedFiltersToggle 
+                  isAdvancedSearchOpen={isAdvancedSearchOpen} 
+                  setIsAdvancedSearchOpen={setIsAdvancedSearchOpen}
+                  clearAdvancedFilters={clearAdvancedFilters} 
+                />
+              </div>
+            )}
           </div>
           
           {/* Date pickers row */}
@@ -146,6 +148,17 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
               </Popover>
             </div>
           </div>
+          
+          {/* Advanced toggle for mobile - placed after date pickers */}
+          {isMobile && (
+            <div className="w-full mt-2">
+              <AdvancedFiltersToggle 
+                isAdvancedSearchOpen={isAdvancedSearchOpen} 
+                setIsAdvancedSearchOpen={setIsAdvancedSearchOpen}
+                clearAdvancedFilters={clearAdvancedFilters} 
+              />
+            </div>
+          )}
         </div>
         
         {/* Advanced Filters Panel */}

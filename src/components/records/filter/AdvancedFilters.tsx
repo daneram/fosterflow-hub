@@ -1,7 +1,5 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -22,7 +20,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ isOpen }) => {
   if (!isOpen) return null;
   
   return (
-    <div className="space-y-3 pt-2">
+    <div className="space-y-2 pt-2">
       <div className="space-y-2">
         <h3 className="text-sm font-medium">Date Range</h3>
         <div className="grid grid-cols-2 gap-2">

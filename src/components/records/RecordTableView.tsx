@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ChevronUp, ChevronDown, FileText } from 'lucide-react';
+import { ChevronUp, ChevronDown, FileText, Check, Square } from 'lucide-react';
 import { Record } from './types';
 import {
   Table,
@@ -11,6 +11,7 @@ import {
   TableRow,
   TableCell
 } from '@/components/ui/table';
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface RecordTableViewProps {
   records: Record[];
@@ -28,6 +29,9 @@ interface RecordTableViewProps {
 
 export const RecordTableView: React.FC<RecordTableViewProps> = ({
   records,
+  selectedRecords,
+  handleSelectAll,
+  handleSelectRecord,
   formatDate,
   getTypeIcon,
   sortField,
@@ -103,12 +107,23 @@ export const RecordTableView: React.FC<RecordTableViewProps> = ({
     return formattedId;
   };
 
+  const allSelected = records.length > 0 && records.every(record => selectedRecords.includes(record.id));
+  const someSelected = records.length > 0 && records.some(record => selectedRecords.includes(record.id)) && !allSelected;
+
   return (
     <div className="w-full">
       <div className="relative w-full overflow-auto">
         <table className="w-full caption-bottom text-sm">
           <thead>
             <tr className="border-b bg-muted/50">
+              <th className="h-10 px-2 w-12">
+                <Checkbox 
+                  checked={allSelected}
+                  indeterminate={someSelected}
+                  onCheckedChange={handleSelectAll}
+                  aria-label="Select all records"
+                />
+              </th>
               <th className="h-10 px-4 text-left" onClick={() => toggleSort('title')}>
                 <div className="flex items-center space-x-1">
                   <span>Document</span>
@@ -134,7 +149,7 @@ export const RecordTableView: React.FC<RecordTableViewProps> = ({
           <tbody>
             {records.length === 0 ? (
               <tr>
-                <td colSpan={4} className="h-24 text-center">
+                <td colSpan={5} className="h-24 text-center">
                   <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
                     <FileText className="h-8 w-8 mb-2" />
                     <p>No records found</p>
@@ -143,7 +158,17 @@ export const RecordTableView: React.FC<RecordTableViewProps> = ({
               </tr>
             ) : (
               records.map((record) => (
-                <tr key={record.id} className="border-b hover:bg-muted/50">
+                <tr 
+                  key={record.id} 
+                  className={`border-b hover:bg-muted/50 ${selectedRecords.includes(record.id) ? 'bg-muted/50' : ''}`}
+                >
+                  <td className="py-2 px-2">
+                    <Checkbox 
+                      checked={selectedRecords.includes(record.id)}
+                      onCheckedChange={(checked) => handleSelectRecord(record.id, !!checked)}
+                      aria-label={`Select ${record.title}`}
+                    />
+                  </td>
                   <td className="py-2 px-4 font-medium">
                     <div className="flex flex-col">
                       <span>{record.title}</span>

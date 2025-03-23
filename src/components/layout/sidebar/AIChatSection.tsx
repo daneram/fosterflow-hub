@@ -11,9 +11,9 @@ interface AIChatSectionProps {
 const AIChatSection: React.FC<AIChatSectionProps> = ({ isOpen, onNavItemClick }) => {
   return (
     <>
-      {isOpen && <div className="text-xs font-medium text-muted-foreground mb-1.5">AI ASSISTANT</div>}
+      {isOpen && <div className="text-xs font-medium text-muted-foreground mb-1.5">FOSTERNOTES AI</div>}
       <nav className="space-y-0.5 mb-4">
-        <BotItem to="/ai-assistant" icon={Bot} label="AI Assistant" isOpen={isOpen} onClick={onNavItemClick} />
+        <BotItem to="/ai-assistant" icon={Bot} label="FosterNotes AI" isOpen={isOpen} onClick={onNavItemClick} />
       </nav>
     </>
   );

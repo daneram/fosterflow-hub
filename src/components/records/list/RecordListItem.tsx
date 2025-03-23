@@ -3,6 +3,7 @@ import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Record } from '../types';
 import { formatUniqueIdentifier } from '../table/RecordIdFormatter';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface RecordListItemProps {
   record: Record;
@@ -24,6 +25,8 @@ export const RecordListItem: React.FC<RecordListItemProps> = ({
   const handleClick = () => {
     onSelectRecord(record.id, !isSelected);
   };
+  
+  const isMobile = useIsMobile();
 
   return (
     <Card 
@@ -39,7 +42,6 @@ export const RecordListItem: React.FC<RecordListItemProps> = ({
           </div>
           
           <div className="flex justify-between items-center text-xs text-muted-foreground">
-            <span>{formatUniqueIdentifier(record)}</span>
             <span>{record.owner || 'Unassigned'}</span>
             <span>Linked</span>
           </div>

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -34,12 +35,12 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
         isActive 
           ? "bg-primary text-primary-foreground" 
           : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground",
-        isOpen ? "px-2.5" : "justify-center"
+        isOpen ? "px-2.5" : "px-2.5 justify-center"
       )}
       onClick={handleClick}
       title={!isOpen ? label : undefined}
     >
-      <div className="flex items-center justify-center w-6 h-6">
+      <div className="flex items-center justify-center w-6 h-6 flex-shrink-0">
         <Icon className="h-5 w-5" />
       </div>
       {isOpen && (

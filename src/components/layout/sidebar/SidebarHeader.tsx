@@ -12,12 +12,12 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
   return (
     <div 
       className={cn(
-        "flex items-center cursor-pointer mb-4 h-10",
-        isOpen ? "px-2.5" : "justify-center"
+        "flex items-center cursor-pointer mb-4",
+        isOpen ? "px-2.5" : "px-2.5 justify-center"
       )}
       onClick={onToggle}
     >
-      <div className="flex items-center justify-center w-6 h-6">
+      <div className="flex items-center justify-center w-6 h-6 flex-shrink-0">
         <Avatar className="h-5 w-5">
           <AvatarImage 
             src="/lovable-uploads/6d655b66-ad8d-445b-93e9-36d9917768dc.png" 

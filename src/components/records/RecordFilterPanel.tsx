@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { FilterHeader } from './filter/FilterHeader';
@@ -49,7 +50,7 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
             <div className="w-full mt-4">
               <AdvancedFiltersToggle isAdvancedSearchOpen={isAdvancedSearchOpen} setIsAdvancedSearchOpen={setIsAdvancedSearchOpen} />
             </div>
-          </div> : <div className="flex items-center justify-between gap-3 py-[5px]">
+          </div> : <div className="flex items-center justify-between gap-3 py-4">
             {/* Type filter */}
             <div>
               <TypeFilter selectedType={selectedType} setSelectedType={setSelectedType} />

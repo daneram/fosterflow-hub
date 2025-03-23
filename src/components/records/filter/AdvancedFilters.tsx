@@ -41,7 +41,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
     if (isMobile) {
       return format(date, "dd/MM/yy");
     }
-    return format(date, "PPP");
+    return format(date, "dd MMMM yyyy");
   };
   
   return (

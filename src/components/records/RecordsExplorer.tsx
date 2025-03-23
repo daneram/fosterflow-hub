@@ -95,13 +95,13 @@ const RecordsExplorer: React.FC = () => {
 
   return (
     <Layout>
-      <div className="space-y-4">
+      <div className="space-y-6">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold tracking-tight">Records Explorer</h1>
           <RecordViewSelector viewMode={viewMode} setViewMode={setViewMode} />
         </div>
         
-        {/* Filter Panel - Now horizontal across the top */}
+        {/* Filter Panel - Horizontal across the top */}
         <div className="w-full">
           <RecordFilterPanel
             selectedType={selectedType}
@@ -116,9 +116,9 @@ const RecordsExplorer: React.FC = () => {
           />
         </div>
         
-        {/* Records Card - Now full width */}
+        {/* Records Card - Full width */}
         <div className="w-full">
-          <Card>
+          <Card className="shadow-md border-muted">
             <CardHeader className="pb-2">
               <RecordSearchToolbar
                 searchQuery={searchQuery}
@@ -130,7 +130,7 @@ const RecordsExplorer: React.FC = () => {
                 {sortedRecords.length} {sortedRecords.length === 1 ? 'record' : 'records'} found
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-4">
               <Tabs value={viewMode} className="w-full">
                 <TabsContent value="list" className="mt-0">
                   <div className="space-y-4">
@@ -199,7 +199,7 @@ const RecordsExplorer: React.FC = () => {
                 </TabsContent>
               </Tabs>
             </CardContent>
-            <CardFooter className="border-t">
+            <CardFooter className="border-t p-4">
               <RecordPagination
                 currentPage={currentPage}
                 totalPages={Math.ceil(sortedRecords.length / 10)}

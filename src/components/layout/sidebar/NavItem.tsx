@@ -35,7 +35,7 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
         isActive 
           ? "bg-primary text-primary-foreground" 
           : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground",
-        isOpen ? "px-2.5" : "justify-center"
+        isOpen ? "px-2.5" : "justify-center px-0"
       )}
       onClick={handleClick}
       title={!isOpen ? label : undefined}

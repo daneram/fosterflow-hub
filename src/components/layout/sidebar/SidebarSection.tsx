@@ -5,9 +5,9 @@ import { SidebarSectionProps } from './types';
 
 const SidebarSection: React.FC<SidebarSectionProps> = ({ title, isOpen, items, onNavItemClick }) => {
   return (
-    <>
-      {isOpen && <div className="text-xs font-medium text-muted-foreground mt-4 mb-1.5">{title}</div>}
-      <nav className="space-y-0.5">
+    <div className="mb-6">
+      {isOpen && <div className="text-xs font-medium text-muted-foreground px-3 mb-2">{title}</div>}
+      <nav className="space-y-1 px-2">
         {items.map((item) => (
           <NavItem
             key={item.to}
@@ -19,7 +19,7 @@ const SidebarSection: React.FC<SidebarSectionProps> = ({ title, isOpen, items, o
           />
         ))}
       </nav>
-    </>
+    </div>
   );
 };
 

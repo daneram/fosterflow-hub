@@ -9,7 +9,7 @@ const SidebarFooter: React.FC<SidebarFooterProps> = ({ isOpen }) => {
   if (!isOpen) return null;
   
   return (
-    <div className="mt-auto px-2 py-2">
+    <div className="mt-auto px-3 py-3 border-t border-sidebar-border">
       <div className="flex items-center gap-2">
         <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center">
           <span className="text-primary font-medium text-xs">SW</span>

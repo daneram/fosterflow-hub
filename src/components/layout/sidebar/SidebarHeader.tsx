@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 interface SidebarHeaderProps {
@@ -13,8 +12,8 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
   return (
     <div 
       className={cn(
-        "px-2 py-3 flex items-center cursor-pointer transition-all duration-300 ease-in-out",
-        !isOpen && "justify-center"
+        "flex items-center cursor-pointer transition-all duration-300 ease-in-out mb-4",
+        isOpen ? "px-3" : "justify-center"
       )}
       onClick={onToggle}
     >

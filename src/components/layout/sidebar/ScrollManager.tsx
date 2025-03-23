@@ -46,7 +46,7 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
   return (
     <ScrollArea 
       ref={scrollAreaRef} 
-      className={isOpen ? "px-2 mt-4 flex-1 overflow-hidden" : "px-0 mt-4 flex-1 overflow-hidden"}
+      className="flex-1 overflow-hidden"
     >
       {children}
     </ScrollArea>

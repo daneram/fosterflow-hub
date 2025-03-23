@@ -19,7 +19,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
   const isAIAssistantPage = location.pathname === '/ai-assistant';
   
-  // Tracking content transitions instead of sidebar transitions
+  // Tracking content transitions
   const [isContentTransitioning, setIsContentTransitioning] = useState(false);
 
   // Set initial AI chat state based on screen size
@@ -58,16 +58,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       isOpen={sidebarOpen} 
       onToggle={toggleSidebar} 
       onNavItemClick={closeSidebarOnMobile} 
-      toggleAiChat={toggleAiChat} 
       isMobile={isMobile}
-      isTransitioning={false} // Never hide sidebar completely on transitions
+      isTransitioning={false}
     />
-  ), [sidebarOpen, toggleSidebar, closeSidebarOnMobile, toggleAiChat, isMobile]);
+  ), [sidebarOpen, toggleSidebar, closeSidebarOnMobile, isMobile]);
 
   return (
     <SidebarProvider>
       <div className="h-screen flex bg-background overflow-hidden">
-        {/* Always render the sidebar, never completely hide it during transitions */}
+        {/* Always render the sidebar */}
         {memoizedSidebar}
 
         {/* Main content and AI assistant */}
@@ -76,6 +75,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           toggleAiChat={toggleAiChat} 
           isMobile={isMobile}
           isTransitioning={isContentTransitioning}
+          sidebarOpen={sidebarOpen}
         >
           {children}
         </ContentArea>

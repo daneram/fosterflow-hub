@@ -35,16 +35,13 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
         isActive 
           ? "bg-primary text-primary-foreground" 
           : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground",
-        isOpen ? "px-2.5" : "justify-center w-10 px-0"
+        isOpen ? "px-2.5" : "justify-center w-10"
       )}
       onClick={handleClick}
       title={!isOpen ? label : undefined}
     >
-      <div className={cn(
-        "flex items-center justify-center", 
-        isOpen ? "w-5 ml-0.5" : "w-6"
-      )}>
-        <Icon className="h-5 w-5 flex-shrink-0" />
+      <div className="flex items-center justify-center w-5 h-5">
+        <Icon className="h-5 w-5" />
       </div>
       {isOpen && <span className="ml-3 truncate">{label}</span>}
     </Link>

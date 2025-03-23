@@ -7,6 +7,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface AdvancedFiltersProps {
   isOpen: boolean;
@@ -23,6 +24,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
   const [toDate, setToDate] = useState<Date | undefined>(undefined);
   const [fromDateOpen, setFromDateOpen] = useState(false);
   const [toDateOpen, setToDateOpen] = useState(false);
+  const isMobile = useIsMobile();
   
   // Reset state when component is closed (which happens after clear filters)
   useEffect(() => {
@@ -35,9 +37,8 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
   if (!isOpen) return null;
   
   return (
-    <div className="space-y-2 pt-2">
+    <div className="space-y-4 pt-2">
       <div className="space-y-2">
-        <h3 className="text-sm font-medium">Date</h3>
         <div className="grid grid-cols-2 gap-2">
           <div>
             <Popover open={fromDateOpen} onOpenChange={setFromDateOpen}>
@@ -113,10 +114,9 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
       </div>
       
       <div className="space-y-2">
-        <h3 className="text-sm font-medium">Assigned To</h3>
         <Select>
           <SelectTrigger className="h-8">
-            <SelectValue placeholder="Select user" />
+            <SelectValue placeholder="Assigned to" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="any">Anyone</SelectItem>
@@ -129,29 +129,30 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
       </div>
       
       <div className="space-y-2">
-        <h3 className="text-sm font-medium">Compliance Status</h3>
-        <div className="flex flex-wrap gap-2">
-          <Button 
-            variant={selectedStatus === 'complete' ? 'default' : 'outline'} 
-            size="sm"
-            onClick={() => setSelectedStatus(selectedStatus === 'complete' ? null : 'complete')}
-          >
-            Complete
-          </Button>
-          <Button 
-            variant={selectedStatus === 'incomplete' ? 'default' : 'outline'} 
-            size="sm"
-            onClick={() => setSelectedStatus(selectedStatus === 'incomplete' ? null : 'incomplete')}
-          >
-            Incomplete
-          </Button>
-          <Button 
-            variant={selectedStatus === 'overdue' ? 'default' : 'outline'} 
-            size="sm"
-            onClick={() => setSelectedStatus(selectedStatus === 'overdue' ? null : 'overdue')}
-          >
-            Overdue
-          </Button>
+        <div className={isMobile ? "flex justify-center" : "flex flex-wrap"}>
+          <div className={isMobile ? "flex flex-wrap justify-center gap-2" : "flex flex-wrap gap-2"}>
+            <Button 
+              variant={selectedStatus === 'complete' ? 'default' : 'outline'} 
+              size="sm"
+              onClick={() => setSelectedStatus(selectedStatus === 'complete' ? null : 'complete')}
+            >
+              Complete
+            </Button>
+            <Button 
+              variant={selectedStatus === 'incomplete' ? 'default' : 'outline'} 
+              size="sm"
+              onClick={() => setSelectedStatus(selectedStatus === 'incomplete' ? null : 'incomplete')}
+            >
+              Incomplete
+            </Button>
+            <Button 
+              variant={selectedStatus === 'overdue' ? 'default' : 'outline'} 
+              size="sm"
+              onClick={() => setSelectedStatus(selectedStatus === 'overdue' ? null : 'overdue')}
+            >
+              Overdue
+            </Button>
+          </div>
         </div>
       </div>
     </div>

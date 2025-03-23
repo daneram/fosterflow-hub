@@ -58,7 +58,7 @@ const DatePickerButton: React.FC<DatePickerButtonProps> = ({
           )}
           {date && (
             <div 
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer z-10"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer z-10"
               onClick={clearDate}
             >
               <X className="h-4 w-4 text-primary-foreground" />

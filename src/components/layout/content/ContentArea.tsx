@@ -23,7 +23,9 @@ const ContentArea: React.FC<ContentAreaProps> = ({
       >
         {/* Main content panel with proper overflow handling */}
         <ResizablePanel defaultSize={75} minSize={50} id="main-content">
-          <div className="h-screen overflow-y-auto p-3 sm:p-4 md:p-5 pt-3">{children}</div>
+          <div className="h-screen overflow-y-auto p-3 sm:p-4 md:p-5 pt-3 relative">
+            {children}
+          </div>
         </ResizablePanel>
         
         {/* Resizable handle - only visible on desktop when AI chat is open */}

@@ -32,10 +32,10 @@ const EmailPage = React.lazy(() => import("./components/email/EmailPage"));
 const CalendarPage = React.lazy(() => import("./components/calendar/CalendarPage"));
 const TasksPage = React.lazy(() => import("./components/tasks/TasksPage"));
 
-// Loading fallback component
+// Updated loading fallback component with blur effect
 const PageLoader = () => (
-  <div className="flex items-center justify-center w-full min-h-[50vh]">
-    <div className="animate-pulse h-8 w-8 rounded-full bg-primary/20"></div>
+  <div className="absolute inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-background/40">
+    <div className="animate-pulse h-8 w-8 rounded-full bg-primary/40"></div>
   </div>
 );
 
@@ -79,37 +79,126 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Suspense fallback={<PageLoader />}>
-          <RoutePreloader />
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/ai-assistant" element={<AIAssistantPage />} />
-            <Route path="/records" element={<RecordsExplorer />} />
-            <Route path="/activity" element={<ActivityLog />} />
-            <Route path="/compliance" element={<ComplianceTracker />} />
-            <Route path="/insights" element={<InsightsDashboard />} />
-            <Route path="/form-f" element={<FormFAssessment />} />
-            <Route path="/children" element={<ChildrenProfiles />} />
-            <Route path="/carers" element={<CarersDirectory />} />
-            <Route path="/team" element={<TeamDirectory />} />
-            <Route path="/policies" element={<PolicyLibrary />} />
-            <Route path="/training" element={<TrainingPlatform />} />
-            <Route path="/recruitment" element={<RecruitmentPipeline />} />
-            <Route path="/finance" element={<FinanceManager />} />
-            <Route path="/forms" element={<FormsLibrary />} />
-            <Route path="/workflow" element={<WorkflowManager />} />
-            <Route path="/contacts" element={<ContactsDirectory />} />
-            <Route path="/settings" element={<SettingsPanel />} />
-            <Route path="/email" element={<EmailPage />} />
-            <Route path="/calendar" element={<CalendarPage />} />
-            <Route path="/tasks" element={<TasksPage />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
+        <RoutePreloader />
+        <Routes>
+          <Route path="/" element={
+            <Suspense fallback={null}>
+              <Index />
+            </Suspense>
+          } />
+          <Route path="/ai-assistant" element={
+            <Suspense fallback={<ContentLoader />}>
+              <AIAssistantPage />
+            </Suspense>
+          } />
+          <Route path="/records" element={
+            <Suspense fallback={<ContentLoader />}>
+              <RecordsExplorer />
+            </Suspense>
+          } />
+          <Route path="/activity" element={
+            <Suspense fallback={<ContentLoader />}>
+              <ActivityLog />
+            </Suspense>
+          } />
+          <Route path="/compliance" element={
+            <Suspense fallback={<ContentLoader />}>
+              <ComplianceTracker />
+            </Suspense>
+          } />
+          <Route path="/insights" element={
+            <Suspense fallback={<ContentLoader />}>
+              <InsightsDashboard />
+            </Suspense>
+          } />
+          <Route path="/form-f" element={
+            <Suspense fallback={<ContentLoader />}>
+              <FormFAssessment />
+            </Suspense>
+          } />
+          <Route path="/children" element={
+            <Suspense fallback={<ContentLoader />}>
+              <ChildrenProfiles />
+            </Suspense>
+          } />
+          <Route path="/carers" element={
+            <Suspense fallback={<ContentLoader />}>
+              <CarersDirectory />
+            </Suspense>
+          } />
+          <Route path="/team" element={
+            <Suspense fallback={<ContentLoader />}>
+              <TeamDirectory />
+            </Suspense>
+          } />
+          <Route path="/policies" element={
+            <Suspense fallback={<ContentLoader />}>
+              <PolicyLibrary />
+            </Suspense>
+          } />
+          <Route path="/training" element={
+            <Suspense fallback={<ContentLoader />}>
+              <TrainingPlatform />
+            </Suspense>
+          } />
+          <Route path="/recruitment" element={
+            <Suspense fallback={<ContentLoader />}>
+              <RecruitmentPipeline />
+            </Suspense>
+          } />
+          <Route path="/finance" element={
+            <Suspense fallback={<ContentLoader />}>
+              <FinanceManager />
+            </Suspense>
+          } />
+          <Route path="/forms" element={
+            <Suspense fallback={<ContentLoader />}>
+              <FormsLibrary />
+            </Suspense>
+          } />
+          <Route path="/workflow" element={
+            <Suspense fallback={<ContentLoader />}>
+              <WorkflowManager />
+            </Suspense>
+          } />
+          <Route path="/contacts" element={
+            <Suspense fallback={<ContentLoader />}>
+              <ContactsDirectory />
+            </Suspense>
+          } />
+          <Route path="/settings" element={
+            <Suspense fallback={<ContentLoader />}>
+              <SettingsPanel />
+            </Suspense>
+          } />
+          <Route path="/email" element={
+            <Suspense fallback={<ContentLoader />}>
+              <EmailPage />
+            </Suspense>
+          } />
+          <Route path="/calendar" element={
+            <Suspense fallback={<ContentLoader />}>
+              <CalendarPage />
+            </Suspense>
+          } />
+          <Route path="/tasks" element={
+            <Suspense fallback={<ContentLoader />}>
+              <TasksPage />
+            </Suspense>
+          } />
+          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
+);
+
+// New ContentLoader component that only applies to the content area
+const ContentLoader = () => (
+  <div className="absolute inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-background/40">
+    <div className="animate-pulse h-8 w-8 rounded-full bg-primary/40"></div>
+  </div>
 );
 
 export default App;

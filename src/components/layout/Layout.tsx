@@ -37,7 +37,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       isOpen={sidebarOpen} 
       onToggle={toggleSidebar} 
       onNavItemClick={closeSidebarOnMobile} 
-      toggleAiChat={toggleAiChat} 
       isMobile={isMobile}
       isTransitioning={false}
     />
@@ -46,7 +45,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <SidebarProvider>
       <div className="h-screen flex bg-background overflow-hidden">
-        {/* Always render the sidebar */}
+        {/* Key change: Don't rerender the sidebar on location change - remove key dependency on location */}
         {memoizedSidebar}
 
         {/* Main content and AI assistant */}

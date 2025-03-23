@@ -30,40 +30,47 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
     }
   }, []);
   
-  // Save scroll position before navigation
+  // Save scroll position when location changes or component unmounts
   useEffect(() => {
-    const currentPath = location.pathname;
-    
-    // Save current scroll position when unmounting or changing routes
     const saveScrollPosition = () => {
       if (viewportRef.current) {
-        scrollPositions.set(currentPath, viewportRef.current.scrollTop);
+        scrollPositions.set(location.pathname, viewportRef.current.scrollTop);
+        console.log('Saved scroll position for', location.pathname, viewportRef.current.scrollTop);
       }
     };
+
+    // Save current position immediately
+    saveScrollPosition();
     
-    // Save position before unmounting
-    return () => {
-      saveScrollPosition();
-    };
+    // And also save when unmounting or before navigation
+    return saveScrollPosition;
   }, [location.pathname]);
   
   // Restore scroll position after navigation
   useEffect(() => {
-    // Only proceed if we have initialized and have a viewport reference
     if (!isInitialized || !viewportRef.current) return;
     
-    const currentPath = location.pathname;
-    const savedPosition = scrollPositions.get(currentPath);
-    
-    // If we have a saved position, restore it in the next animation frame
-    // This ensures we wait for any DOM updates to complete
-    if (savedPosition !== undefined) {
-      requestAnimationFrame(() => {
-        if (viewportRef.current) {
-          viewportRef.current.scrollTop = savedPosition;
-        }
-      });
-    }
+    const restorePosition = () => {
+      const savedPosition = scrollPositions.get(location.pathname);
+      console.log('Attempting to restore position for', location.pathname, savedPosition);
+      
+      if (savedPosition !== undefined && viewportRef.current) {
+        // Use multiple attempts with increasing timeouts to ensure restoration works
+        const attempts = [0, 10, 50, 100];
+        
+        attempts.forEach(delay => {
+          setTimeout(() => {
+            if (viewportRef.current) {
+              viewportRef.current.scrollTop = savedPosition;
+              console.log('Restored scroll to', savedPosition, 'after', delay, 'ms');
+            }
+          }, delay);
+        });
+      }
+    };
+
+    // Restore position with a slight delay to ensure DOM is ready
+    restorePosition();
   }, [location.pathname, isInitialized]);
 
   return (
@@ -76,4 +83,4 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
   );
 };
 
-export default ScrollManager;
+export default React.memo(ScrollManager);

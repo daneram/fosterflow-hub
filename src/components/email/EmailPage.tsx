@@ -6,4 +6,5 @@ const EmailPage = () => {
   return <EmailClient />;
 };
 
+// Make sure to properly export the component
 export default EmailPage;

@@ -8,19 +8,31 @@ type LazyComponentWithInit = React.LazyExoticComponent<React.ComponentType<any>>
 
 // Helper to create a lazy component with preloading capability
 const createLazyComponent = (importFn: () => Promise<any>): LazyComponentWithInit => {
-  const LazyComponent = React.lazy(importFn);
+  // Create the lazy component with a properly structured import function
+  const LazyComponent = React.lazy(() => 
+    importFn().then(module => {
+      // Handle both ESM default exports and CommonJS modules
+      const Component = module.default || module;
+      if (!Component) {
+        console.error('Module does not have a default export:', module);
+        // Provide a fallback component to prevent rendering errors
+        return { default: () => <div>Failed to load component</div> };
+      }
+      return { default: Component };
+    })
+  );
   
   // Add an _init method that triggers the import but doesn't render
   (LazyComponent as LazyComponentWithInit)._init = () => {
-    importFn().catch(() => {
-      // Silent catch - just for preloading
+    importFn().catch((error) => {
+      console.error('Error preloading component:', error);
     });
   };
   
   return LazyComponent as LazyComponentWithInit;
 };
 
-// Simple direct imports without transformation
+// Import components with proper error handling
 export const AIAssistantPage = createLazyComponent(() => 
   import("../pages/AIAssistantPage")
 );

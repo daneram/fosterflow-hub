@@ -9,17 +9,55 @@ import NotFound from "../pages/NotFound";
 // Import lazy-loaded components
 import * as LazyComponents from "./lazyComponents";
 
-// Simple loading fallback that doesn't cover the entire screen
-const LoadingFallback = () => <div className="p-4 opacity-0">Loading...</div>;
+// Better error handling fallback component
+const LoadingFallback = () => (
+  <div className="p-4 flex items-center justify-center min-h-[200px]">
+    <div className="animate-pulse text-muted-foreground">Loading...</div>
+  </div>
+);
+
+// Component to handle lazy loading errors
+class ErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean }
+> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: any, errorInfo: any) {
+    console.error("Error loading component:", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="p-4 border border-red-200 rounded bg-red-50 text-red-800">
+          <h2 className="font-semibold mb-2">Something went wrong</h2>
+          <p>There was an error loading this component. Please try refreshing the page.</p>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
 
 const AppRoutes: React.FC = () => {
   const location = useLocation();
   
   // Memoize the suspense wrapper to prevent unnecessary rerenders
   const SuspenseWrapper = useCallback(({ children }: { children: React.ReactNode }) => (
-    <Suspense fallback={<LoadingFallback />}>
-      {children}
-    </Suspense>
+    <ErrorBoundary>
+      <Suspense fallback={<LoadingFallback />}>
+        {children}
+      </Suspense>
+    </ErrorBoundary>
   ), []);
   
   return (

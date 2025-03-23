@@ -10,10 +10,12 @@ interface ContentAreaProps {
   isMobile: boolean;
 }
 
-// Content loader with semi-transparent blur effect
+// Content loader with subtle animation instead of full screen blur
 export const ContentLoader = () => (
-  <div className="absolute inset-0 z-50 flex items-center justify-center bg-background/40 backdrop-blur-sm">
-    <div className="animate-pulse h-8 w-8 rounded-full bg-primary/40"></div>
+  <div className="fixed inset-0 z-40 pointer-events-none">
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+      <div className="animate-pulse h-6 w-6 rounded-full bg-primary/30"></div>
+    </div>
   </div>
 );
 

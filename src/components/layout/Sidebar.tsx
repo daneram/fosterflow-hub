@@ -53,9 +53,8 @@ const Sidebar: React.FC<SidebarProps> = ({
         // Add transition for opacity and transform
         "transition-all duration-200",
         
-        // On mobile, position it absolutely when open and maintain layers
+        // On mobile, position it absolutely when open
         isMobile && isOpen ? "fixed left-0 top-0 z-50 shadow-lg" : "",
-        isMobile && !isOpen ? "relative" : "",
         
         // Never completely hide the sidebar
         isMobile && isTransitioning ? "opacity-90" : "opacity-100"

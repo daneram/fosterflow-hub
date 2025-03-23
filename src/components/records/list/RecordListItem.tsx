@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { Card } from '@/components/ui/card';
-import { Users, Calendar } from 'lucide-react';
 import { Record } from '../types';
+import { formatUniqueIdentifier } from '../table/RecordIdFormatter';
 
 interface RecordListItemProps {
   record: Record;
@@ -17,33 +17,28 @@ interface RecordListItemProps {
 
 export const RecordListItem: React.FC<RecordListItemProps> = ({
   record,
+  isSelected,
+  onSelectRecord,
   formatDate,
-  getTypeIcon,
 }) => {
+  const handleClick = () => {
+    onSelectRecord(record.id, !isSelected);
+  };
+
   return (
-    <Card key={record.id} className="overflow-hidden">
+    <Card 
+      key={record.id} 
+      className={`overflow-hidden cursor-pointer ${isSelected ? 'bg-muted/50' : ''}`}
+      onClick={handleClick}
+    >
       <div className="flex items-center">
-        {/* Record Content */}
         <div className="flex flex-col flex-1 p-3">
-          <div className="flex items-start space-x-3">
-            <div>
-              {getTypeIcon(record.type)}
-            </div>
-            <div className="flex-1">
-              <div className="font-medium">{record.title}</div>
-              <div className="text-xs text-muted-foreground">ID: {record.id}</div>
-            </div>
-          </div>
+          <div className="font-medium mb-1.5">{record.title}</div>
           
-          <div className="flex items-center mt-2 space-x-4 text-sm">
-            <div className="flex items-center">
-              <Users className="h-4 w-4 mr-1" />
-              {record.owner || 'Unassigned'}
-            </div>
-            <div className="flex items-center">
-              <Calendar className="h-4 w-4 mr-1" />
-              Updated: {formatDate(record.updatedAt)}
-            </div>
+          <div className="flex justify-between items-center text-xs text-muted-foreground">
+            <span>{formatUniqueIdentifier(record)}</span>
+            <span>{record.owner || 'Unassigned'}</span>
+            <span>{formatDate(record.updatedAt)}</span>
           </div>
         </div>
       </div>

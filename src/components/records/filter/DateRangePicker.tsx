@@ -46,7 +46,7 @@ const DatePickerButton: React.FC<DatePickerButtonProps> = ({
         <Button
           variant="outline"
           className={cn(
-            "w-full h-9 justify-start text-left font-normal relative",
+            "w-full h-9 justify-start text-left font-normal relative focus:outline-none",
             !date && "text-muted-foreground"
           )}
         >
@@ -75,7 +75,7 @@ const DatePickerButton: React.FC<DatePickerButtonProps> = ({
             setOpen(false);
           }}
           initialFocus
-          className="pointer-events-auto"
+          className="pointer-events-auto focus:outline-none"
         />
       </PopoverContent>
     </Popover>

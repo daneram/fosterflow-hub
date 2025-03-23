@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -95,7 +96,10 @@
   select:focus-visible, 
   textarea:focus-visible,
   button:focus-visible,
-  [tabindex]:focus-visible {
+  [tabindex]:focus-visible,
+  *:focus,
+  *:focus-visible,
+  *:focus-within {
     @apply ring-0 outline-none;
   }
 }

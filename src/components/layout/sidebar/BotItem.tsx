@@ -40,7 +40,7 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
       onClick={handleClick}
       title={!isOpen ? label : undefined}
     >
-      <Icon className="h-4 w-4 flex-shrink-0" />
+      <Icon className="h-4 w-4 flex-shrink-0 ml-0" />
       {isOpen && <span className="ml-3 truncate">{label}</span>}
     </Link>
   );

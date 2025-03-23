@@ -17,7 +17,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
       )}
       onClick={onToggle}
     >
-      <Avatar className="h-5 w-5 flex-shrink-0">
+      <Avatar className="h-5 w-5 flex-shrink-0 ml-0">
         <AvatarImage 
           src="/lovable-uploads/6d655b66-ad8d-445b-93e9-36d9917768dc.png" 
           alt="Indigo Fostering"

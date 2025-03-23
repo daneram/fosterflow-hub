@@ -43,6 +43,19 @@ const RecordsExplorer: React.FC = () => {
     onSelectPreset(preset, setSelectedType, setSelectedStatus);
   };
 
+  // New function to handle clearing search and potentially advanced filters
+  const handleClearSearch = () => {
+    setSearchQuery('');
+    
+    // If advanced search is open, also clear advanced filters and close the panel
+    if (isAdvancedSearchOpen) {
+      if (selectedStatus) {
+        setSelectedStatus(null);
+      }
+      setIsAdvancedSearchOpen(false);
+    }
+  };
+
   return (
     <Layout>
       <div className="space-y-6">
@@ -62,7 +75,7 @@ const RecordsExplorer: React.FC = () => {
             <Button 
               variant="ghost" 
               size="sm" 
-              onClick={() => setSearchQuery('')}
+              onClick={handleClearSearch}
               className="absolute right-0 top-0 h-9 px-2 hover:bg-transparent"
             >
               <X className="h-3.5 w-3.5" />

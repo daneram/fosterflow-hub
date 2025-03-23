@@ -25,8 +25,10 @@ const ContentArea: React.FC<ContentAreaProps> = ({
     <div className={cn(
       "flex-1 overflow-hidden", 
       isTransitioning ? "opacity-90 transition-opacity duration-100" : "opacity-100",
-      // When sidebar is open on mobile, add a light backdrop filter
-      isMobile && sidebarOpen ? "relative" : ""
+      // When sidebar is open on mobile, add padding equal to collapsed sidebar width
+      // so the content stays in the same place visually
+      isMobile && sidebarOpen ? "ml-0" : "",
+      isMobile ? "pl-14" : ""  // Always add left padding on mobile equal to collapsed sidebar
     )}>
       <ResizablePanelGroup direction="horizontal" className="min-h-screen">
         {/* Main content panel */}

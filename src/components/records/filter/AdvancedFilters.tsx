@@ -136,14 +136,14 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
               size="sm"
               onClick={() => setSelectedStatus(selectedStatus === 'complete' ? null : 'complete')}
             >
-              Complete
+              Compliant
             </Button>
             <Button 
               variant={selectedStatus === 'incomplete' ? 'default' : 'outline'} 
               size="sm"
               onClick={() => setSelectedStatus(selectedStatus === 'incomplete' ? null : 'incomplete')}
             >
-              Incomplete
+              Non-compliant
             </Button>
             <Button 
               variant={selectedStatus === 'overdue' ? 'default' : 'outline'} 

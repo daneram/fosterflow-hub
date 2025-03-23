@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
-import { X } from 'lucide-react';
+import { ChevronDown, X } from 'lucide-react';
 
 interface AdvancedFiltersProps {
   isOpen: boolean;
@@ -36,7 +36,8 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
   };
   
   // Function to clear assignee
-  const clearAssignee = () => {
+  const clearAssignee = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent dropdown from opening
     setSelectedAssignee(null);
   };
 
@@ -58,13 +59,18 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
           >
             <SelectTrigger 
               className={cn(
-                "h-9 pr-10", 
+                "h-9", 
                 selectedAssignee ? "bg-primary text-primary-foreground hover:bg-primary/90" : ""
               )}
+              hideDefaultChevron
             >
               <SelectValue placeholder="Assigned to">
                 {selectedAssignee && assigneeNames[selectedAssignee]}
               </SelectValue>
+              
+              {!selectedAssignee && (
+                <ChevronDown className="h-4 w-4 opacity-50 absolute right-3 top-1/2 transform -translate-y-1/2" />
+              )}
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="any">Anyone</SelectItem>
@@ -78,7 +84,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
           {selectedAssignee && (
             <button
               onClick={clearAssignee}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-primary-foreground"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-primary-foreground z-10"
               aria-label="Clear selection"
             >
               <X className="h-4 w-4" />

@@ -31,24 +31,22 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     }
   }, [isMobile, setSidebarOpen, sidebarOpen]);
 
-  // IMPORTANT: We're using useMemo to prevent the sidebar from re-rendering
-  // when the location changes or when other state changes happen
-  const memoizedSidebar = useMemo(() => (
-    <Sidebar 
-      isOpen={sidebarOpen} 
-      onToggle={toggleSidebar} 
-      onNavItemClick={closeSidebarOnMobile} 
-      isMobile={isMobile}
-      isTransitioning={false}
-    />
-  ), [sidebarOpen, toggleSidebar, closeSidebarOnMobile, isMobile]);
+  // Use a stable child key to ensure the sidebar doesn't remount
+  // This is CRITICAL for maintaining scroll position
+  const stableSidebarKey = useMemo(() => "sidebar-stable-instance", []);
 
   return (
     <SidebarProvider>
       <div className="h-screen flex bg-background overflow-hidden">
         {/* Use a fixed key to ensure the sidebar isn't remounted */}
-        <React.Fragment key="sidebar-container">
-          {memoizedSidebar}
+        <React.Fragment key={stableSidebarKey}>
+          <Sidebar 
+            isOpen={sidebarOpen} 
+            onToggle={toggleSidebar} 
+            onNavItemClick={closeSidebarOnMobile} 
+            isMobile={isMobile}
+            isTransitioning={false}
+          />
         </React.Fragment>
 
         <ContentArea 
@@ -64,9 +62,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   );
 };
 
-// Use React.memo to prevent unnecessary re-renders of the entire Layout
+// Use React.memo with a custom comparison that ignores children changes
+// This prevents Layout from re-rendering when only the children change
 export default React.memo(Layout, (prevProps, nextProps) => {
-  // Always return true to prevent re-renders based on children changes
-  // This is safe because we're only concerned with the sidebar's state
+  // We only care about the children's identity, not their content
   return true;
 });

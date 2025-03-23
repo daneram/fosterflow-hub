@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { cn } from '@/lib/utils';
 import SidebarHeader from './sidebar/SidebarHeader';
@@ -55,10 +56,12 @@ const Sidebar: React.FC<SidebarProps> = ({
         // Never completely hide the sidebar
         isMobile && isTransitioning ? "opacity-90" : "opacity-100"
       )}
+      // Add an ID for easier DOM targeting
+      id="sidebar-container"
     >
       <SidebarHeader isOpen={isOpen} onToggle={onToggle} />
 
-      <ScrollManager isOpen={isOpen}>
+      <ScrollManager isOpen={isOpen} sidebarId="sidebar-container">
         <div className="flex flex-col space-y-0">
           {isMobile && (
             <AIChatSection isOpen={isOpen} onNavItemClick={onNavItemClick} />

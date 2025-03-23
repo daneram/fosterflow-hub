@@ -1,5 +1,5 @@
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { BotItemProps } from './types';
@@ -8,6 +8,7 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
   const location = useLocation();
   const navigate = useNavigate();
   const isActive = location.pathname === to;
+  const linkRef = useRef<HTMLAnchorElement>(null);
 
   // Use useCallback to prevent unnecessary re-renders
   const handleClick = useCallback((e: React.MouseEvent) => {
@@ -23,12 +24,30 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
       onClick();
     }
     
+    // Store the current scroll position before navigation
+    const sidebarElement = document.getElementById('sidebar-container');
+    if (sidebarElement) {
+      const scrollArea = sidebarElement.querySelector('[data-radix-scroll-area-viewport]') as HTMLElement;
+      if (scrollArea) {
+        // Save the scroll position to sessionStorage keyed by current route
+        sessionStorage.setItem('sidebar-scroll-' + location.pathname, scrollArea.scrollTop.toString());
+      }
+    }
+    
     // Use navigate instead of letting the link handle it
-    navigate(to, { replace: false, state: { preserveScroll: true } });
-  }, [isActive, onClick, navigate, to]);
+    navigate(to, { 
+      replace: false, 
+      state: { 
+        preserveScroll: true,
+        sidebarScroll: true,
+        from: location.pathname 
+      } 
+    });
+  }, [isActive, onClick, navigate, to, location.pathname]);
 
   return (
     <Link
+      ref={linkRef}
       to={to}
       className={cn(
         "flex items-center h-10 text-sm font-medium",
@@ -40,6 +59,7 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
       )}
       onClick={handleClick}
       title={!isOpen ? label : undefined}
+      data-testid={`bot-item-${label.toLowerCase()}`}
     >
       <div className="flex items-center justify-center w-5 h-5 flex-shrink-0">
         <Icon className="h-5 w-5" />

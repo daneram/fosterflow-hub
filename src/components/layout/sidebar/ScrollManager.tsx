@@ -1,6 +1,7 @@
 
 import React, { useRef, useEffect } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { useLocation } from 'react-router-dom';
 
 interface ScrollManagerProps {
   children: React.ReactNode;
@@ -13,8 +14,9 @@ const SCROLL_POSITION_KEY = 'sidebar-scroll-position';
 const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLElement | null>(null);
+  const location = useLocation();
   
-  // Initialize viewport ref and restore scroll position from localStorage
+  // Initialize viewport ref
   useEffect(() => {
     if (!scrollAreaRef.current) return;
     
@@ -31,17 +33,50 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
   }, []);
   
   // Save scroll position to localStorage whenever it changes
+  // but only if we're not in the middle of a navigation
   useEffect(() => {
     const viewport = viewportRef.current;
     if (!viewport) return;
     
+    // Debounced scroll handler to avoid excessive saves
+    let scrollTimeout: number | null = null;
+    
     const handleScroll = () => {
-      localStorage.setItem(SCROLL_POSITION_KEY, viewport.scrollTop.toString());
+      if (scrollTimeout) {
+        window.clearTimeout(scrollTimeout);
+      }
+      
+      scrollTimeout = window.setTimeout(() => {
+        // Don't save scroll positions that would hide the last menu items
+        const maxScrollHeight = viewport.scrollHeight - viewport.clientHeight;
+        const scrollTop = viewport.scrollTop;
+        
+        // Save the scroll position with buffer to prevent jumps at the bottom
+        localStorage.setItem(SCROLL_POSITION_KEY, 
+          Math.min(scrollTop, maxScrollHeight - 20).toString());
+      }, 100);
     };
     
     viewport.addEventListener('scroll', handleScroll);
-    return () => viewport.removeEventListener('scroll', handleScroll);
+    return () => {
+      if (scrollTimeout) window.clearTimeout(scrollTimeout);
+      viewport.removeEventListener('scroll', handleScroll);
+    };
   }, []);
+  
+  // Reset scroll position when changing routes on mobile
+  useEffect(() => {
+    // Only reset on mobile
+    if (window.innerWidth < 768 && viewportRef.current) {
+      // Small delay to ensure the navigation completed
+      setTimeout(() => {
+        if (viewportRef.current) {
+          viewportRef.current.scrollTop = 0;
+          localStorage.setItem(SCROLL_POSITION_KEY, '0');
+        }
+      }, 50);
+    }
+  }, [location.pathname]);
 
   return (
     <ScrollArea 

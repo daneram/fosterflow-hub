@@ -20,11 +20,10 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
     
     // Only navigate if this isn't the current page
     if (!isActive) {
-      // Use setTimeout with 0ms to push this to the next event loop cycle
-      // This ensures the sidebar state update happens before navigation
+      // Add a slight delay to ensure the animation starts before navigation
       setTimeout(() => {
         navigate(to);
-      }, 0);
+      }, 50); // Small delay to let animation start
     }
   };
 

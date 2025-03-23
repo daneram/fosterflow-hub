@@ -23,16 +23,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     setAiChatOpen(!isMobile && !isAIAssistantPage);
   }, [isMobile, isAIAssistantPage, setAiChatOpen]);
 
-  // Immediately close the sidebar on mobile when a navigation item is clicked
+  // Close the sidebar on mobile when a navigation item is clicked
   const closeSidebarOnMobile = useCallback(() => {
-    // Force close the sidebar immediately on mobile devices
+    // Only proceed if sidebar is open and on mobile
     if (isMobile && sidebarOpen) {
+      // Set sidebar state to closed but let animation play
       setSidebarOpen(false);
       
-      // Ensure the DOM updates immediately
-      requestAnimationFrame(() => {
-        document.body.style.overflow = '';
-      });
+      // Don't immediately manipulate the DOM - let the animation complete
+      // The transition duration is 300ms in the CSS
     }
   }, [isMobile, setSidebarOpen, sidebarOpen]);
 

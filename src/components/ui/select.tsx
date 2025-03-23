@@ -1,6 +1,7 @@
+
 import * as React from "react"
 import * as SelectPrimitive from "@radix-ui/react-select"
-import { Check, ChevronDown, ChevronUp, X } from "lucide-react"
+import { Check, ChevronDown, ChevronUp } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
@@ -12,47 +13,22 @@ const SelectValue = SelectPrimitive.Value
 
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> & {
-    onClear?: () => void;
-  }
->(({ className, children, onClear, ...props }, ref) => {
-  // Check if the select has a value by looking at the props.value directly
-  const hasValue = props.value !== undefined && props.value !== "";
-  
-  return (
-    <SelectPrimitive.Trigger
-      ref={ref}
-      className={cn(
-        "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
-        className
-      )}
-      {...props}
-    >
-      {children}
-      {hasValue && onClear ? (
-        <div 
-          className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer z-10"
-          onClick={(e) => {
-            e.stopPropagation();
-            onClear();
-          }}
-        >
-          <X className={cn(
-            "h-4 w-4", 
-            className?.includes("bg-primary") ? "text-primary-foreground" : "opacity-50"
-          )} />
-        </div>
-      ) : (
-        <SelectPrimitive.Icon asChild>
-          <ChevronDown className={cn(
-            "h-4 w-4", 
-            hasValue && className?.includes("bg-primary") ? "text-primary-foreground" : "opacity-50"
-          )} />
-        </SelectPrimitive.Icon>
-      )}
-    </SelectPrimitive.Trigger>
-  );
-});
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
+>(({ className, children, ...props }, ref) => (
+  <SelectPrimitive.Trigger
+    ref={ref}
+    className={cn(
+      "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+      className
+    )}
+    {...props}
+  >
+    {children}
+    <SelectPrimitive.Icon asChild>
+      <ChevronDown className="h-4 w-4 opacity-50" />
+    </SelectPrimitive.Icon>
+  </SelectPrimitive.Trigger>
+))
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName
 
 const SelectScrollUpButton = React.forwardRef<

@@ -2,7 +2,6 @@
 import React from 'react';
 import { Record } from '../types';
 import { RecordListItem } from './RecordListItem';
-import { RecordListHeader } from './RecordListHeader';
 import { EmptyRecordList } from './EmptyRecordList';
 
 interface RecordListProps {
@@ -21,7 +20,6 @@ export const RecordList: React.FC<RecordListProps> = ({
   records,
   selectedRecords,
   handleSelectRecord,
-  handleSelectAll,
   formatDate,
   getTypeIcon,
   getStatusBadge,
@@ -34,12 +32,6 @@ export const RecordList: React.FC<RecordListProps> = ({
   
   return (
     <div className="space-y-2.5">
-      <RecordListHeader 
-        selectedRecordsCount={selectedRecords.length}
-        totalRecords={records.length}
-        onSelectAll={handleSelectAll}
-      />
-      
       {records.map((record) => (
         <RecordListItem
           key={record.id}

@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { FileText, ChevronUp, ChevronDown } from 'lucide-react';
 
 interface Record {
@@ -38,9 +37,6 @@ interface RecordTableViewProps {
 
 export const RecordTableView: React.FC<RecordTableViewProps> = ({
   records,
-  selectedRecords,
-  handleSelectAll,
-  handleSelectRecord,
   formatDate,
   getTypeIcon,
   sortField,
@@ -53,12 +49,6 @@ export const RecordTableView: React.FC<RecordTableViewProps> = ({
         <table className="w-full caption-bottom text-sm">
           <thead>
             <tr className="border-b bg-muted/50">
-              <th className="h-10 px-2 text-left">
-                <Checkbox 
-                  checked={selectedRecords.length === records.length && records.length > 0}
-                  onCheckedChange={(checked) => handleSelectAll(checked as boolean)}
-                />
-              </th>
               <th className="h-10 px-2 text-left" onClick={() => toggleSort('type')}>
                 <div className="flex items-center space-x-1">
                   <span>Type</span>
@@ -89,7 +79,7 @@ export const RecordTableView: React.FC<RecordTableViewProps> = ({
           <tbody>
             {records.length === 0 ? (
               <tr>
-                <td colSpan={5} className="h-24 text-center">
+                <td colSpan={4} className="h-24 text-center">
                   <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
                     <FileText className="h-8 w-8 mb-2" />
                     <p>No records found</p>
@@ -99,12 +89,6 @@ export const RecordTableView: React.FC<RecordTableViewProps> = ({
             ) : (
               records.map((record) => (
                 <tr key={record.id} className="border-b hover:bg-muted/50">
-                  <td className="p-2">
-                    <Checkbox 
-                      checked={selectedRecords.includes(record.id)} 
-                      onCheckedChange={(checked) => handleSelectRecord(record.id, checked as boolean)}
-                    />
-                  </td>
                   <td className="p-2">
                     <div className="flex items-center">
                       {getTypeIcon(record.type)}

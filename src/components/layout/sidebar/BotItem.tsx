@@ -1,25 +1,30 @@
 
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { BotItemProps } from './types';
 
 const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClick }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const isActive = location.pathname === to;
 
   const handleClick = (e: React.MouseEvent) => {
+    // Prevent default navigation
+    e.preventDefault();
+    
     if (onClick) {
-      // First call the onClick handler to close the sidebar if on mobile
+      // First close the sidebar if on mobile
       onClick();
-      
-      // If this is the current page, prevent default navigation
-      if (isActive) {
-        e.preventDefault();
-      }
-      
-      // If we're not on the current page, let navigation happen naturally
-      // but we need to make sure onClick completes first
+    }
+    
+    // Only navigate if this isn't the current page
+    if (!isActive) {
+      // Use setTimeout with 0ms to push this to the next event loop cycle
+      // This ensures the sidebar state update happens before navigation
+      setTimeout(() => {
+        navigate(to);
+      }, 0);
     }
   };
 

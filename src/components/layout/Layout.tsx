@@ -26,8 +26,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   // Immediately close the sidebar on mobile when a navigation item is clicked
   const closeSidebarOnMobile = useCallback(() => {
     // Force close the sidebar immediately on mobile devices
-    if (isMobile) {
-      // Use a more direct approach to ensure immediate closure
+    if (isMobile && sidebarOpen) {
       setSidebarOpen(false);
       
       // Ensure the DOM updates immediately
@@ -35,7 +34,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         document.body.style.overflow = '';
       });
     }
-  }, [isMobile, setSidebarOpen]);
+  }, [isMobile, setSidebarOpen, sidebarOpen]);
 
   return (
     <div className="h-screen flex bg-background overflow-hidden">

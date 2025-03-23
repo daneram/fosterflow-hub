@@ -18,5 +18,9 @@ export const useSidebarState = () => {
     setSidebarOpen(prev => !prev);
   }, []);
 
-  return { sidebarOpen, setSidebarOpen, toggleSidebar };
+  return { 
+    sidebarOpen, 
+    setSidebarOpen, 
+    toggleSidebar 
+  };
 };

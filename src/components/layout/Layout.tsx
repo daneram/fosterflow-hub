@@ -28,7 +28,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     if (isMobile) {
       setSidebarOpen(false);
     }
-    // Removed the scrolling behavior - it will be handled in NavItem
   };
 
   return (

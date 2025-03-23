@@ -9,7 +9,7 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
   const isActive = location.pathname === to;
 
   const handleClick = (e: React.MouseEvent) => {
-    // Don't prevent default navigation - just call onClick if provided
+    // Call onClick if provided
     if (onClick) {
       onClick();
     }

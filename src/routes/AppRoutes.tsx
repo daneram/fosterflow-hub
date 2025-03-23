@@ -1,6 +1,6 @@
 
-import React, { Suspense } from "react";
-import { Routes, Route } from "react-router-dom";
+import React, { Suspense, useCallback } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
 
 // Import directly loaded pages
 import Index from "../pages/Index";
@@ -9,109 +9,121 @@ import NotFound from "../pages/NotFound";
 // Import lazy-loaded components
 import * as LazyComponents from "./lazyComponents";
 
+// Simple loading fallback that doesn't cover the entire screen
+const LoadingFallback = () => <div className="p-4 opacity-0">Loading...</div>;
+
 const AppRoutes: React.FC = () => {
+  const location = useLocation();
+  
+  // Memoize the suspense wrapper to prevent unnecessary rerenders
+  const SuspenseWrapper = useCallback(({ children }: { children: React.ReactNode }) => (
+    <Suspense fallback={<LoadingFallback />}>
+      {children}
+    </Suspense>
+  ), []);
+  
   return (
-    <Routes>
+    <Routes location={location}>
       <Route path="/" element={<Index />} />
       <Route path="/ai-assistant" element={
-        <Suspense fallback={null}>
+        <SuspenseWrapper>
           <LazyComponents.AIAssistantPage />
-        </Suspense>
+        </SuspenseWrapper>
       } />
       <Route path="/records" element={
-        <Suspense fallback={null}>
+        <SuspenseWrapper>
           <LazyComponents.RecordsExplorer />
-        </Suspense>
+        </SuspenseWrapper>
       } />
       <Route path="/activity" element={
-        <Suspense fallback={null}>
+        <SuspenseWrapper>
           <LazyComponents.ActivityLog />
-        </Suspense>
+        </SuspenseWrapper>
       } />
       <Route path="/compliance" element={
-        <Suspense fallback={null}>
+        <SuspenseWrapper>
           <LazyComponents.ComplianceTracker />
-        </Suspense>
+        </SuspenseWrapper>
       } />
       <Route path="/insights" element={
-        <Suspense fallback={null}>
+        <SuspenseWrapper>
           <LazyComponents.InsightsDashboard />
-        </Suspense>
+        </SuspenseWrapper>
       } />
       <Route path="/form-f" element={
-        <Suspense fallback={null}>
+        <SuspenseWrapper>
           <LazyComponents.FormFAssessment />
-        </Suspense>
+        </SuspenseWrapper>
       } />
       <Route path="/children" element={
-        <Suspense fallback={null}>
+        <SuspenseWrapper>
           <LazyComponents.ChildrenProfiles />
-        </Suspense>
+        </SuspenseWrapper>
       } />
       <Route path="/carers" element={
-        <Suspense fallback={null}>
+        <SuspenseWrapper>
           <LazyComponents.CarersDirectory />
-        </Suspense>
+        </SuspenseWrapper>
       } />
       <Route path="/team" element={
-        <Suspense fallback={null}>
+        <SuspenseWrapper>
           <LazyComponents.TeamDirectory />
-        </Suspense>
+        </SuspenseWrapper>
       } />
       <Route path="/policies" element={
-        <Suspense fallback={null}>
+        <SuspenseWrapper>
           <LazyComponents.PolicyLibrary />
-        </Suspense>
+        </SuspenseWrapper>
       } />
       <Route path="/training" element={
-        <Suspense fallback={null}>
+        <SuspenseWrapper>
           <LazyComponents.TrainingPlatform />
-        </Suspense>
+        </SuspenseWrapper>
       } />
       <Route path="/recruitment" element={
-        <Suspense fallback={null}>
+        <SuspenseWrapper>
           <LazyComponents.RecruitmentPipeline />
-        </Suspense>
+        </SuspenseWrapper>
       } />
       <Route path="/finance" element={
-        <Suspense fallback={null}>
+        <SuspenseWrapper>
           <LazyComponents.FinanceManager />
-        </Suspense>
+        </SuspenseWrapper>
       } />
       <Route path="/forms" element={
-        <Suspense fallback={null}>
+        <SuspenseWrapper>
           <LazyComponents.FormsLibrary />
-        </Suspense>
+        </SuspenseWrapper>
       } />
       <Route path="/workflow" element={
-        <Suspense fallback={null}>
+        <SuspenseWrapper>
           <LazyComponents.WorkflowManager />
-        </Suspense>
+        </SuspenseWrapper>
       } />
       <Route path="/contacts" element={
-        <Suspense fallback={null}>
+        <SuspenseWrapper>
           <LazyComponents.ContactsDirectory />
-        </Suspense>
+        </SuspenseWrapper>
       } />
       <Route path="/settings" element={
-        <Suspense fallback={null}>
+        <SuspenseWrapper>
           <LazyComponents.SettingsPanel />
-        </Suspense>
+        </SuspenseWrapper>
       } />
       <Route path="/email" element={
-        <Suspense fallback={null}>
+        <SuspenseWrapper>
           <LazyComponents.EmailPage />
-        </Suspense>
+        </SuspenseWrapper>
       } />
       <Route path="/calendar" element={
-        <Suspense fallback={null}>
+        <SuspenseWrapper>
           <LazyComponents.CalendarPage />
-        </Suspense>
+        </SuspenseWrapper>
       } />
       <Route path="/tasks" element={
-        <Suspense fallback={null}>
+        <SuspenseWrapper>
           <LazyComponents.TasksPage />
-        </Suspense>
+        </SuspenseWrapper>
       } />
       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
       <Route path="*" element={<NotFound />} />
@@ -119,4 +131,4 @@ const AppRoutes: React.FC = () => {
   );
 };
 
-export default AppRoutes;
+export default React.memo(AppRoutes);

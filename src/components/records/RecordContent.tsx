@@ -2,7 +2,6 @@
 import React from 'react';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { RecordListView } from './RecordListView';
-import { RecordGridView } from './RecordGridView';
 import { RecordTableView } from './RecordTableView';
 import { Record } from './types';
 import { 
@@ -12,9 +11,9 @@ import {
   getPriorityBadge, 
   getComplianceIcon
 } from './RecordUtils';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface RecordContentProps {
-  viewMode: 'list' | 'grid' | 'table';
   filteredRecords: Record[];
   selectedRecords: string[];
   handleSelectRecord: (id: string, checked: boolean) => void;
@@ -25,7 +24,6 @@ interface RecordContentProps {
 }
 
 export const RecordContent: React.FC<RecordContentProps> = ({
-  viewMode,
   filteredRecords,
   selectedRecords,
   handleSelectRecord,
@@ -34,9 +32,12 @@ export const RecordContent: React.FC<RecordContentProps> = ({
   sortDirection,
   toggleSort
 }) => {
+  const isMobile = useIsMobile();
+  const viewMode = isMobile ? 'list' : 'table';
+
   return (
-    <Tabs value={viewMode} className="w-full">
-      <TabsContent value="list" className="mt-0">
+    <div className="w-full">
+      {viewMode === 'list' ? (
         <RecordListView
           records={filteredRecords}
           selectedRecords={selectedRecords}
@@ -48,22 +49,7 @@ export const RecordContent: React.FC<RecordContentProps> = ({
           getPriorityBadge={getPriorityBadge}
           getComplianceIcon={getComplianceIcon}
         />
-      </TabsContent>
-      
-      <TabsContent value="grid" className="mt-0">
-        <RecordGridView
-          records={filteredRecords}
-          selectedRecords={selectedRecords}
-          handleSelectRecord={handleSelectRecord}
-          formatDate={formatDate}
-          getTypeIcon={getTypeIcon}
-          getStatusBadge={getStatusBadge}
-          getPriorityBadge={getPriorityBadge}
-          getComplianceIcon={getComplianceIcon}
-        />
-      </TabsContent>
-      
-      <TabsContent value="table" className="mt-0">
+      ) : (
         <RecordTableView
           records={filteredRecords}
           selectedRecords={selectedRecords}
@@ -77,7 +63,7 @@ export const RecordContent: React.FC<RecordContentProps> = ({
           sortDirection={sortDirection}
           toggleSort={toggleSort}
         />
-      </TabsContent>
-    </Tabs>
+      )}
+    </div>
   );
 };

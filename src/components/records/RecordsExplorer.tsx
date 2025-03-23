@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import Layout from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardDescription, CardFooter } from '@/components/ui/card';
 import { RecordFilterPanel } from './RecordFilterPanel';
@@ -13,7 +13,6 @@ import { useRecordSelection } from './hooks/useRecordSelection';
 import { usePresetFilters } from './PresetUtils';
 
 const RecordsExplorer: React.FC = () => {
-  const [viewMode, setViewMode] = useState<'list' | 'grid' | 'table'>('list');
   const { filteringProps, filteredRecords } = useRecordsFiltering(MOCK_RECORDS);
   const { selectedRecords, handleSelectRecord, handleSelectAll } = useRecordSelection(filteredRecords);
   const { onSelectPreset } = usePresetFilters();
@@ -44,7 +43,7 @@ const RecordsExplorer: React.FC = () => {
   return (
     <Layout>
       <div className="space-y-6">
-        <RecordsHeader viewMode={viewMode} setViewMode={setViewMode} />
+        <RecordsHeader />
         
         {/* Filter Panel - Horizontal across the top */}
         <div className="w-full">
@@ -78,7 +77,6 @@ const RecordsExplorer: React.FC = () => {
             </CardHeader>
             <CardContent className="p-4">
               <RecordContent 
-                viewMode={viewMode}
                 filteredRecords={filteredRecords}
                 selectedRecords={selectedRecords}
                 handleSelectRecord={handleSelectRecord}

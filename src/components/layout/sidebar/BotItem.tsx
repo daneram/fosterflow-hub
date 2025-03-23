@@ -1,5 +1,5 @@
 
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { BotItemProps } from './types';
@@ -9,7 +9,7 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
   const navigate = useNavigate();
   const isActive = location.pathname === to;
 
-  const handleClick = useCallback((e: React.MouseEvent) => {
+  const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
     
     // Don't navigate if we're already on this page
@@ -20,9 +20,9 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
       onClick();
     }
     
-    // Navigate programmatically without any special state
-    navigate(to);
-  }, [isActive, onClick, navigate, to]);
+    // Navigate programmatically without causing a scroll reset
+    navigate(to, { replace: false });
+  };
 
   return (
     <Link

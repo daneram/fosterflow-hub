@@ -35,15 +35,13 @@ const ContentArea: React.FC<ContentAreaProps> = ({
 
         {/* AI Assistant panel - only show on desktop and when open */}
         {!isMobile && aiChatOpen && (
-          <>
-            <ResizablePanel 
-              defaultSize={40} 
-              minSize={30}
-              className="border-l"
-            >
-              <AIChat />
-            </ResizablePanel>
-          </>
+          <ResizablePanel 
+            defaultSize={40} 
+            minSize={30}
+            className="border-l"
+          >
+            <AIChat />
+          </ResizablePanel>
         )}
       </ResizablePanelGroup>
     </div>

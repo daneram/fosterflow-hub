@@ -13,6 +13,7 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
   const scrollPositionRef = useRef<number>(0);
   const viewportRef = useRef<HTMLElement | null>(null);
   const location = useLocation();
+  const initialLoadRef = useRef(true);
   
   // Find the viewport element and store a reference to it
   useEffect(() => {
@@ -40,13 +41,22 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
   }, [viewportRef.current]);
   
   // When route changes, restore scroll position in the sidebar
-  // This is key to maintaining the scroll position
   useEffect(() => {
+    // Skip scroll restoration on initial load
+    if (initialLoadRef.current) {
+      initialLoadRef.current = false;
+      return;
+    }
+
     const viewport = viewportRef.current;
     if (viewport && scrollPositionRef.current > 0) {
-      // Use RAF to ensure we restore after the browser's layout calculations
+      // Use multiple RAF calls to ensure we restore after the browser has completed all layout calculations
       requestAnimationFrame(() => {
-        viewport.scrollTop = scrollPositionRef.current;
+        requestAnimationFrame(() => {
+          if (viewport) {
+            viewport.scrollTop = scrollPositionRef.current;
+          }
+        });
       });
     }
   }, [location.pathname]);

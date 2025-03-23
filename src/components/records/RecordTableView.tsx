@@ -1,6 +1,7 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ChevronUp, ChevronDown, FileText } from 'lucide-react';
+import { ChevronUp, ChevronDown, FileText, User, Clock } from 'lucide-react';
 import { Record } from './types';
 import {
   Table,
@@ -10,6 +11,7 @@ import {
   TableRow,
   TableCell
 } from '@/components/ui/table';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface RecordTableViewProps {
   records: Record[];
@@ -35,6 +37,8 @@ export const RecordTableView: React.FC<RecordTableViewProps> = ({
   sortDirection,
   toggleSort
 }) => {
+  const isMobile = useIsMobile();
+  
   // Function to format the unique identifier
   const formatUniqueIdentifier = (record: Record) => {
     let prefix = '';
@@ -123,24 +127,28 @@ export const RecordTableView: React.FC<RecordTableViewProps> = ({
                   )}
                 </div>
               </th>
-              <th className="h-10 px-4 text-left">
-                <span>Linked</span>
-              </th>
-              <th className="h-10 px-4 text-left">Staff</th>
-              <th className="h-10 px-4 text-left" onClick={() => toggleSort('updatedAt')}>
-                <div className="flex items-center space-x-1">
-                  <span>Updated</span>
-                  {sortField === 'updatedAt' && (
-                    sortDirection === 'asc' ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />
-                  )}
-                </div>
-              </th>
+              {!isMobile && (
+                <>
+                  <th className="h-10 px-4 text-left">
+                    <span>Linked</span>
+                  </th>
+                  <th className="h-10 px-4 text-left">Staff</th>
+                  <th className="h-10 px-4 text-left" onClick={() => toggleSort('updatedAt')}>
+                    <div className="flex items-center space-x-1">
+                      <span>Updated</span>
+                      {sortField === 'updatedAt' && (
+                        sortDirection === 'asc' ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />
+                      )}
+                    </div>
+                  </th>
+                </>
+              )}
             </tr>
           </thead>
           <tbody>
             {records.length === 0 ? (
               <tr>
-                <td colSpan={4} className="h-24 text-center">
+                <td colSpan={isMobile ? 1 : 4} className="h-24 text-center">
                   <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
                     <FileText className="h-8 w-8 mb-2" />
                     <p>No records found</p>
@@ -155,20 +163,45 @@ export const RecordTableView: React.FC<RecordTableViewProps> = ({
                   onClick={() => handleRowClick(record.id)}
                 >
                   <td className="py-2 px-4 font-medium">
-                    <div className="flex flex-col">
-                      <span>{record.title}</span>
-                      <div className="text-xs text-muted-foreground">{formatUniqueIdentifier(record)}</div>
-                    </div>
-                  </td>
-                  <td className="py-2 px-4">
-                    {record.client && (
-                      <span className="text-sm text-muted-foreground hover:underline cursor-pointer">
-                        {record.client}
-                      </span>
+                    {isMobile ? (
+                      <div className="flex justify-between">
+                        <div className="flex-1">
+                          <div className="font-medium">{record.title}</div>
+                          <div className="text-xs text-muted-foreground">{formatUniqueIdentifier(record)}</div>
+                        </div>
+                        <div className="flex flex-col text-right text-xs text-muted-foreground">
+                          {record.client && (
+                            <div className="mb-1 flex items-center justify-end">
+                              <User className="h-3 w-3 mr-1" />
+                              <span>{record.client}</span>
+                            </div>
+                          )}
+                          <div className="flex items-center justify-end">
+                            <Clock className="h-3 w-3 mr-1" />
+                            <span>{formatDate(record.updatedAt)}</span>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col">
+                        <span>{record.title}</span>
+                        <div className="text-xs text-muted-foreground">{formatUniqueIdentifier(record)}</div>
+                      </div>
                     )}
                   </td>
-                  <td className="py-2 px-4">{record.owner || 'Unassigned'}</td>
-                  <td className="py-2 px-4">{formatDate(record.updatedAt)}</td>
+                  {!isMobile && (
+                    <>
+                      <td className="py-2 px-4">
+                        {record.client && (
+                          <span className="text-sm text-muted-foreground hover:underline cursor-pointer">
+                            {record.client}
+                          </span>
+                        )}
+                      </td>
+                      <td className="py-2 px-4">{record.owner || 'Unassigned'}</td>
+                      <td className="py-2 px-4">{formatDate(record.updatedAt)}</td>
+                    </>
+                  )}
                 </tr>
               ))
             )}

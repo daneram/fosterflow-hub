@@ -44,7 +44,8 @@ const ContentArea: React.FC<ContentAreaProps> = ({
               minSize={30}
               className="border-l"
             >
-              <AIChat toggleAiChat={toggleAiChat} />
+              {/* Remove the toggleAiChat prop if AIChat doesn't accept it */}
+              <AIChat />
             </ResizablePanel>
           </>
         )}

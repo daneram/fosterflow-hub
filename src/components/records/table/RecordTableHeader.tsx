@@ -20,9 +20,7 @@ export const RecordTableHeader: React.FC<RecordTableHeaderProps> = ({
   return (
     <tr className="border-b bg-muted/50">
       <TableHead className="h-10 px-4 text-left">
-        <div className="flex items-center space-x-1">
-          <span>Document</span>
-        </div>
+        <span>Document</span>
       </TableHead>
       {!isMobile && (
         <>
@@ -31,9 +29,7 @@ export const RecordTableHeader: React.FC<RecordTableHeaderProps> = ({
           </TableHead>
           <TableHead className="h-10 px-4 text-left">Staff</TableHead>
           <TableHead className="h-10 px-4 text-left">
-            <div className="flex items-center space-x-1">
-              <span>Updated</span>
-            </div>
+            <span>Updated</span>
           </TableHead>
         </>
       )}

@@ -44,7 +44,7 @@ const DatePickerButton: React.FC<DatePickerButtonProps> = ({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          variant={date ? "default" : "outline"}
           className={cn(
             "w-full h-9 justify-start text-left font-normal relative focus:outline-none",
             !date && "text-muted-foreground"

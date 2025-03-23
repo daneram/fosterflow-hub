@@ -1,8 +1,8 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/lib/utils';
 
 interface AdvancedFiltersProps {
   isOpen: boolean;
@@ -16,6 +16,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
   setSelectedStatus 
 }) => {
   const isMobile = useIsMobile();
+  const [selectedAssignee, setSelectedAssignee] = React.useState<string | null>(null);
   
   if (!isOpen) return null;
 
@@ -25,12 +26,19 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
     // Only change the status to the new one that was clicked
     setSelectedStatus(status);
   };
+
+  // Function to handle assignee selection
+  const handleAssigneeChange = (value: string) => {
+    setSelectedAssignee(value === "any" ? null : value);
+  };
   
   return (
     <div className="space-y-4 py-2">
       <div className="space-y-2">
-        <Select>
-          <SelectTrigger className="h-9">
+        <Select onValueChange={handleAssigneeChange} value={selectedAssignee || undefined}>
+          <SelectTrigger 
+            className={cn("h-9", selectedAssignee ? "bg-primary text-primary-foreground hover:bg-primary/90" : "")}
+          >
             <SelectValue placeholder="Assigned to" />
           </SelectTrigger>
           <SelectContent>

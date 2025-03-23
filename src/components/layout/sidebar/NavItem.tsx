@@ -9,7 +9,7 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
   const isActive = location.pathname === to;
 
   const handleClick = (e: React.MouseEvent) => {
-    // If we're already on this page, prevent default navigation and maintain scroll
+    // If we're already on this page, completely prevent navigation
     if (isActive) {
       e.preventDefault();
       e.stopPropagation();

@@ -44,16 +44,6 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ isOpen }) => {
       </div>
       
       <div className="space-y-2">
-        <h3 className="text-sm font-medium">Priority</h3>
-        <div className="flex flex-wrap gap-2">
-          <Button variant="outline" size="sm">Urgent</Button>
-          <Button variant="outline" size="sm">High</Button>
-          <Button variant="outline" size="sm">Medium</Button>
-          <Button variant="outline" size="sm">Low</Button>
-        </div>
-      </div>
-      
-      <div className="space-y-2">
         <h3 className="text-sm font-medium">Compliance Status</h3>
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" size="sm">Complete</Button>

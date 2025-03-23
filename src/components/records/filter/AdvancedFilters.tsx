@@ -37,6 +37,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
   return (
     <div className="space-y-2 pt-2">
       <div className="space-y-2">
+        <h3 className="text-sm font-medium">Date</h3>
         <div className="grid grid-cols-2 gap-2">
           <div>
             <Popover open={fromDateOpen} onOpenChange={setFromDateOpen}>

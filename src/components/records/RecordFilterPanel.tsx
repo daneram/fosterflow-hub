@@ -37,11 +37,14 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
   const [toDate, setToDate] = useState<Date | undefined>(undefined);
   const [fromDateOpen, setFromDateOpen] = useState(false);
   const [toDateOpen, setToDateOpen] = useState(false);
+  const [selectedAssignee, setSelectedAssignee] = useState<string | null>(null);
   
   const clearAdvancedFilters = () => {
-    // Clear filters but only status for now as it's part of advanced filters
     if (selectedStatus) {
       setSelectedStatus(null);
+    }
+    if (selectedAssignee) {
+      setSelectedAssignee(null);
     }
   };
   
@@ -94,7 +97,13 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
         
         {/* Advanced Filters Panel */}
         <div className={`${isAdvancedSearchOpen ? 'mt-4 animate-fade-in' : 'mt-0'}`}>
-          <AdvancedFilters isOpen={isAdvancedSearchOpen} selectedStatus={selectedStatus} setSelectedStatus={setSelectedStatus} />
+          <AdvancedFilters 
+            isOpen={isAdvancedSearchOpen} 
+            selectedStatus={selectedStatus} 
+            setSelectedStatus={setSelectedStatus}
+            selectedAssignee={selectedAssignee}
+            setSelectedAssignee={setSelectedAssignee}
+          />
         </div>
       </CardContent>
     </Card>

@@ -6,7 +6,7 @@ import { Filter, ChevronDown, X } from 'lucide-react';
 interface AdvancedFiltersToggleProps {
   isAdvancedSearchOpen: boolean;
   setIsAdvancedSearchOpen: (open: boolean) => void;
-  clearAdvancedFilters?: () => void;
+  clearAdvancedFilters: () => void;
 }
 
 export const AdvancedFiltersToggle: React.FC<AdvancedFiltersToggleProps> = ({
@@ -15,7 +15,7 @@ export const AdvancedFiltersToggle: React.FC<AdvancedFiltersToggleProps> = ({
   clearAdvancedFilters
 }) => {
   const handleToggleClick = () => {
-    if (isAdvancedSearchOpen && clearAdvancedFilters) {
+    if (isAdvancedSearchOpen) {
       clearAdvancedFilters();
       setIsAdvancedSearchOpen(false);
     } else {

@@ -10,15 +10,18 @@ interface AdvancedFiltersProps {
   isOpen: boolean;
   selectedStatus: string | null;
   setSelectedStatus: (status: string | null) => void;
+  selectedAssignee: string | null;
+  setSelectedAssignee: (assignee: string | null) => void;
 }
 
 export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ 
   isOpen, 
   selectedStatus, 
-  setSelectedStatus 
+  setSelectedStatus,
+  selectedAssignee,
+  setSelectedAssignee
 }) => {
   const isMobile = useIsMobile();
-  const [selectedAssignee, setSelectedAssignee] = React.useState<string | null>(null);
   
   if (!isOpen) return null;
 
@@ -55,7 +58,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
           >
             <SelectTrigger 
               className={cn(
-                "h-9 pr-8", 
+                "h-9 pr-10", 
                 selectedAssignee ? "bg-primary text-primary-foreground hover:bg-primary/90" : ""
               )}
             >
@@ -75,7 +78,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
           {selectedAssignee && (
             <button
               onClick={clearAssignee}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-primary-foreground"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-primary-foreground"
               aria-label="Clear selection"
             >
               <X className="h-4 w-4" />

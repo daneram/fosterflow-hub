@@ -64,7 +64,7 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
             </div>
           </div>
         ) : (
-          <div className="flex flex-wrap justify-between items-center gap-3">
+          <div className="flex items-center justify-between gap-3">
             {/* Type filter */}
             <div>
               <TypeFilter 

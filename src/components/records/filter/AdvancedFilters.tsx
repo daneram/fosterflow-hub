@@ -16,6 +16,8 @@ interface AdvancedFiltersProps {
 export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ isOpen }) => {
   const [fromDate, setFromDate] = useState<Date | undefined>(undefined);
   const [toDate, setToDate] = useState<Date | undefined>(undefined);
+  const [fromDateOpen, setFromDateOpen] = useState(false);
+  const [toDateOpen, setToDateOpen] = useState(false);
   
   if (!isOpen) return null;
   
@@ -25,8 +27,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ isOpen }) => {
         <h3 className="text-sm font-medium">Date Range</h3>
         <div className="grid grid-cols-2 gap-2">
           <div>
-            <p className="text-xs text-muted-foreground mb-1">From</p>
-            <Popover>
+            <Popover open={fromDateOpen} onOpenChange={setFromDateOpen}>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
@@ -35,11 +36,11 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ isOpen }) => {
                     !fromDate && "text-muted-foreground"
                   )}
                 >
-                  <CalendarIcon className="mr-2 h-3.5 w-3.5 opacity-70" />
+                  <CalendarIcon className="mr-1 h-3.5 w-3.5 opacity-70" />
                   {fromDate ? (
-                    <span className="truncate">{format(fromDate, "PPP")}</span>
+                    <span className="truncate text-xs md:text-sm">{format(fromDate, "PPP")}</span>
                   ) : (
-                    "Select date"
+                    "From"
                   )}
                 </Button>
               </PopoverTrigger>
@@ -47,7 +48,10 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ isOpen }) => {
                 <Calendar
                   mode="single"
                   selected={fromDate}
-                  onSelect={setFromDate}
+                  onSelect={(date) => {
+                    setFromDate(date);
+                    setFromDateOpen(false);
+                  }}
                   initialFocus
                   className="pointer-events-auto"
                   classNames={{
@@ -58,8 +62,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ isOpen }) => {
             </Popover>
           </div>
           <div>
-            <p className="text-xs text-muted-foreground mb-1">To</p>
-            <Popover>
+            <Popover open={toDateOpen} onOpenChange={setToDateOpen}>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
@@ -68,11 +71,11 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ isOpen }) => {
                     !toDate && "text-muted-foreground"
                   )}
                 >
-                  <CalendarIcon className="mr-2 h-3.5 w-3.5 opacity-70" />
+                  <CalendarIcon className="mr-1 h-3.5 w-3.5 opacity-70" />
                   {toDate ? (
-                    <span className="truncate">{format(toDate, "PPP")}</span>
+                    <span className="truncate text-xs md:text-sm">{format(toDate, "PPP")}</span>
                   ) : (
-                    "Select date"
+                    "To"
                   )}
                 </Button>
               </PopoverTrigger>
@@ -80,7 +83,10 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ isOpen }) => {
                 <Calendar
                   mode="single"
                   selected={toDate}
-                  onSelect={setToDate}
+                  onSelect={(date) => {
+                    setToDate(date);
+                    setToDateOpen(false);
+                  }}
                   initialFocus
                   className="pointer-events-auto"
                   classNames={{

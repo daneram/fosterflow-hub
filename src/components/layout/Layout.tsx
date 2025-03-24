@@ -22,28 +22,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   // Tracking content transitions instead of sidebar transitions
   const [isContentTransitioning, setIsContentTransitioning] = useState(false);
 
-  // Set initial AI chat state based on screen size and don't change it during navigation
+  // Set initial AI chat state based on screen size
   useEffect(() => {
-    // Only set AI chat state on initial load, not during navigation
-    const storedAiChatState = localStorage.getItem('aiChatOpen');
-    if (storedAiChatState === null) {
-      // First time visit, set default based on device and page
-      const defaultState = !isMobile && !isAIAssistantPage;
-      setAiChatOpen(defaultState);
-      localStorage.setItem('aiChatOpen', String(defaultState));
-    } else {
-      // Return visit, use stored preference unless on AI Assistant page
-      const savedState = storedAiChatState === 'true';
-      setAiChatOpen(isAIAssistantPage ? false : savedState);
-    }
+    setAiChatOpen(!isMobile && !isAIAssistantPage);
   }, [isMobile, isAIAssistantPage, setAiChatOpen]);
-
-  // Save AI chat state when it changes
-  useEffect(() => {
-    if (!isAIAssistantPage) {
-      localStorage.setItem('aiChatOpen', String(aiChatOpen));
-    }
-  }, [aiChatOpen, isAIAssistantPage]);
 
   // Handle page transition effects for content area
   useEffect(() => {
@@ -63,11 +45,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     return () => clearTimeout(timer);
   }, [location.pathname, isMobile]);
 
-  // Custom toggle for AI chat that also stores the state
-  const handleToggleAiChat = useCallback(() => {
-    toggleAiChat();
-  }, [toggleAiChat]);
-
   // Close the sidebar on mobile when a navigation item is clicked
   const closeSidebarOnMobile = useCallback(() => {
     if (isMobile && sidebarOpen) {
@@ -81,11 +58,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       isOpen={sidebarOpen} 
       onToggle={toggleSidebar} 
       onNavItemClick={closeSidebarOnMobile} 
-      toggleAiChat={handleToggleAiChat} 
+      toggleAiChat={toggleAiChat} 
       isMobile={isMobile}
       isTransitioning={false} // Never hide sidebar completely on transitions
     />
-  ), [sidebarOpen, toggleSidebar, closeSidebarOnMobile, handleToggleAiChat, isMobile]);
+  ), [sidebarOpen, toggleSidebar, closeSidebarOnMobile, toggleAiChat, isMobile]);
 
   return (
     <SidebarProvider>
@@ -96,7 +73,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         {/* Main content and AI assistant */}
         <ContentArea 
           aiChatOpen={aiChatOpen} 
-          toggleAiChat={handleToggleAiChat} 
+          toggleAiChat={toggleAiChat} 
           isMobile={isMobile}
           isTransitioning={isContentTransitioning}
         >

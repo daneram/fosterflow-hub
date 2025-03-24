@@ -37,24 +37,14 @@
     scrollbar-color: var(--scrollbar-color) transparent;
   }
   
-  /* Only show scrollbar when actually scrolling (for webkit browsers) */
+  /* Completely hide scrollbar by default */
   *::-webkit-scrollbar {
-    opacity: 0;
-    visibility: hidden; /* Hide by default using visibility instead of opacity */
+    display: none;
   }
   
-  /* Show scrollbar ONLY during active scrolling, NOT on hover */
-  *:active::-webkit-scrollbar {
-    visibility: visible; /* Show immediately when scrolling */
-  }
-  
-  /* Hide scrollbar on hover unless actively scrolling */
-  *:hover::-webkit-scrollbar {
-    visibility: hidden;
-  }
-  
-  /* Keep visible during scroll+hover combination */
-  *:hover:active::-webkit-scrollbar {
-    visibility: visible;
+  /* Only show scrollbar during active scrolling */
+  *:active::-webkit-scrollbar,
+  *:focus::-webkit-scrollbar {
+    display: block;
   }
 }

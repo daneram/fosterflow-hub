@@ -103,7 +103,7 @@
     @apply ring-0 outline-none;
   }
 
-  /* Style scrollbar instead of hiding it */
+  /* Style scrollbar consistently across the entire app */
   * {
     scrollbar-width: thin; /* Firefox */
   }

@@ -2,7 +2,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 import AIChat from '@/components/ai/AIChat';
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
+import { ResizablePanelGroup, ResizablePanel } from '@/components/ui/resizable';
 
 interface ContentAreaProps {
   children: React.ReactNode;
@@ -31,7 +31,7 @@ const ContentArea: React.FC<ContentAreaProps> = ({
           minSize={25}
           className="overflow-auto"
         >
-          <div className="p-4 sm:p-6 w-full max-w-full">
+          <div className="p-6 w-full">
             {children}
           </div>
         </ResizablePanel>
@@ -39,12 +39,12 @@ const ContentArea: React.FC<ContentAreaProps> = ({
         {/* AI Assistant panel - only show on desktop and when open */}
         {!isMobile && aiChatOpen && (
           <>
-            <ResizableHandle withHandle />
             <ResizablePanel 
               defaultSize={40} 
               minSize={30}
               className="border-l"
             >
+              {/* Remove the toggleAiChat prop if AIChat doesn't accept it */}
               <AIChat />
             </ResizablePanel>
           </>

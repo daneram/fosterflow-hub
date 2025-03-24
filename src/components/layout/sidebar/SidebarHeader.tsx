@@ -5,6 +5,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useSidebar } from '@/components/ui/sidebar';
+import { Menu } from 'lucide-react';
 
 interface SidebarHeaderProps {
   isOpen: boolean;
@@ -18,7 +19,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const imageRef = useRef<HTMLImageElement | null>(null);
   const isMobile = useIsMobile();
-  const { openMobile, setOpenMobile } = useSidebar();
+  const { openMobile, setOpenMobile, toggleSidebar } = useSidebar();
   
   // Handle image loading
   useEffect(() => {
@@ -43,7 +44,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
     };
   }, []);
 
-  // Simplified logo click handler
+  // Clear and direct logo click handler
   const handleLogoClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -53,15 +54,8 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
       currentOpenMobileState: openMobile 
     });
     
-    if (isMobile) {
-      console.log('[SidebarHeader] On mobile, toggling mobile sidebar');
-      // For mobile, toggle the shadcn Sheet component
-      setOpenMobile(!openMobile);
-    } else {
-      console.log('[SidebarHeader] On desktop, performing regular toggle');
-      // On desktop, use the provided toggle function
-      onToggle();
-    }
+    // Use the shared toggleSidebar function for consistency
+    toggleSidebar();
   };
   
   return (
@@ -74,30 +68,34 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
         onClick={handleLogoClick}
       >
         <div className="flex items-center justify-center w-5 h-5 flex-shrink-0">
-          <Avatar className="h-6 w-6">
-            {imageLoaded ? (
-              <AvatarImage 
-                ref={imageRef}
-                src={LOGO_URL}
-                alt="Indigo Fostering"
-                loading="eager"
-                className="object-contain bg-white"
-                draggable={false}
-                onLoad={() => setImageLoaded(true)}
-              />
-            ) : (
-              <AvatarFallback className="bg-white">
-                <img 
-                  src={LOGO_URL} 
+          {isMobile ? (
+            <Menu className="h-5 w-5" />
+          ) : (
+            <Avatar className="h-6 w-6">
+              {imageLoaded ? (
+                <AvatarImage 
+                  ref={imageRef}
+                  src={LOGO_URL}
                   alt="Indigo Fostering"
-                  className="h-full w-full object-contain"
-                  style={{ visibility: imageLoaded ? 'visible' : 'hidden' }}
-                  onLoad={() => setImageLoaded(true)}
+                  loading="eager"
+                  className="object-contain bg-white"
                   draggable={false}
+                  onLoad={() => setImageLoaded(true)}
                 />
-              </AvatarFallback>
-            )}
-          </Avatar>
+              ) : (
+                <AvatarFallback className="bg-white">
+                  <img 
+                    src={LOGO_URL} 
+                    alt="Indigo Fostering"
+                    className="h-full w-full object-contain"
+                    style={{ visibility: imageLoaded ? 'visible' : 'hidden' }}
+                    onLoad={() => setImageLoaded(true)}
+                    draggable={false}
+                  />
+                </AvatarFallback>
+              )}
+            </Avatar>
+          )}
         </div>
         <div className={cn("ml-3 overflow-hidden transition-opacity duration-100", 
                          isOpen ? "opacity-100" : "opacity-0 w-0")}>

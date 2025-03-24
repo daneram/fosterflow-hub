@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { cn } from '@/lib/utils';
 import SidebarHeader from './sidebar/SidebarHeader';
@@ -6,11 +7,6 @@ import SidebarSection from './sidebar/SidebarSection';
 import ScrollManager from './sidebar/ScrollManager';
 import AIChatSection from './sidebar/AIChatSection';
 import { SidebarProps } from './sidebar/types';
-import {
-  useSidebar,
-  Sidebar as ShadcnSidebar,
-  SidebarContent
-} from '@/components/ui/sidebar';
 import {
   dashboardSection,
   coreSection,
@@ -35,42 +31,19 @@ const Sidebar: React.FC<SidebarProps> = ({
   isMobile,
   isTransitioning = false
 }) => {
-  const { openMobile, setOpenMobile } = useSidebar();
-
-  // If we're on mobile, let the ShadcnSidebar handle rendering via Sheet
-  if (isMobile) {
+  // Render a fixed-width placeholder instead of not rendering at all
+  if (isMobile && isTransitioning) {
     return (
-      <ShadcnSidebar>
-        <SidebarContent className="p-0">
-          <div className="flex flex-col h-full">
-            <SidebarHeader isOpen={true} onToggle={() => setOpenMobile(false)} />
-            
-            <ScrollManager isOpen={true}>
-              <div className="flex flex-col space-y-0 mt-0.5">
-                {isMobile && (
-                  <AIChatSection isOpen={true} onNavItemClick={onNavItemClick} />
-                )}
-                
-                {sidebarSections.map(({ key, section }) => (
-                  <SidebarSection 
-                    key={key}
-                    title={section.title} 
-                    isOpen={true} 
-                    items={section.items} 
-                    onNavItemClick={onNavItemClick} 
-                  />
-                ))}
-              </div>
-            </ScrollManager>
-            
-            <SidebarFooter isOpen={true} />
-          </div>
-        </SidebarContent>
-      </ShadcnSidebar>
+      <div 
+        className={cn(
+          "h-screen flex flex-col bg-sidebar py-4 px-0",
+          !isOpen ? "w-14" : "w-52"
+        )} 
+        aria-hidden="true"
+      />
     );
   }
 
-  // Desktop view - regular sidebar
   return (
     <div 
       className={cn(
@@ -81,13 +54,17 @@ const Sidebar: React.FC<SidebarProps> = ({
         "transition-opacity duration-200",
         
         // Never completely hide the sidebar
-        isTransitioning ? "opacity-90" : "opacity-100"
+        isMobile && isTransitioning ? "opacity-90" : "opacity-100"
       )}
     >
       <SidebarHeader isOpen={isOpen} onToggle={onToggle} />
 
       <ScrollManager isOpen={isOpen}>
         <div className="flex flex-col space-y-0 mt-0.5">
+          {isMobile && (
+            <AIChatSection isOpen={isOpen} onNavItemClick={onNavItemClick} />
+          )}
+          
           {sidebarSections.map(({ key, section }) => (
             <SidebarSection 
               key={key}
@@ -105,7 +82,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   );
 };
 
-// Update memo comparison to include the new dependencies
+// Update memo comparison to include the new isTransitioning prop
 export default React.memo(Sidebar, (prevProps, nextProps) => {
   return (
     prevProps.isOpen === nextProps.isOpen &&

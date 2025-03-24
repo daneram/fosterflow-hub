@@ -52,10 +52,12 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
     console.log('Logo clicked', { isMobile, openMobile });
     
     if (isMobile) {
-      console.log('Mobile logo click, toggling sidebar');
-      // For mobile, toggle the sidebar state
-      setOpenMobile(!openMobile);
-      console.log('Sidebar state toggled', { openMobile: !openMobile });
+      console.log('Mobile logo click, opening sidebar');
+      // Toggle the mobile sidebar open state
+      setTimeout(() => {
+        setOpenMobile(true);
+        console.log('Sidebar should be open now', { openMobile: true });
+      }, 10);
     } else {
       // On desktop, perform regular toggle through props
       onToggle();

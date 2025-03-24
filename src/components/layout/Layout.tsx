@@ -1,4 +1,3 @@
-
 import React, { useEffect, useCallback, useMemo, useState } from 'react';
 import Sidebar from './Sidebar';
 import ContentArea from './content/ContentArea';
@@ -81,20 +80,18 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       isOpen={sidebarOpen} 
       onToggle={toggleSidebar} 
       onNavItemClick={closeSidebarOnMobile} 
+      toggleAiChat={handleToggleAiChat} 
       isMobile={isMobile}
-      isTransitioning={isContentTransitioning} 
+      isTransitioning={false} // Never hide sidebar completely on transitions
     />
-  ), [sidebarOpen, toggleSidebar, closeSidebarOnMobile, isMobile, isContentTransitioning]);
+  ), [sidebarOpen, toggleSidebar, closeSidebarOnMobile, handleToggleAiChat, isMobile]);
 
   return (
-    <SidebarProvider 
-      defaultOpen={sidebarOpen} 
-      onOpenChange={setSidebarOpen}
-      open={sidebarOpen}
-    >
+    <SidebarProvider defaultOpen={sidebarOpen} onOpenChange={setSidebarOpen}>
       <div className="h-screen flex bg-background overflow-hidden w-full">
+        {/* Use the Sidebar component connected to SidebarProvider */}
         {memoizedSidebar}
-        
+
         {/* Main content and AI assistant */}
         <ContentArea 
           aiChatOpen={aiChatOpen} 

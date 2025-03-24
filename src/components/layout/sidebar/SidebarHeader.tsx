@@ -10,34 +10,34 @@ interface SidebarHeaderProps {
   onToggle: () => void;
 }
 
-// Use the same logo URL constant for consistency
+// Global constant for the logo URL
 const LOGO_URL = "/lovable-uploads/6d655b66-ad8d-445b-93e9-36d9917768dc.png";
 
 const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const imageRef = useRef<HTMLImageElement | null>(null);
   const isMobile = useIsMobile();
   
-  // Check if the logo is already cached on component mount
+  // Handle image loading
   useEffect(() => {
-    // Try to get the logo URL from localStorage first
-    const cachedLogoUrl = localStorage.getItem('app_logo_url') || LOGO_URL;
-    
-    // Check if image is already in browser cache
+    // Create an image object to check if it's already in browser cache
     const img = new Image();
     
+    const handleLoad = () => {
+      setImageLoaded(true);
+    };
+    
+    // If image is already complete (cached), set loaded state immediately
     if (img.complete) {
       setImageLoaded(true);
     } else {
-      img.onload = () => setImageLoaded(true);
-      img.onerror = () => console.warn("Failed to load logo image");
+      img.onload = handleLoad;
     }
     
-    // Set the source to trigger loading or cache check
-    img.src = cachedLogoUrl;
+    img.src = LOGO_URL;
     
     return () => {
       img.onload = null;
-      img.onerror = null;
     };
   }, []);
   
@@ -45,8 +45,11 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
   const handleHeaderToggle = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    
+    // Call the toggle function from props
     onToggle();
     
+    // On mobile, we want to ensure the sidebar stays open/closed based on toggle
     if (isMobile) {
       console.log("Mobile logo toggle activated");
     }
@@ -65,11 +68,14 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
           <Avatar className="h-6 w-6">
             {imageLoaded ? (
               <AvatarImage 
+                ref={imageRef}
                 src={LOGO_URL}
                 alt="Indigo Fostering"
                 loading="eager"
+                fetchPriority="high"
                 className="object-contain bg-white"
                 draggable={false}
+                onLoad={() => setImageLoaded(true)}
               />
             ) : (
               <AvatarFallback className="bg-white">

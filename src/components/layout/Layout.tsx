@@ -54,6 +54,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const closeSidebarOnMobile = useCallback(() => {
     if (isMobile && sidebarOpen) {
       setSidebarOpen(false);
+      console.log("Closing sidebar on mobile after nav item click");
     }
   }, [isMobile, setSidebarOpen, sidebarOpen]);
 

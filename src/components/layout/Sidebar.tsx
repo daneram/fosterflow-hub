@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import SidebarHeader from './sidebar/SidebarHeader';
@@ -31,7 +32,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   isMobile,
   isTransitioning = false
 }) => {
-  // Get shadcn sidebar context
+  // Get shadcn sidebar context - now this will work because we are properly wrapped with SidebarProvider
   const { openMobile, setOpenMobile } = useSidebar();
   
   // Debug logging for Sidebar

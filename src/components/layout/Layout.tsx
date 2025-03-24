@@ -6,10 +6,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { useLocation } from 'react-router-dom';
 import { useSidebarState } from './hooks/useSidebarState';
 import { useAIChatState } from './hooks/useAIChatState';
-import { 
-  SidebarProvider, 
-  useSidebar
-} from '@/components/ui/sidebar';
+import { SidebarProvider } from '@/components/ui/sidebar';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -83,23 +80,19 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     toggleAiChat();
   }, [toggleAiChat]);
 
-  // Access the sidebar context for mobile state management
-  const sidebarContext = useSidebar();
-
   // Close the sidebar on mobile when a navigation item is clicked
   const closeSidebarOnMobile = useCallback(() => {
     if (isMobile) {
       console.log('[Layout] Closing sidebar on mobile after nav item click');
-      // Use the sidebar context to close mobile sidebar
-      sidebarContext.setOpenMobile(false);
     }
-  }, [isMobile, sidebarContext]);
+  }, [isMobile]);
 
   // Log when sidebar state changes
   useEffect(() => {
     console.log('[Layout] Sidebar state changed:', { sidebarOpen });
   }, [sidebarOpen]);
 
+  // We need to provide the default state to the SidebarProvider
   return (
     <SidebarProvider defaultOpen={sidebarOpen} onOpenChange={setSidebarOpen}>
       <div className="h-screen flex bg-background overflow-hidden w-full">

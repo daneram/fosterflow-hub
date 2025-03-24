@@ -31,36 +31,21 @@ const Sidebar: React.FC<SidebarProps> = ({
   isMobile,
   isTransitioning = false
 }) => {
-  // Render a fixed-width placeholder instead of not rendering at all
-  if (isMobile && isTransitioning) {
-    return (
-      <div 
-        className={cn(
-          "h-screen flex flex-col bg-sidebar py-4 px-0",
-          !isOpen ? "w-14" : "w-52"
-        )} 
-        aria-hidden="true"
-      />
-    );
-  }
-
   return (
     <div 
       className={cn(
-        "h-screen flex flex-col bg-sidebar py-2 px-0", // Reduced top padding
+        "h-screen py-4 px-0 bg-sidebar", // Base styles
+        isMobile ? "fixed top-0 left-0 z-50" : "relative", // Position fixed on mobile
         isOpen ? "w-52" : "w-14", // Width based on open state
         
-        // Add only opacity transition, keep width fixed during transitions
-        "transition-opacity duration-200",
-        
-        // Never completely hide the sidebar
-        isMobile && isTransitioning ? "opacity-90" : "opacity-100"
+        // Add transition for smooth opening/closing
+        "transition-all duration-200 ease-in-out"
       )}
     >
       <SidebarHeader isOpen={isOpen} onToggle={onToggle} />
 
       <ScrollManager isOpen={isOpen}>
-        <div className="flex flex-col space-y-0 mt-0.5">
+        <div className="flex flex-col space-y-0">
           {isMobile && (
             <AIChatSection isOpen={isOpen} onNavItemClick={onNavItemClick} />
           )}

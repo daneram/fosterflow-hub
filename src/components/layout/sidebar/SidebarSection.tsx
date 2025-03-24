@@ -5,8 +5,8 @@ import { SidebarSectionProps } from './types';
 
 const SidebarSection: React.FC<SidebarSectionProps> = ({ title, isOpen, items, onNavItemClick }) => {
   return (
-    <div className="py-0">
-      <nav className="flex flex-col gap-0.5">
+    <div className="py-1">
+      <nav className="flex flex-col gap-1">
         {items.map((item) => (
           <NavItem
             key={item.to}

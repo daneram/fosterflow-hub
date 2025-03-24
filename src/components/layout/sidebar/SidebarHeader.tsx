@@ -40,7 +40,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
   }, []);
   
   return (
-    <div className="mb-0">
+    <div className="mb-1">
       <div 
         className={cn(
           "flex items-center cursor-pointer h-10 text-sm font-medium",
@@ -80,7 +80,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
           <span className="truncate font-bold">Indigo Fostering</span>
         </div>
       </div>
-      {isOpen && <Separator className="my-0.5 bg-sidebar-border" />}
+      {isOpen && <Separator className="my-2 bg-sidebar-border" />}
     </div>
   );
 };

@@ -35,7 +35,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   isMobile,
   isTransitioning = false
 }) => {
-  const { openMobile } = useSidebar();
+  const { openMobile, setOpenMobile } = useSidebar();
 
   // If we're on mobile, let the ShadcnSidebar handle rendering via Sheet
   if (isMobile) {
@@ -43,7 +43,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       <ShadcnSidebar>
         <SidebarContent className="p-0">
           <div className="flex flex-col h-full">
-            <SidebarHeader isOpen={true} onToggle={onToggle} />
+            <SidebarHeader isOpen={true} onToggle={() => setOpenMobile(false)} />
             
             <ScrollManager isOpen={true}>
               <div className="flex flex-col space-y-0 mt-0.5">

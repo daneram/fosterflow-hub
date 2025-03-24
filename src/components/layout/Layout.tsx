@@ -81,16 +81,16 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       isOpen={sidebarOpen} 
       onToggle={toggleSidebar} 
       onNavItemClick={closeSidebarOnMobile} 
-      toggleAiChat={handleToggleAiChat} 
       isMobile={isMobile}
-      isTransitioning={false} // Never hide sidebar completely on transitions
+      isTransitioning={isContentTransitioning} 
     />
-  ), [sidebarOpen, toggleSidebar, closeSidebarOnMobile, handleToggleAiChat, isMobile]);
+  ), [sidebarOpen, toggleSidebar, closeSidebarOnMobile, isMobile, isContentTransitioning]);
 
   return (
     <SidebarProvider 
       defaultOpen={sidebarOpen} 
       onOpenChange={setSidebarOpen}
+      open={sidebarOpen}
     >
       <div className="h-screen flex bg-background overflow-hidden w-full">
         {memoizedSidebar}

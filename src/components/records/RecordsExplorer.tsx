@@ -56,10 +56,10 @@ const RecordsExplorer: React.FC = () => {
 
   return (
     <Layout>
-      <div className="w-full max-w-full space-y-2">
+      <div className="w-full max-w-full space-y-4">
         <RecordsHeader />
         
-        <div className="relative w-full max-w-md">
+        <div className="relative w-full max-w-md mx-0">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="text"

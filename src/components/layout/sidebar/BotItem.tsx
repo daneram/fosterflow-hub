@@ -16,7 +16,7 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
     // Don't navigate if we're already on this page
     if (isActive) return;
     
-    // Run the onClick handler first
+    // Run the onClick handler first (which will close the sidebar on mobile)
     if (onClick) {
       onClick();
     }

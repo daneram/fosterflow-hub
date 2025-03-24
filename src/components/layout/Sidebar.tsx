@@ -29,20 +29,13 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(({
   onToggle, 
   onNavItemClick, 
   isMobile,
-  isTransitioning = false
 }, ref) => {
-  // Apply fixed width styles for both states to prevent transition flicker
   return (
     <div 
       ref={ref}
       className={cn(
         "h-screen flex flex-col bg-sidebar py-4 px-0", // Base styles
-        isOpen ? "w-52" : "w-14", // Width based on open state
-        
-        // Important: Use visibility and opacity for transitions instead of width
-        // This prevents the sidebar from changing size during page transitions
-        "transition-all duration-100",
-        isMobile && isTransitioning ? "opacity-90" : "opacity-100"
+        isOpen ? "w-52" : "w-14" // Width based on open state
       )}
       data-state={isOpen ? "open" : "closed"}
     >
@@ -74,11 +67,10 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(({
 // Set display name
 Sidebar.displayName = 'Sidebar';
 
-// Update memo comparison to include the new isTransitioning prop
+// Simple memo comparison
 export default React.memo(Sidebar, (prevProps, nextProps) => {
   return (
     prevProps.isOpen === nextProps.isOpen &&
-    prevProps.isMobile === nextProps.isMobile &&
-    prevProps.isTransitioning === nextProps.isTransitioning
+    prevProps.isMobile === nextProps.isMobile
   );
 });

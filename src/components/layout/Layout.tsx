@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useMemo, useState, useRef } from 'react';
+import React, { useEffect, useCallback, useMemo, useRef } from 'react';
 import Sidebar from './Sidebar';
 import ContentArea from './content/ContentArea';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -17,27 +17,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
   const isAIAssistantPage = location.pathname === '/ai-assistant';
   const sidebarRef = useRef<HTMLDivElement>(null);
-  
-  // Tracking content transitions instead of sidebar transitions
-  const [isContentTransitioning, setIsContentTransitioning] = useState(false);
 
   // Set initial AI chat state based on screen size
   useEffect(() => {
     setAiChatOpen(!isMobile && !isAIAssistantPage);
   }, [isMobile, isAIAssistantPage, setAiChatOpen]);
-
-  // Handle page transition effects for content area only
-  useEffect(() => {
-    // Mark content as transitioning
-    setIsContentTransitioning(true);
-    
-    // Reset transition state after a shorter delay
-    const timer = setTimeout(() => {
-      setIsContentTransitioning(false);
-    }, 100);
-    
-    return () => clearTimeout(timer);
-  }, [location.pathname]);
 
   // Handle sidebar toggle for mobile - keep it in sync with the main toggle
   const handleSidebarToggle = useCallback(() => {
@@ -87,7 +71,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         aiChatOpen={aiChatOpen} 
         toggleAiChat={toggleAiChat} 
         isMobile={isMobile}
-        isTransitioning={isContentTransitioning}
+        isTransitioning={false}
         onClick={handleContentClick}
       >
         {children}

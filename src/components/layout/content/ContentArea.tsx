@@ -9,7 +9,6 @@ interface ContentAreaProps {
   aiChatOpen: boolean;
   toggleAiChat: () => void;
   isMobile: boolean;
-  isTransitioning?: boolean;
   onClick?: () => void;
 }
 
@@ -18,7 +17,6 @@ const ContentArea: React.FC<ContentAreaProps> = ({
   aiChatOpen, 
   toggleAiChat, 
   isMobile,
-  isTransitioning = false,
   onClick
 }) => {
   // Handle content click - improve the click detection to make sure it properly detects
@@ -32,10 +30,7 @@ const ContentArea: React.FC<ContentAreaProps> = ({
 
   return (
     <div 
-      className={cn(
-        "flex-1 overflow-auto",
-        isTransitioning ? "opacity-90 transition-opacity duration-100" : "opacity-100"
-      )}
+      className="flex-1 overflow-auto"
       onClick={handleContentClick}
     >
       <ResizablePanelGroup direction="horizontal" className="min-h-screen">

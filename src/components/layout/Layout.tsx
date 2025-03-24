@@ -87,9 +87,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const closeSidebarOnMobile = useCallback(() => {
     if (isMobile) {
       console.log('[Layout] Closing sidebar on mobile after nav item click');
-      // Use the shadcn sidebar context to close mobile sidebar
-      const { setOpenMobile } = useSidebar();
-      setOpenMobile(false);
     }
   }, [isMobile]);
 

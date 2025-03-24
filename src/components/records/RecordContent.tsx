@@ -34,7 +34,7 @@ export const RecordContent: React.FC<RecordContentProps> = ({
   const isMobile = useIsMobile();
 
   return (
-    <div className="w-full max-w-full overflow-hidden px-2 sm:px-0">
+    <div className="w-full overflow-hidden">
       {isMobile ? (
         <RecordListView
           records={filteredRecords}

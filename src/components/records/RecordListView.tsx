@@ -17,7 +17,7 @@ interface RecordListViewProps {
 
 export const RecordListView: React.FC<RecordListViewProps> = (props) => {
   return (
-    <div className="space-y-2">
+    <div className="w-full">
       <RecordList {...props} />
     </div>
   );

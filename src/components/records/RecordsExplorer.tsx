@@ -56,10 +56,10 @@ const RecordsExplorer: React.FC = () => {
 
   return (
     <Layout>
-      <div className="w-full max-w-full space-y-3 sm:space-y-4">
+      <div className="w-full space-y-4">
         <RecordsHeader />
         
-        <div className="relative w-full max-w-md mx-0">
+        <div className="relative w-full max-w-md">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="text"
@@ -97,13 +97,13 @@ const RecordsExplorer: React.FC = () => {
         
         <div className="w-full">
           <Card className="border-0 shadow-none">
-            <CardHeader className="pb-0 pt-2 px-2 sm:px-4">
+            <CardHeader className="pb-0 pt-4 px-0">
               <RecordSearchToolbar
                 selectedRecords={selectedRecords}
                 recordCount={filteredRecords.length}
               />
             </CardHeader>
-            <CardContent className="p-0">
+            <CardContent className="p-0 pt-2">
               <RecordContent 
                 filteredRecords={filteredRecords}
                 selectedRecords={selectedRecords}
@@ -114,7 +114,7 @@ const RecordsExplorer: React.FC = () => {
                 toggleSort={toggleSort}
               />
             </CardContent>
-            <CardFooter className="border-0 shadow-none p-2 bg-transparent">
+            <CardFooter className="border-0 shadow-none p-0 pt-4 bg-transparent">
               <RecordPagination
                 currentPage={currentPage}
                 totalPages={Math.ceil(filteredRecords.length / 10)}

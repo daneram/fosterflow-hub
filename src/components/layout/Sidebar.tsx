@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import SidebarHeader from './sidebar/SidebarHeader';
@@ -15,7 +14,6 @@ import {
   organizationSection,
   toolsSection
 } from './sidebar/sidebarSections';
-import { Sheet, SheetContent } from '@/components/ui/sheet';
 
 // Create a memoized list of sections to prevent re-creation on each render
 const sidebarSections = [
@@ -46,76 +44,45 @@ const Sidebar: React.FC<SidebarProps> = ({
     });
   }, [isOpen, isMobile, isTransitioning, openMobile]);
   
-  // For mobile: render the collapsed sidebar and use Sheet for expanded view
+  // For mobile: render a single sidebar that can be expanded/collapsed
   if (isMobile) {
+    // Use openMobile as the expanded state for mobile
+    const mobileIsOpen = openMobile;
+    
     return (
-      <>
-        {/* Collapsed sidebar that's always visible on mobile */}
-        <div className="h-screen flex flex-col bg-sidebar py-2 px-0 w-14 z-10">
-          <SidebarHeader 
-            isOpen={false} 
-            onToggle={() => {
-              console.log('[Sidebar] Mobile header clicked, opening sheet');
-              setOpenMobile(true);
-            }} 
-          />
+      <div 
+        className={cn(
+          "h-screen flex flex-col bg-sidebar py-2 px-0", 
+          mobileIsOpen ? "w-52" : "w-14", 
+          "transition-all duration-200 ease-in-out"
+        )}
+      >
+        <SidebarHeader 
+          isOpen={mobileIsOpen} 
+          onToggle={() => {
+            console.log('[Sidebar] Mobile header clicked, toggling mobile sidebar');
+            setOpenMobile(!openMobile);
+          }} 
+        />
 
-          <ScrollManager isOpen={false}>
-            <div className="flex flex-col space-y-0 mt-0.5">
-              {sidebarSections.map(({ key, section }) => (
-                <SidebarSection 
-                  key={key}
-                  title={section.title} 
-                  isOpen={false} 
-                  items={section.items} 
-                  onNavItemClick={onNavItemClick} 
-                />
-              ))}
-            </div>
-          </ScrollManager>
-
-          <SidebarFooter isOpen={false} />
-        </div>
-
-        {/* Sheet for expanded mobile sidebar view */}
-        <Sheet open={openMobile} onOpenChange={setOpenMobile}>
-          <SheetContent 
-            side="left" 
-            className="p-0 w-[280px] bg-sidebar"
-          >
-            <div className="h-screen flex flex-col bg-sidebar py-2 px-0">
-              <SidebarHeader 
-                isOpen={true} 
-                onToggle={() => setOpenMobile(false)} 
+        <ScrollManager isOpen={mobileIsOpen}>
+          <div className="flex flex-col space-y-0 mt-0.5">
+            {mobileIsOpen && <AIChatSection isOpen={true} onNavItemClick={onNavItemClick} />}
+            
+            {sidebarSections.map(({ key, section }) => (
+              <SidebarSection 
+                key={key}
+                title={section.title} 
+                isOpen={mobileIsOpen} 
+                items={section.items} 
+                onNavItemClick={onNavItemClick} 
               />
+            ))}
+          </div>
+        </ScrollManager>
 
-              <ScrollManager isOpen={true}>
-                <div className="flex flex-col space-y-0 mt-0.5">
-                  <AIChatSection isOpen={true} onNavItemClick={() => {
-                    onNavItemClick();
-                    setOpenMobile(false);
-                  }} />
-                  
-                  {sidebarSections.map(({ key, section }) => (
-                    <SidebarSection 
-                      key={key}
-                      title={section.title} 
-                      isOpen={true} 
-                      items={section.items} 
-                      onNavItemClick={() => {
-                        onNavItemClick();
-                        setOpenMobile(false);
-                      }} 
-                    />
-                  ))}
-                </div>
-              </ScrollManager>
-
-              <SidebarFooter isOpen={true} />
-            </div>
-          </SheetContent>
-        </Sheet>
-      </>
+        <SidebarFooter isOpen={mobileIsOpen} />
+      </div>
     );
   }
 

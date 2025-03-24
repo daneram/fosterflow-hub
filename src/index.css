@@ -110,6 +110,8 @@
     width: 1.5px;
     height: 1.5px;
     display: block;
+    position: absolute;
+    right: 0;
   }
 
   *::-webkit-scrollbar-track,
@@ -141,6 +143,13 @@
   /* Make sure the body doesn't have overflow hidden */
   html, body {
     overflow: auto;
+    overflow-x: hidden; /* Prevent horizontal scrollbar */
+  }
+  
+  /* Remove default margin from body */
+  body {
+    margin: 0;
+    padding: 0;
   }
 }
 

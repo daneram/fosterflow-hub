@@ -43,20 +43,34 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
     };
   }, []);
 
-  // Fixed logo click handler for mobile
+  // Enhanced logo click handler with debugging
   const handleLogoClick = (e: React.MouseEvent) => {
     // Always prevent default and stop propagation
     e.preventDefault();
     e.stopPropagation();
     
+    console.log('[SidebarHeader] Logo clicked', { 
+      isMobile, 
+      currentOpenMobileState: openMobile 
+    });
+    
     if (isMobile) {
-      // Toggle the mobile sidebar open state directly without setTimeout
+      console.log('[SidebarHeader] On mobile, toggling mobile sidebar');
+      // Toggle the mobile sidebar open state directly
       setOpenMobile(!openMobile);
+      // Log after state update attempt
+      console.log('[SidebarHeader] Mobile sidebar toggle requested', { newRequestedState: !openMobile });
     } else {
+      console.log('[SidebarHeader] On desktop, performing regular toggle');
       // On desktop, perform regular toggle through props
       onToggle();
     }
   };
+  
+  // Add effect to monitor openMobile changes
+  useEffect(() => {
+    console.log('[SidebarHeader] openMobile state changed:', openMobile);
+  }, [openMobile]);
   
   return (
     <div className="mb-0">

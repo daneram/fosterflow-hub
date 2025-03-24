@@ -57,9 +57,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       onToggle={handleSidebarToggle} 
       onNavItemClick={closeSidebarOnMobile} 
       isMobile={isMobile}
-      isTransitioning={false} // Never apply transitions to sidebar during page changes
     />
-  ), [sidebarOpen, handleSidebarToggle, closeSidebarOnMobile, toggleAiChat, isMobile]);
+  ), [sidebarOpen, handleSidebarToggle, closeSidebarOnMobile, isMobile]);
 
   return (
     <div className="h-screen flex bg-background overflow-hidden">
@@ -71,7 +70,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         aiChatOpen={aiChatOpen} 
         toggleAiChat={toggleAiChat} 
         isMobile={isMobile}
-        isTransitioning={false}
         onClick={handleContentClick}
       >
         {children}

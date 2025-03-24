@@ -88,6 +88,9 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
         contentRef.current = viewport.firstElementChild;
       }
       
+      // Make sure we remove any active scrolling class initially
+      viewport.classList.remove('scrolling-active');
+      
       // Restore scroll position after component mounts
       restoreScrollPosition();
       
@@ -96,6 +99,13 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
         positionLastItemAtBottom();
       }
     }
+    
+    // Cleanup function to ensure we remove the class when unmounting
+    return () => {
+      if (viewportRef.current) {
+        viewportRef.current.classList.remove('scrolling-active');
+      }
+    };
   }, [isMobile, positionLastItemAtBottom, restoreScrollPosition]);
   
   // Recalculate when children or sidebar open state changes
@@ -122,18 +132,18 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
     return () => resizeObserver.disconnect();
   }, [positionLastItemAtBottom]);
   
-  // Handle scroll events
+  // Handle scroll events - completely rewritten for reliability
   useEffect(() => {
     const viewport = viewportRef.current;
     if (!viewport) return;
     
     // Clear any existing scroll listeners to prevent duplicates
-    const scrollHandler = () => {
-      // Add the active class when scrolling starts
-      viewport.classList.add('scrolling-active');
-      
-      // Track that we're scrolling
-      setIsScrolling(true);
+    const handleScroll = () => {
+      if (!isScrolling) {
+        // Add the active class when scrolling starts
+        viewport.classList.add('scrolling-active');
+        setIsScrolling(true);
+      }
       
       // Save position
       saveScrollPosition();
@@ -148,27 +158,39 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
         viewport.classList.remove('scrolling-active');
         setIsScrolling(false);
         scrollTimeoutRef.current = null;
-      }, 500); // Longer timeout for better user experience
+      }, 800); // Longer timeout for better user experience
     };
     
-    // Handle mouse enter/leave to ensure scrollbar state is correct
+    // Handle mouse enter/leave to ENSURE scrollbar never shows on hover
+    const mouseEnterHandler = () => {
+      if (!isScrolling) {
+        viewport.classList.remove('scrolling-active');
+      }
+    };
+    
+    // Force remove active class when mouse leaves unless actively scrolling
     const mouseLeaveHandler = () => {
       if (!isScrolling) {
         viewport.classList.remove('scrolling-active');
       }
     };
     
-    viewport.addEventListener('scroll', scrollHandler, { passive: true });
+    viewport.addEventListener('scroll', handleScroll, { passive: true });
+    viewport.addEventListener('mouseenter', mouseEnterHandler);
     viewport.addEventListener('mouseleave', mouseLeaveHandler);
     
     return () => {
-      viewport.removeEventListener('scroll', scrollHandler);
+      viewport.removeEventListener('scroll', handleScroll);
+      viewport.removeEventListener('mouseenter', mouseEnterHandler);
       viewport.removeEventListener('mouseleave', mouseLeaveHandler);
       
       // Clean up timeout on unmount
       if (scrollTimeoutRef.current) {
         window.clearTimeout(scrollTimeoutRef.current);
       }
+      
+      // Ensure class is removed on cleanup
+      viewport.classList.remove('scrolling-active');
     };
   }, [isScrolling, saveScrollPosition]);
 

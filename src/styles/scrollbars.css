@@ -8,8 +8,8 @@
     height: 1.5px;
     position: absolute;
     right: 0;
-    /* Hide scrollbars by default */
-    display: none;
+    /* Hide scrollbars by default - absolutely critical */
+    display: none !important;
   }
 
   *::-webkit-scrollbar-track,
@@ -38,18 +38,19 @@
     scrollbar-color: var(--scrollbar-color) transparent;
   }
   
-  /* Only show scrollbar when element has the scrolling-active class */
+  /* ONLY show scrollbar when element has the scrolling-active class */
   .scrolling-active::-webkit-scrollbar {
-    display: block;
+    display: block !important;
   }
   
-  /* Explicitly prevent hover from showing the scrollbar */
-  *:hover::-webkit-scrollbar {
+  /* Force hide scrollbar on hover - higher specificity */
+  *:hover::-webkit-scrollbar,
+  *:hover:not(.scrolling-active)::-webkit-scrollbar {
     display: none !important;
   }
   
-  /* Make sure :hover doesn't override active scrolling */
-  .scrolling-active:hover::-webkit-scrollbar {
+  /* Make sure scrolling-active overrides hover */
+  .scrolling-active::-webkit-scrollbar {
     display: block !important;
   }
 }

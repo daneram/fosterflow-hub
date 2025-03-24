@@ -1,6 +1,6 @@
 
 @layer base {
-  /* Base scrollbar styling with maximum specificity */
+  /* Hide all scrollbars by default with maximum specificity */
   *::-webkit-scrollbar,
   html::-webkit-scrollbar,
   body::-webkit-scrollbar,
@@ -11,28 +11,33 @@
   main::-webkit-scrollbar,
   article::-webkit-scrollbar,
   [data-scrollarea-viewport]::-webkit-scrollbar {
-    width: 1.5px !important;
-    height: 1.5px !important;
-    position: absolute !important;
-    right: 0 !important;
-    /* Hide scrollbars by default with maximum specificity */
+    width: 0 !important;
+    height: 0 !important;
     display: none !important;
     opacity: 0 !important;
     visibility: hidden !important;
+    -webkit-appearance: none !important;
   }
 
+  /* Firefox scrollbar styling - hidden by default */
+  * {
+    scrollbar-width: none !important;
+    scrollbar-color: transparent transparent !important;
+  }
+  
+  /* Track styling */
   *::-webkit-scrollbar-track,
   body::-webkit-scrollbar-track,
   html::-webkit-scrollbar-track {
     background: transparent !important;
   }
 
+  /* Thumb styling */
   *::-webkit-scrollbar-thumb,
   body::-webkit-scrollbar-thumb,
   html::-webkit-scrollbar-thumb {
     background-color: var(--scrollbar-color) !important;
     border-radius: 10px !important;
-    opacity: 1 !important;
   }
 
   *::-webkit-scrollbar-thumb:hover,
@@ -40,39 +45,42 @@
   html::-webkit-scrollbar-thumb:hover {
     background-color: var(--scrollbar-hover-color) !important;
   }
-
-  /* Firefox scrollbar styling */
-  * {
-    scrollbar-width: none !important;
+  
+  /* Apply scrolling-active class styles for elements that should show scrollbars */
+  .scrolling-active {
+    /* Firefox - we can't fully control when it shows, but we can style it when visible */
+    scrollbar-width: thin !important;
     scrollbar-color: var(--scrollbar-color) transparent !important;
   }
   
-  /* ONLY show scrollbar when element has the scrolling-active class */
+  /* Enable scrollbar ONLY when scrolling-active class is present */
   .scrolling-active::-webkit-scrollbar {
+    width: 1.5px !important;
+    height: 1.5px !important;
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
   }
-  
-  /* Force hide scrollbar on hover with maximum specificity - this is the critical part */
-  *:hover::-webkit-scrollbar,
-  div:hover::-webkit-scrollbar,
-  nav:hover::-webkit-scrollbar,
-  aside:hover::-webkit-scrollbar,
+
+  /* Critical: Make sure hover never shows scrollbar unless scrolling-active is present */
   *:hover:not(.scrolling-active)::-webkit-scrollbar,
+  div:hover:not(.scrolling-active)::-webkit-scrollbar,
+  nav:hover:not(.scrolling-active)::-webkit-scrollbar,
+  section:hover:not(.scrolling-active)::-webkit-scrollbar,
+  main:hover:not(.scrolling-active)::-webkit-scrollbar,
+  article:hover:not(.scrolling-active)::-webkit-scrollbar,
   [data-scrollarea-viewport]:hover:not(.scrolling-active)::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0 !important;
     display: none !important;
     visibility: hidden !important;
     opacity: 0 !important;
   }
   
-  /* Make sure scrolling-active overrides hover with highest specificity */
-  .scrolling-active::-webkit-scrollbar,
-  .scrolling-active:hover::-webkit-scrollbar,
-  [data-scrollarea-viewport].scrolling-active::-webkit-scrollbar,
-  [data-scrollarea-viewport].scrolling-active:hover::-webkit-scrollbar {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
+  /* Make sure no transitions affect scrollbar visibility */
+  ::-webkit-scrollbar,
+  ::-webkit-scrollbar-track,
+  ::-webkit-scrollbar-thumb {
+    transition: none !important;
   }
 }

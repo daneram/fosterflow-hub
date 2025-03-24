@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { cn } from '@/lib/utils';
 import SidebarHeader from './sidebar/SidebarHeader';
@@ -31,7 +30,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   isMobile,
   isTransitioning = false
 }) => {
-  // If mobile and transitioning, render a placeholder
+  // Render a fixed-width placeholder instead of not rendering at all
   if (isMobile && isTransitioning) {
     return (
       <div 
@@ -50,12 +49,8 @@ const Sidebar: React.FC<SidebarProps> = ({
         "h-screen flex flex-col bg-sidebar py-4 px-0", // Base styles
         isOpen ? "w-52" : "w-14", // Width based on open state
         
-        // Add transition for opacity and transform
-        "transition-all duration-200",
-        
-        // On mobile, position it absolutely when open and maintain layers
-        isMobile && isOpen ? "fixed left-0 top-0 z-50 shadow-lg" : "",
-        isMobile && !isOpen ? "relative" : "",
+        // Add only opacity transition, keep width fixed during transitions
+        "transition-opacity duration-200",
         
         // Never completely hide the sidebar
         isMobile && isTransitioning ? "opacity-90" : "opacity-100"
@@ -86,7 +81,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   );
 };
 
-// Update memo comparison to include the new props
+// Update memo comparison to include the new isTransitioning prop
 export default React.memo(Sidebar, (prevProps, nextProps) => {
   return (
     prevProps.isOpen === nextProps.isOpen &&

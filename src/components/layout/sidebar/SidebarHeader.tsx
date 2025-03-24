@@ -43,9 +43,8 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
     };
   }, []);
 
-  // Enhanced logo click handler
+  // Simplified logo click handler
   const handleLogoClick = (e: React.MouseEvent) => {
-    // Always prevent default and stop propagation
     e.preventDefault();
     e.stopPropagation();
     
@@ -56,11 +55,11 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
     
     if (isMobile) {
       console.log('[SidebarHeader] On mobile, toggling mobile sidebar');
-      // Directly set the opposite state for mobile
+      // For mobile, toggle the shadcn Sheet component
       setOpenMobile(!openMobile);
     } else {
       console.log('[SidebarHeader] On desktop, performing regular toggle');
-      // On desktop, perform regular toggle through props
+      // On desktop, use the provided toggle function
       onToggle();
     }
   };

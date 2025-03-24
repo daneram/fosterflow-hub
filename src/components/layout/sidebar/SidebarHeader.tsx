@@ -1,8 +1,10 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useSidebar } from '@/components/ui/sidebar';
 
 interface SidebarHeaderProps {
   isOpen: boolean;
@@ -16,6 +18,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const imageRef = useRef<HTMLImageElement | null>(null);
   const isMobile = useIsMobile();
+  const sidebarContext = useSidebar();
   
   // Handle image loading
   useEffect(() => {
@@ -40,20 +43,21 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
     };
   }, []);
 
-  // On mobile, clicking the logo should keep the sidebar open
+  // Handle logo click with improved mobile support
   const handleLogoClick = (e: React.MouseEvent) => {
+    // Always prevent default and stop propagation
+    e.preventDefault();
+    e.stopPropagation();
+    
     if (isMobile) {
-      // Ensure the event doesn't bubble up to other handlers
-      e.stopPropagation();
-      e.preventDefault();
-      
-      // Always force sidebar to open on mobile
+      // On mobile, use the sidebar context to set the mobile state directly
       if (!isOpen) {
-        onToggle();
+        // If sidebar is closed, open it using the context API
+        sidebarContext.setOpenMobile(true);
       }
-      // If already open, do nothing
+      // If already open, do nothing to maintain the open state
     } else {
-      // On desktop, perform regular toggle
+      // On desktop, perform regular toggle through props
       onToggle();
     }
   };

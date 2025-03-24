@@ -1,3 +1,4 @@
+
 import React, { useEffect, useCallback, useMemo, useState, useRef } from 'react';
 import Sidebar from './Sidebar';
 import ContentArea from './content/ContentArea';
@@ -57,6 +58,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   }, [isMobile, setSidebarOpen, sidebarOpen]);
 
   // Handle click outside the sidebar on mobile to close it
+  // This function is simplified to always close the sidebar on mobile when clicking content
   const handleContentClick = useCallback(() => {
     if (isMobile && sidebarOpen) {
       setSidebarOpen(false);

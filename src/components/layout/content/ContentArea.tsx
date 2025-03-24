@@ -21,11 +21,11 @@ const ContentArea: React.FC<ContentAreaProps> = ({
   isTransitioning = false,
   onClick
 }) => {
-  // Handle content click - it should always call the onClick handler when provided
-  // But we don't want to propagate the click to child elements
+  // Handle content click - improve the click detection to make sure it properly detects
+  // clicks on the content area but doesn't interfere with child elements
   const handleContentClick = (e: React.MouseEvent) => {
-    // Only handle clicks directly on this element, not on children
-    if (e.target === e.currentTarget && onClick) {
+    // Call onClick if provided - this will close the sidebar on mobile
+    if (onClick) {
       onClick();
     }
   };

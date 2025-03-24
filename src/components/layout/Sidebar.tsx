@@ -14,7 +14,6 @@ import {
   organizationSection,
   toolsSection
 } from './sidebar/sidebarSections';
-import { Sidebar as ShadcnSidebar } from '@/components/ui/sidebar';
 
 // Create a memoized list of sections to prevent re-creation on each render
 const sidebarSections = [
@@ -32,13 +31,29 @@ const Sidebar: React.FC<SidebarProps> = ({
   isMobile,
   isTransitioning = false
 }) => {
-  // Use the shadcn UI Sidebar for mobile and desktop
+  // Render a fixed-width placeholder instead of not rendering at all
+  if (isMobile && isTransitioning) {
+    return (
+      <div 
+        className={cn(
+          "h-screen flex flex-col bg-sidebar py-4 px-0",
+          !isOpen ? "w-14" : "w-52"
+        )} 
+        aria-hidden="true"
+      />
+    );
+  }
+
   return (
-    <ShadcnSidebar
+    <div 
       className={cn(
-        "h-screen flex flex-col bg-sidebar py-2 px-0", 
-        isOpen ? "w-52" : "w-14",
+        "h-screen flex flex-col bg-sidebar py-2 px-0", // Reduced top padding
+        isOpen ? "w-52" : "w-14", // Width based on open state
+        
+        // Add only opacity transition, keep width fixed during transitions
         "transition-opacity duration-200",
+        
+        // Never completely hide the sidebar
         isMobile && isTransitioning ? "opacity-90" : "opacity-100"
       )}
     >
@@ -63,7 +78,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       </ScrollManager>
 
       <SidebarFooter isOpen={isOpen} />
-    </ShadcnSidebar>
+    </div>
   );
 };
 

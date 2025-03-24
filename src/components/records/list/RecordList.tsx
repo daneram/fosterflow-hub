@@ -31,7 +31,7 @@ export const RecordList: React.FC<RecordListProps> = ({
   }
   
   return (
-    <div className="w-full space-y-2.5">
+    <div className="space-y-2.5">
       {records.map((record) => (
         <RecordListItem
           key={record.id}

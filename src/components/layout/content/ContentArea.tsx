@@ -24,12 +24,12 @@ const ContentArea: React.FC<ContentAreaProps> = ({
       "flex-1 overflow-hidden w-full", 
       isTransitioning ? "opacity-90 transition-opacity duration-100" : "opacity-100"
     )}>
-      <ResizablePanelGroup direction="horizontal" className="min-h-screen w-full">
+      <ResizablePanelGroup direction="horizontal" className="min-h-screen">
         {/* Main content panel */}
         <ResizablePanel 
           defaultSize={100} 
           minSize={25}
-          className="overflow-auto w-full"
+          className="overflow-auto"
         >
           <div className="px-4 py-4 sm:px-6 sm:py-6 w-full">
             {children}

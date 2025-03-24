@@ -29,15 +29,34 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(({
   onToggle, 
   onNavItemClick, 
   isMobile,
+  isTransitioning = false
 }, ref) => {
+  // Render a fixed-width placeholder instead of not rendering at all
+  if (isMobile && isTransitioning) {
+    return (
+      <div 
+        className={cn(
+          "h-screen flex flex-col bg-sidebar py-4 px-0",
+          !isOpen ? "w-14" : "w-52"
+        )} 
+        aria-hidden="true"
+      />
+    );
+  }
+
   return (
     <div 
       ref={ref}
       className={cn(
         "h-screen flex flex-col bg-sidebar py-4 px-0", // Base styles
-        isOpen ? "w-52" : "w-14" // Width based on open state
+        isOpen ? "w-52" : "w-14", // Width based on open state
+        
+        // Add only opacity transition, keep width fixed during transitions
+        "transition-opacity duration-200",
+        
+        // Never completely hide the sidebar
+        isMobile && isTransitioning ? "opacity-90" : "opacity-100"
       )}
-      data-state={isOpen ? "open" : "closed"}
     >
       <SidebarHeader isOpen={isOpen} onToggle={onToggle} />
 
@@ -67,10 +86,11 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(({
 // Set display name
 Sidebar.displayName = 'Sidebar';
 
-// Simple memo comparison
+// Update memo comparison to include the new isTransitioning prop
 export default React.memo(Sidebar, (prevProps, nextProps) => {
   return (
     prevProps.isOpen === nextProps.isOpen &&
-    prevProps.isMobile === nextProps.isMobile
+    prevProps.isMobile === nextProps.isMobile &&
+    prevProps.isTransitioning === nextProps.isTransitioning
   );
 });

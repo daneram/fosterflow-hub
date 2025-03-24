@@ -144,7 +144,7 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
   return (
     <ScrollArea 
       ref={scrollAreaRef} 
-      className="flex-1 overflow-y-auto"
+      className="flex-1"
     >
       {children}
     </ScrollArea>

@@ -75,7 +75,7 @@ const ContentArea: React.FC<ContentAreaProps> = ({
           maxSize={85}
           className="w-full overflow-auto"
         >
-          <div className="px-4 py-4 sm:px-6 sm:py-6 w-full max-w-full">
+          <div className="px-4 py-4 sm:px-6 sm:py-6 w-full max-w-full h-full overflow-auto">
             {children}
           </div>
         </ResizablePanel>

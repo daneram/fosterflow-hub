@@ -31,19 +31,7 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(({
   isMobile,
   isTransitioning = false
 }, ref) => {
-  // Render a fixed-width placeholder instead of not rendering at all
-  if (isMobile && isTransitioning) {
-    return (
-      <div 
-        className={cn(
-          "h-screen flex flex-col bg-sidebar py-4 px-0",
-          !isOpen ? "w-14" : "w-52"
-        )} 
-        aria-hidden="true"
-      />
-    );
-  }
-
+  // Apply fixed width styles for both states to prevent transition flicker
   return (
     <div 
       ref={ref}
@@ -51,12 +39,12 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(({
         "h-screen flex flex-col bg-sidebar py-4 px-0", // Base styles
         isOpen ? "w-52" : "w-14", // Width based on open state
         
-        // Add only opacity transition, keep width fixed during transitions
-        "transition-opacity duration-200",
-        
-        // Never completely hide the sidebar
+        // Important: Use visibility and opacity for transitions instead of width
+        // This prevents the sidebar from changing size during page transitions
+        "transition-all duration-100",
         isMobile && isTransitioning ? "opacity-90" : "opacity-100"
       )}
+      data-state={isOpen ? "open" : "closed"}
     >
       <SidebarHeader isOpen={isOpen} onToggle={onToggle} />
 

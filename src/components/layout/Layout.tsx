@@ -1,4 +1,3 @@
-
 import React, { useEffect, useCallback, useMemo, useState, useRef } from 'react';
 import Sidebar from './Sidebar';
 import ContentArea from './content/ContentArea';
@@ -27,7 +26,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     setAiChatOpen(!isMobile && !isAIAssistantPage);
   }, [isMobile, isAIAssistantPage, setAiChatOpen]);
 
-  // Handle page transition effects for content area
+  // Handle page transition effects for content area only
   useEffect(() => {
     // Mark content as transitioning
     setIsContentTransitioning(true);
@@ -73,15 +72,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       isOpen={sidebarOpen} 
       onToggle={handleSidebarToggle} 
       onNavItemClick={closeSidebarOnMobile} 
-      toggleAiChat={toggleAiChat} 
       isMobile={isMobile}
-      isTransitioning={false} // Never hide sidebar completely on transitions
+      isTransitioning={false} // Never apply transitions to sidebar during page changes
     />
   ), [sidebarOpen, handleSidebarToggle, closeSidebarOnMobile, toggleAiChat, isMobile]);
 
   return (
     <div className="h-screen flex bg-background overflow-hidden">
-      {/* Always render the sidebar, never completely hide it during transitions */}
+      {/* Always render the sidebar with the proper state */}
       {memoizedSidebar}
 
       {/* Main content and AI assistant */}

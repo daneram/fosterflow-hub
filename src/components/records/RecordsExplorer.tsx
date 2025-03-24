@@ -56,7 +56,7 @@ const RecordsExplorer: React.FC = () => {
 
   return (
     <Layout>
-      <div className="w-full max-w-full space-y-3 sm:space-y-4">
+      <div className="w-full max-w-full space-y-4">
         <RecordsHeader />
         
         <div className="relative w-full max-w-md mx-0">
@@ -97,7 +97,7 @@ const RecordsExplorer: React.FC = () => {
         
         <div className="w-full">
           <Card className="border-0 shadow-none">
-            <CardHeader className="pb-0 pt-2 px-2 sm:px-4">
+            <CardHeader className="pb-0 pt-2">
               <RecordSearchToolbar
                 selectedRecords={selectedRecords}
                 recordCount={filteredRecords.length}

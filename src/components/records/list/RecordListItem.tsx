@@ -38,17 +38,17 @@ export const RecordListItem: React.FC<RecordListItemProps> = ({
   return (
     <Card 
       key={record.id} 
-      className={`overflow-hidden cursor-pointer w-full ${isSelected ? 'bg-muted/50' : ''}`}
+      className={`overflow-hidden cursor-pointer ${isSelected ? 'bg-muted/50' : ''}`}
       onClick={handleClick}
     >
-      <div className="flex items-center w-full">
-        <div className="flex flex-col flex-1 p-3 w-full">
-          <div className="flex justify-between items-center mb-1 w-full">
+      <div className="flex items-center">
+        <div className="flex flex-col flex-1 p-3">
+          <div className="flex justify-between items-center mb-1">
             <div className="text-sm font-medium">{record.title}</div>
             <div className="text-xs text-muted-foreground">{displayDate}</div>
           </div>
           
-          <div className="flex justify-between items-center text-xs text-muted-foreground w-full">
+          <div className="flex justify-between items-center text-xs text-muted-foreground">
             <span>{record.client}</span>
             <span>{record.owner || 'Unassigned'}</span>
           </div>

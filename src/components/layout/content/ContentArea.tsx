@@ -21,7 +21,7 @@ const ContentArea: React.FC<ContentAreaProps> = ({
 }) => {
   return (
     <div className={cn(
-      "flex-1 overflow-auto p-0 m-0",
+      "flex-1 overflow-auto",
       isTransitioning ? "opacity-90 transition-opacity duration-100" : "opacity-100"
     )}>
       <ResizablePanelGroup direction="horizontal" className="min-h-screen">

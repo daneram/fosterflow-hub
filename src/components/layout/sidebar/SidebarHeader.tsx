@@ -18,7 +18,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const imageRef = useRef<HTMLImageElement | null>(null);
   const isMobile = useIsMobile();
-  const sidebarContext = useSidebar();
+  const { setOpenMobile } = useSidebar();
   
   // Handle image loading
   useEffect(() => {
@@ -43,19 +43,19 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
     };
   }, []);
 
-  // Handle logo click with improved mobile support
+  // Fixed logo click handler for mobile
   const handleLogoClick = (e: React.MouseEvent) => {
     // Always prevent default and stop propagation
     e.preventDefault();
     e.stopPropagation();
     
+    // Add console logs for debugging
+    console.log('Logo clicked', { isMobile });
+    
     if (isMobile) {
-      // On mobile, use the sidebar context to set the mobile state directly
-      if (!isOpen) {
-        // If sidebar is closed, open it using the context API
-        sidebarContext.setOpenMobile(true);
-      }
-      // If already open, do nothing to maintain the open state
+      console.log('Mobile logo click, opening sidebar');
+      // Directly call setOpenMobile to ensure it opens
+      setOpenMobile(true);
     } else {
       // On desktop, perform regular toggle through props
       onToggle();

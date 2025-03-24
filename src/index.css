@@ -148,6 +148,18 @@
     scrollbar-width: thin;
     scrollbar-color: var(--scrollbar-color) transparent;
   }
+  
+  /* Only show scrollbar when hovering/scrolling (for webkit browsers) */
+  *::-webkit-scrollbar {
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  *:hover::-webkit-scrollbar,
+  *:focus::-webkit-scrollbar,
+  *:active::-webkit-scrollbar {
+    opacity: 1;
+  }
 
   /* Make sure the body and HTML don't have overflow hidden and are properly set */
   html, body {

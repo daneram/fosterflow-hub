@@ -142,7 +142,7 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
   return (
     <ScrollArea 
       ref={scrollAreaRef} 
-      className="flex-1 overflow-auto" // Changed from overflow-hidden to overflow-auto
+      className="flex-1 overflow-auto pr-0" // Added pr-0 to remove right padding
     >
       {children}
     </ScrollArea>

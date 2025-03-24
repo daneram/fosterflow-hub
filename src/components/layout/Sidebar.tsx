@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { cn } from '@/lib/utils';
 import SidebarHeader from './sidebar/SidebarHeader';
@@ -46,7 +47,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   return (
     <div 
       className={cn(
-        "h-screen flex flex-col bg-sidebar py-4 px-0", // Base styles
+        "h-screen flex flex-col bg-sidebar py-4 px-0", // Base styles, removed padding
         isOpen ? "w-52" : "w-14", // Width based on open state
         
         // Add only opacity transition, keep width fixed during transitions
@@ -59,7 +60,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       <SidebarHeader isOpen={isOpen} onToggle={onToggle} />
 
       <ScrollManager isOpen={isOpen}>
-        <div className="flex flex-col space-y-0">
+        <div className="flex flex-col space-y-0 pr-0"> {/* Added pr-0 to ensure no right padding */}
           {isMobile && (
             <AIChatSection isOpen={isOpen} onNavItemClick={onNavItemClick} />
           )}

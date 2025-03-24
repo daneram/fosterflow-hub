@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import AIAssistantPage from "./pages/AIAssistantPage";
@@ -36,33 +37,35 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/ai-assistant" element={<AIAssistantPage />} />
-          <Route path="/records" element={<RecordsExplorer />} />
-          <Route path="/activity" element={<ActivityLog />} />
-          <Route path="/compliance" element={<ComplianceTracker />} />
-          <Route path="/insights" element={<InsightsDashboard />} />
-          <Route path="/form-f" element={<FormFAssessment />} />
-          <Route path="/children" element={<ChildrenProfiles />} />
-          <Route path="/carers" element={<CarersDirectory />} />
-          <Route path="/team" element={<TeamDirectory />} />
-          <Route path="/policies" element={<PolicyLibrary />} />
-          <Route path="/training" element={<TrainingPlatform />} />
-          <Route path="/recruitment" element={<RecruitmentPipeline />} />
-          <Route path="/finance" element={<FinanceManager />} />
-          <Route path="/forms" element={<FormsLibrary />} />
-          <Route path="/workflow" element={<WorkflowManager />} />
-          <Route path="/contacts" element={<ContactsDirectory />} />
-          <Route path="/settings" element={<SettingsPanel />} />
-          <Route path="/email" element={<EmailPage />} />
-          <Route path="/calendar" element={<CalendarPage />} />
-          <Route path="/tasks" element={<TasksPage />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <SidebarProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/ai-assistant" element={<AIAssistantPage />} />
+            <Route path="/records" element={<RecordsExplorer />} />
+            <Route path="/activity" element={<ActivityLog />} />
+            <Route path="/compliance" element={<ComplianceTracker />} />
+            <Route path="/insights" element={<InsightsDashboard />} />
+            <Route path="/form-f" element={<FormFAssessment />} />
+            <Route path="/children" element={<ChildrenProfiles />} />
+            <Route path="/carers" element={<CarersDirectory />} />
+            <Route path="/team" element={<TeamDirectory />} />
+            <Route path="/policies" element={<PolicyLibrary />} />
+            <Route path="/training" element={<TrainingPlatform />} />
+            <Route path="/recruitment" element={<RecruitmentPipeline />} />
+            <Route path="/finance" element={<FinanceManager />} />
+            <Route path="/forms" element={<FormsLibrary />} />
+            <Route path="/workflow" element={<WorkflowManager />} />
+            <Route path="/contacts" element={<ContactsDirectory />} />
+            <Route path="/settings" element={<SettingsPanel />} />
+            <Route path="/email" element={<EmailPage />} />
+            <Route path="/calendar" element={<CalendarPage />} />
+            <Route path="/tasks" element={<TasksPage />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </SidebarProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

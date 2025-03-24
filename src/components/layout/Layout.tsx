@@ -5,7 +5,6 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { useLocation } from 'react-router-dom';
 import { useSidebarState } from './hooks/useSidebarState';
 import { useAIChatState } from './hooks/useAIChatState';
-import { SidebarProvider } from '@/components/ui/sidebar';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -79,23 +78,21 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   ), [sidebarOpen, handleSidebarToggle, closeSidebarOnMobile, toggleAiChat, isMobile]);
 
   return (
-    <SidebarProvider>
-      <div className="h-screen flex bg-background overflow-hidden">
-        {/* Always render the sidebar, never completely hide it during transitions */}
-        {memoizedSidebar}
+    <div className="h-screen flex bg-background overflow-hidden">
+      {/* Always render the sidebar, never completely hide it during transitions */}
+      {memoizedSidebar}
 
-        {/* Main content and AI assistant */}
-        <ContentArea 
-          aiChatOpen={aiChatOpen} 
-          toggleAiChat={toggleAiChat} 
-          isMobile={isMobile}
-          isTransitioning={isContentTransitioning}
-          onClick={handleContentClick}
-        >
-          {children}
-        </ContentArea>
-      </div>
-    </SidebarProvider>
+      {/* Main content and AI assistant */}
+      <ContentArea 
+        aiChatOpen={aiChatOpen} 
+        toggleAiChat={toggleAiChat} 
+        isMobile={isMobile}
+        isTransitioning={isContentTransitioning}
+        onClick={handleContentClick}
+      >
+        {children}
+      </ContentArea>
+    </div>
   );
 };
 

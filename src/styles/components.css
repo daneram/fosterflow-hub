@@ -1,0 +1,16 @@
+
+@tailwind components;
+
+@layer components {
+  .glass-card {
+    @apply bg-white/50 backdrop-blur-sm border border-white/20 shadow-sm;
+  }
+  
+  .card-hover {
+    @apply transition-all duration-200 hover:shadow-md hover:border-primary/20;
+  }
+  
+  .record-item {
+    @apply transition-all duration-150 hover:bg-accent/30;
+  }
+}

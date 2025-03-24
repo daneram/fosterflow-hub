@@ -1,0 +1,31 @@
+
+@tailwind utilities;
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.25s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(3px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .compact-grid {
+    @apply grid gap-2;
+  }
+  
+  .subtle-shadow {
+    @apply shadow-[0_2px_5px_0_rgba(0,0,0,0.05)];
+  }
+  
+  .content-padding {
+    @apply px-3 py-2.5;
+  }
+}

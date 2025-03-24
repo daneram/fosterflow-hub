@@ -1,0 +1,12 @@
+
+/* Base styles and theme variables */
+@import './base.css';
+
+/* Scrollbar styling */
+@import './scrollbars.css';
+
+/* Component-specific styles */
+@import './components.css';
+
+/* Utility classes */
+@import './utilities.css';

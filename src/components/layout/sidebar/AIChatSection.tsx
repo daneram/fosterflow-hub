@@ -15,11 +15,8 @@ const AIChatSection: React.FC<AIChatSectionProps> = ({ isOpen, onNavItemClick })
   const isMobile = useIsMobile();
   const isAIAssistantPage = location.pathname === '/ai-assistant';
   
-  // Only show the AI Chat section in the sidebar on mobile,
-  // or if we're not already on the AI Assistant page
-  if (!isMobile && isAIAssistantPage) {
-    return null;
-  }
+  // Always show the sidebar item, regardless of whether we're on the AI Assistant page
+  // The actual chat panel visibility is handled elsewhere
   
   return (
     <div className="py-1">

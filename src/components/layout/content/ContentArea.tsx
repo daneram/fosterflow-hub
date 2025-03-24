@@ -27,6 +27,11 @@ const ContentArea: React.FC<ContentAreaProps> = ({
   // Reference to track if panels have been initialized
   const panelsInitialized = useRef(false);
 
+  // Debug log when the aiChatOpen prop changes
+  useEffect(() => {
+    console.log('[ContentArea] aiChatOpen changed:', aiChatOpen);
+  }, [aiChatOpen]);
+
   // Load saved panel sizes from localStorage on component mount
   useEffect(() => {
     // Only try to restore panel sizes once

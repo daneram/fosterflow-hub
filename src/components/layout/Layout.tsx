@@ -33,7 +33,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     });
   }, []);
 
-  // Set initial AI chat state based on screen size and don't change it during navigation
+  // Set initial AI chat state based on screen size and page
   useEffect(() => {
     console.log('[Layout] Setting initial AI chat state');
     // Only set AI chat state on initial load, not during navigation
@@ -48,14 +48,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       // Always close the side chat when on the AI Assistant page
       setAiChatOpen(false);
     } else {
-      // Return visit, use stored preference
+      // Return visit, use stored preference only if not on AI Assistant page
       const savedState = storedAiChatState === 'true';
       console.log('[Layout] Return visit, setting aiChatOpen to:', savedState);
       setAiChatOpen(savedState);
     }
   }, [isMobile, isAIAssistantPage, setAiChatOpen]);
 
-  // Save AI chat state when it changes
+  // Save AI chat state when it changes, but only if not on the AI Assistant page
   useEffect(() => {
     if (!isAIAssistantPage) {
       console.log('[Layout] Saving aiChatOpen state:', aiChatOpen);
@@ -80,8 +80,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   // Custom toggle for AI chat that also stores the state
   const handleToggleAiChat = useCallback(() => {
     console.log('[Layout] Toggling AI chat');
-    toggleAiChat();
-  }, [toggleAiChat]);
+    // Don't toggle AI chat when on the AI Assistant page
+    if (!isAIAssistantPage) {
+      toggleAiChat();
+    }
+  }, [toggleAiChat, isAIAssistantPage]);
 
   // Close the sidebar on mobile when a navigation item is clicked
   const closeSidebarOnMobile = useCallback(() => {
@@ -94,6 +97,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   useEffect(() => {
     console.log('[Layout] Sidebar state changed:', { sidebarOpen });
   }, [sidebarOpen]);
+
+  // Setup a derived state for AI chat that's always false on the AI Assistant page
+  const showAiChat = aiChatOpen && !isAIAssistantPage;
+  useEffect(() => {
+    console.log('[Layout] showAiChat computed:', { aiChatOpen, isAIAssistantPage, showAiChat });
+  }, [aiChatOpen, isAIAssistantPage, showAiChat]);
 
   // We need to provide the default state to the SidebarProvider
   return (
@@ -110,7 +119,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
         {/* Main content and AI assistant */}
         <ContentArea 
-          aiChatOpen={aiChatOpen && !isAIAssistantPage}
+          aiChatOpen={showAiChat}
           toggleAiChat={handleToggleAiChat}
           isMobile={isMobile}
           isTransitioning={isContentTransitioning}

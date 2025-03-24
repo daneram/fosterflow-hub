@@ -67,7 +67,8 @@ const Sidebar: React.FC<SidebarProps> = ({
 
         <ScrollManager isOpen={mobileIsOpen}>
           <div className="flex flex-col space-y-0 mt-0.5">
-            {mobileIsOpen && <AIChatSection isOpen={true} onNavItemClick={onNavItemClick} />}
+            {/* Always show AIChatSection on mobile, regardless of isOpen state */}
+            <AIChatSection isOpen={mobileIsOpen} onNavItemClick={onNavItemClick} />
             
             {sidebarSections.map(({ key, section }) => (
               <SidebarSection 

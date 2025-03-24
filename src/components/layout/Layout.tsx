@@ -83,12 +83,17 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     toggleAiChat();
   }, [toggleAiChat]);
 
+  // Access the sidebar context for mobile state management
+  const sidebarContext = useSidebar();
+
   // Close the sidebar on mobile when a navigation item is clicked
   const closeSidebarOnMobile = useCallback(() => {
     if (isMobile) {
       console.log('[Layout] Closing sidebar on mobile after nav item click');
+      // Use the sidebar context to close mobile sidebar
+      sidebarContext.setOpenMobile(false);
     }
-  }, [isMobile]);
+  }, [isMobile, sidebarContext]);
 
   // Log when sidebar state changes
   useEffect(() => {

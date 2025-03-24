@@ -39,8 +39,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     // Only set AI chat state on initial load, not during navigation
     const storedAiChatState = localStorage.getItem('aiChatOpen');
     if (storedAiChatState === null) {
-      // First time visit, set default based on device and page
-      const defaultState = !isMobile && !isAIAssistantPage;
+      // First time visit, set default based on device
+      const defaultState = !isMobile;
       console.log('[Layout] First visit, setting aiChatOpen to:', defaultState);
       setAiChatOpen(defaultState);
       localStorage.setItem('aiChatOpen', String(defaultState));

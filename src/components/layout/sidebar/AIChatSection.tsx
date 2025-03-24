@@ -2,6 +2,8 @@
 import React from 'react';
 import BotItem from './BotItem';
 import { Bot } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface AIChatSectionProps {
   isOpen: boolean;
@@ -9,6 +11,16 @@ interface AIChatSectionProps {
 }
 
 const AIChatSection: React.FC<AIChatSectionProps> = ({ isOpen, onNavItemClick }) => {
+  const location = useLocation();
+  const isMobile = useIsMobile();
+  const isAIAssistantPage = location.pathname === '/ai-assistant';
+  
+  // Only show the AI Chat section in the sidebar on mobile,
+  // or if we're not already on the AI Assistant page
+  if (!isMobile && isAIAssistantPage) {
+    return null;
+  }
+  
   return (
     <div className="py-1">
       <nav className="flex flex-col gap-1">

@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React, { forwardRef } from 'react';
 import { cn } from '@/lib/utils';
 import SidebarHeader from './sidebar/SidebarHeader';
 import SidebarFooter from './sidebar/SidebarFooter';
@@ -23,13 +24,13 @@ const sidebarSections = [
   { key: 'tools', section: toolsSection }
 ];
 
-const Sidebar: React.FC<SidebarProps> = ({ 
+const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(({ 
   isOpen, 
   onToggle, 
   onNavItemClick, 
   isMobile,
   isTransitioning = false
-}) => {
+}, ref) => {
   // Render a fixed-width placeholder instead of not rendering at all
   if (isMobile && isTransitioning) {
     return (
@@ -45,6 +46,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <div 
+      ref={ref}
       className={cn(
         "h-screen flex flex-col bg-sidebar py-4 px-0", // Base styles
         isOpen ? "w-52" : "w-14", // Width based on open state
@@ -79,7 +81,10 @@ const Sidebar: React.FC<SidebarProps> = ({
       <SidebarFooter isOpen={isOpen} />
     </div>
   );
-};
+});
+
+// Set display name
+Sidebar.displayName = 'Sidebar';
 
 // Update memo comparison to include the new isTransitioning prop
 export default React.memo(Sidebar, (prevProps, nextProps) => {

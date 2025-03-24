@@ -74,9 +74,22 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
     }
   }, [isMobile]);
   
+  // Ensure scrollbar is always hidden unless actively scrolling
+  const forceHideScrollbar = useCallback(() => {
+    if (viewportRef.current) {
+      viewportRef.current.classList.remove('scrolling-active');
+      setIsScrolling(false);
+    }
+  }, []);
+  
   // Initialize viewport ref, content ref and restore scroll position
   useEffect(() => {
     if (!scrollAreaRef.current) return;
+    
+    // Always force hide scrollbar initially
+    const initialForceHideTimer = setTimeout(() => {
+      forceHideScrollbar();
+    }, 50);
     
     // Find the viewport element using the data-attribute we added
     const viewport = scrollAreaRef.current.querySelector('[data-scrollarea-viewport]');
@@ -102,21 +115,21 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
     
     // Cleanup function to ensure we remove the class when unmounting
     return () => {
-      if (viewportRef.current) {
-        viewportRef.current.classList.remove('scrolling-active');
-      }
+      clearTimeout(initialForceHideTimer);
+      forceHideScrollbar();
     };
-  }, [isMobile, positionLastItemAtBottom, restoreScrollPosition]);
+  }, [isMobile, positionLastItemAtBottom, restoreScrollPosition, forceHideScrollbar]);
   
   // Recalculate when children or sidebar open state changes
   useEffect(() => {
     // Use a short delay to ensure DOM is fully rendered
     const timeoutId = setTimeout(() => {
       positionLastItemAtBottom();
+      forceHideScrollbar();
     }, 200);
     
     return () => clearTimeout(timeoutId);
-  }, [children, isOpen, positionLastItemAtBottom]);
+  }, [children, isOpen, positionLastItemAtBottom, forceHideScrollbar]);
   
   // Set up resize observer
   useEffect(() => {
@@ -124,13 +137,15 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
     
     const resizeObserver = new ResizeObserver(() => {
       positionLastItemAtBottom();
+      // Also ensure scrollbar is hidden after resize
+      forceHideScrollbar();
     });
     
     resizeObserver.observe(contentRef.current);
     resizeObserver.observe(viewportRef.current);
     
     return () => resizeObserver.disconnect();
-  }, [positionLastItemAtBottom]);
+  }, [positionLastItemAtBottom, forceHideScrollbar]);
   
   // Handle scroll events - completely rewritten for reliability
   useEffect(() => {
@@ -161,20 +176,37 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
       }, 800); // Longer timeout for better user experience
     };
     
-    // Handle mouse enter/leave to ENSURE scrollbar never shows on hover
+    // These handlers are critical - they ensure the scrollbar never shows on hover
     const mouseEnterHandler = () => {
+      // Always force hide scrollbar on mouse enter
       if (!isScrolling) {
         viewport.classList.remove('scrolling-active');
       }
     };
     
-    // Force remove active class when mouse leaves unless actively scrolling
+    // Force remove active class when mouse leaves
     const mouseLeaveHandler = () => {
-      if (!isScrolling) {
-        viewport.classList.remove('scrolling-active');
+      // Always hide scrollbar on mouse leave
+      viewport.classList.remove('scrolling-active');
+      setIsScrolling(false);
+      
+      // Clear timeout to prevent it from showing again
+      if (scrollTimeoutRef.current) {
+        window.clearTimeout(scrollTimeoutRef.current);
+        scrollTimeoutRef.current = null;
       }
     };
     
+    // Force hide if mouse is not over element
+    const forceInitialHide = () => {
+      viewport.classList.remove('scrolling-active');
+      setIsScrolling(false);
+    };
+    
+    // Ensure it's hidden initially
+    forceInitialHide();
+    
+    // Add all event listeners
     viewport.addEventListener('scroll', handleScroll, { passive: true });
     viewport.addEventListener('mouseenter', mouseEnterHandler);
     viewport.addEventListener('mouseleave', mouseLeaveHandler);

@@ -1,56 +1,78 @@
 
 @layer base {
-  /* Base scrollbar styling */
+  /* Base scrollbar styling with maximum specificity */
   *::-webkit-scrollbar,
+  html::-webkit-scrollbar,
   body::-webkit-scrollbar,
-  html::-webkit-scrollbar {
-    width: 1.5px;
-    height: 1.5px;
-    position: absolute;
-    right: 0;
-    /* Hide scrollbars by default - absolutely critical */
+  div::-webkit-scrollbar,
+  nav::-webkit-scrollbar,
+  aside::-webkit-scrollbar,
+  section::-webkit-scrollbar,
+  main::-webkit-scrollbar,
+  article::-webkit-scrollbar,
+  [data-scrollarea-viewport]::-webkit-scrollbar {
+    width: 1.5px !important;
+    height: 1.5px !important;
+    position: absolute !important;
+    right: 0 !important;
+    /* Hide scrollbars by default with maximum specificity */
     display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
   }
 
   *::-webkit-scrollbar-track,
   body::-webkit-scrollbar-track,
   html::-webkit-scrollbar-track {
-    background: transparent;
+    background: transparent !important;
   }
 
   *::-webkit-scrollbar-thumb,
   body::-webkit-scrollbar-thumb,
   html::-webkit-scrollbar-thumb {
-    background-color: var(--scrollbar-color);
-    border-radius: 10px;
-    opacity: 1;
+    background-color: var(--scrollbar-color) !important;
+    border-radius: 10px !important;
+    opacity: 1 !important;
   }
 
   *::-webkit-scrollbar-thumb:hover,
   body::-webkit-scrollbar-thumb:hover,
   html::-webkit-scrollbar-thumb:hover {
-    background-color: var(--scrollbar-hover-color);
+    background-color: var(--scrollbar-hover-color) !important;
   }
 
   /* Firefox scrollbar styling */
   * {
-    scrollbar-width: thin;
-    scrollbar-color: var(--scrollbar-color) transparent;
+    scrollbar-width: none !important;
+    scrollbar-color: var(--scrollbar-color) transparent !important;
   }
   
   /* ONLY show scrollbar when element has the scrolling-active class */
   .scrolling-active::-webkit-scrollbar {
     display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
   
-  /* Force hide scrollbar on hover - higher specificity */
+  /* Force hide scrollbar on hover with maximum specificity - this is the critical part */
   *:hover::-webkit-scrollbar,
-  *:hover:not(.scrolling-active)::-webkit-scrollbar {
+  div:hover::-webkit-scrollbar,
+  nav:hover::-webkit-scrollbar,
+  aside:hover::-webkit-scrollbar,
+  *:hover:not(.scrolling-active)::-webkit-scrollbar,
+  [data-scrollarea-viewport]:hover:not(.scrolling-active)::-webkit-scrollbar {
     display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
   }
   
-  /* Make sure scrolling-active overrides hover */
-  .scrolling-active::-webkit-scrollbar {
+  /* Make sure scrolling-active overrides hover with highest specificity */
+  .scrolling-active::-webkit-scrollbar,
+  .scrolling-active:hover::-webkit-scrollbar,
+  [data-scrollarea-viewport].scrolling-active::-webkit-scrollbar,
+  [data-scrollarea-viewport].scrolling-active:hover::-webkit-scrollbar {
     display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
 }

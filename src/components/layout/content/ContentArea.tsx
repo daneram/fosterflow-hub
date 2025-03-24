@@ -73,7 +73,7 @@ const ContentArea: React.FC<ContentAreaProps> = ({
           defaultSize={mainPanelSize} 
           minSize={50}
           maxSize={85}
-          className="overflow-auto w-full"
+          className="w-full overflow-auto"
         >
           <div className="px-4 py-4 sm:px-6 sm:py-6 w-full max-w-full">
             {children}

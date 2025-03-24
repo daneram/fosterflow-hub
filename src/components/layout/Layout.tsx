@@ -61,7 +61,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     }, 100);
     
     return () => clearTimeout(timer);
-  }, [location.pathname, isMobile]);
+  }, [location.pathname, isMobile, sidebarOpen, setSidebarOpen]);
 
   // Custom toggle for AI chat that also stores the state
   const handleToggleAiChat = useCallback(() => {
@@ -89,7 +89,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <SidebarProvider>
-      <div className="h-screen flex bg-background overflow-hidden">
+      <div className="h-screen flex bg-background overflow-hidden w-full">
         {/* Always render the sidebar, never completely hide it during transitions */}
         {memoizedSidebar}
 

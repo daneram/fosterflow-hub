@@ -64,7 +64,7 @@ const RecordsExplorer: React.FC = () => {
           <Input
             type="text"
             placeholder="Search records..."
-            className="pl-8 h-9 pr-8"
+            className="pl-8 h-9 pr-8 w-full"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -96,14 +96,14 @@ const RecordsExplorer: React.FC = () => {
         </div>
         
         <div className="w-full max-w-full">
-          <Card className="border-0 shadow-none">
+          <Card className="border-0 shadow-none w-full">
             <CardHeader className="pb-0 pt-4 px-0">
               <RecordSearchToolbar
                 selectedRecords={selectedRecords}
                 recordCount={filteredRecords.length}
               />
             </CardHeader>
-            <CardContent className="p-0 pt-2">
+            <CardContent className="p-0 pt-2 w-full">
               <RecordContent 
                 filteredRecords={filteredRecords}
                 selectedRecords={selectedRecords}
@@ -114,7 +114,7 @@ const RecordsExplorer: React.FC = () => {
                 toggleSort={toggleSort}
               />
             </CardContent>
-            <CardFooter className="border-0 shadow-none p-0 pt-4 bg-transparent">
+            <CardFooter className="border-0 shadow-none p-0 pt-4 bg-transparent w-full">
               <RecordPagination
                 currentPage={currentPage}
                 totalPages={Math.ceil(filteredRecords.length / 10)}

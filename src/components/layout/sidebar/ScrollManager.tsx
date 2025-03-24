@@ -120,24 +120,29 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
     return () => resizeObserver.disconnect();
   }, [positionLastItemAtBottom]);
   
-  // Save scroll position to localStorage with debounce
+  // Save scroll position to localStorage with no debounce for immediate effect
   useEffect(() => {
     const viewport = viewportRef.current;
     if (!viewport) return;
     
     const handleScroll = () => {
-      if (!isScrolling) {
-        setIsScrolling(true);
-        setTimeout(() => {
-          saveScrollPosition();
-          setIsScrolling(false);
-        }, 200);
-      }
+      // Set scrolling state to true and save position immediately
+      setIsScrolling(true);
+      saveScrollPosition();
+      
+      // Reset scrolling state after scrolling stops
+      clearTimeout((viewport as any)._scrollTimer);
+      (viewport as any)._scrollTimer = setTimeout(() => {
+        setIsScrolling(false);
+      }, 100); // Short timeout to detect end of scrolling
     };
     
     viewport.addEventListener('scroll', handleScroll);
-    return () => viewport.removeEventListener('scroll', handleScroll);
-  }, [isScrolling, saveScrollPosition]);
+    return () => {
+      viewport.removeEventListener('scroll', handleScroll);
+      clearTimeout((viewport as any)._scrollTimer);
+    };
+  }, [saveScrollPosition]);
 
   return (
     <ScrollArea 

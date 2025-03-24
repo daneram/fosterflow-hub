@@ -1,38 +1,36 @@
 
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useSidebar } from '@/components/ui/sidebar';
 
 export const useSidebarState = () => {
   const isMobile = useIsMobile();
+  const { open: sidebarOpen, setOpen: setSidebarOpen, openMobile, setOpenMobile, toggleSidebar: contextToggleSidebar } = useSidebar();
   
-  // Get initial state from localStorage with mobile-aware default
-  const [sidebarOpen, setSidebarOpen] = useState(() => {
-    // Check localStorage first
-    const saved = localStorage.getItem('sidebar-state');
-    if (saved) {
-      return saved === 'open';
-    }
-    // Default to closed on mobile, open on desktop
-    return !isMobile;
-  });
-
-  // Save sidebar state to localStorage when it changes
-  useEffect(() => {
-    localStorage.setItem('sidebar-state', sidebarOpen ? 'open' : 'closed');
-  }, [sidebarOpen]);
-
-  // Toggle function that prevents automatic closing on mobile
+  // Toggle function that works on both mobile and desktop
   const toggleSidebar = useCallback(() => {
-    setSidebarOpen(prev => !prev);
-  }, []);
+    if (isMobile) {
+      setOpenMobile(!openMobile);
+    } else {
+      contextToggleSidebar();
+    }
+  }, [isMobile, openMobile, setOpenMobile, contextToggleSidebar]);
 
   // Function to explicitly set sidebar state
   const setSidebarOpenState = useCallback((state: boolean) => {
-    setSidebarOpen(state);
-  }, []);
+    if (isMobile) {
+      setOpenMobile(state);
+    } else {
+      setSidebarOpen(state);
+    }
+  }, [isMobile, setSidebarOpen, setOpenMobile]);
+
+  // The exposed sidebarOpen state should be either the mobile or desktop state
+  // depending on the current view
+  const effectiveSidebarOpen = isMobile ? openMobile : sidebarOpen;
 
   return { 
-    sidebarOpen, 
+    sidebarOpen: effectiveSidebarOpen, 
     setSidebarOpen: setSidebarOpenState, 
     toggleSidebar 
   };

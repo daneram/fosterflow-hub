@@ -1,4 +1,3 @@
-
 import React, { useEffect, useCallback, useMemo, useState, useRef } from 'react';
 import Sidebar from './Sidebar';
 import ContentArea from './content/ContentArea';
@@ -58,28 +57,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     }
   }, [isMobile, setSidebarOpen, sidebarOpen]);
 
-  // Handle click outside the sidebar on mobile
-  useEffect(() => {
-    // Only add this listener if on mobile and sidebar is open
-    if (!isMobile || !sidebarOpen) return;
-
-    const handleClickOutside = (event: MouseEvent) => {
-      // If the click is outside the sidebar, close it
-      if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
-        setSidebarOpen(false);
-      }
-    };
-
-    // Add the event listener to the document
-    document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('touchstart', handleClickOutside);
-
-    // Cleanup the event listener
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('touchstart', handleClickOutside);
-    };
-  }, [isMobile, sidebarOpen, setSidebarOpen]);
+  // Handle click outside the sidebar on mobile to close it
+  const handleContentClick = useCallback(() => {
+    if (isMobile && sidebarOpen) {
+      setSidebarOpen(false);
+      console.log("Closing sidebar on mobile from content click");
+    }
+  }, [isMobile, setSidebarOpen, sidebarOpen]);
 
   // Memoize the Sidebar component to prevent unnecessary re-renders
   const memoizedSidebar = useMemo(() => (
@@ -106,7 +90,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           toggleAiChat={toggleAiChat} 
           isMobile={isMobile}
           isTransitioning={isContentTransitioning}
-          onClick={closeSidebarOnMobile}
+          onClick={handleContentClick}
         >
           {children}
         </ContentArea>

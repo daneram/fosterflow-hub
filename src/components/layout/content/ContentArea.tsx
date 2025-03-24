@@ -21,13 +21,22 @@ const ContentArea: React.FC<ContentAreaProps> = ({
   isTransitioning = false,
   onClick
 }) => {
+  // Handle content click - it should always call the onClick handler when provided
+  // But we don't want to propagate the click to child elements
+  const handleContentClick = (e: React.MouseEvent) => {
+    // Only handle clicks directly on this element, not on children
+    if (e.target === e.currentTarget && onClick) {
+      onClick();
+    }
+  };
+
   return (
     <div 
       className={cn(
         "flex-1 overflow-auto",
         isTransitioning ? "opacity-90 transition-opacity duration-100" : "opacity-100"
       )}
-      onClick={isMobile ? onClick : undefined}
+      onClick={handleContentClick}
     >
       <ResizablePanelGroup direction="horizontal" className="min-h-screen">
         {/* Main content panel */}

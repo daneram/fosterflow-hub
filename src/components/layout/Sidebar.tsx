@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import SidebarHeader from './sidebar/SidebarHeader';
@@ -44,8 +45,8 @@ const Sidebar: React.FC<SidebarProps> = ({
     });
   }, [isOpen, isMobile, isTransitioning, openMobile]);
   
-  // For mobile, we only render sidebar content that will be placed inside the shadcn Sheet
-  // The actual visibility is controlled by the shadcn Sheet component
+  // For mobile, content is rendered inside the Sheet component
+  // with a fixed open state (true) since the Sheet handles visibility
   if (isMobile) {
     console.log('[Sidebar] On mobile, rendering content for sheet');
     return (

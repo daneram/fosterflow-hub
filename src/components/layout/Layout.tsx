@@ -1,4 +1,3 @@
-
 import React, { useEffect, useCallback, useMemo, useState } from 'react';
 import Sidebar from './Sidebar';
 import ContentArea from './content/ContentArea';
@@ -32,18 +31,22 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     // Mark content as transitioning
     setIsContentTransitioning(true);
     
-    // Close sidebar on mobile during navigation if needed
-    if (isMobile && sidebarOpen) {
-      setSidebarOpen(false);
-    }
-    
     // Reset transition state after a shorter delay
     const timer = setTimeout(() => {
       setIsContentTransitioning(false);
     }, 100);
     
     return () => clearTimeout(timer);
-  }, [location.pathname, isMobile, sidebarOpen, setSidebarOpen]);
+  }, [location.pathname]);
+
+  // Handle sidebar toggle for mobile - keep it in sync with the main toggle
+  const handleSidebarToggle = useCallback(() => {
+    // Use the toggle function directly
+    toggleSidebar();
+    
+    // Debug the toggle action
+    console.log("Sidebar toggle called, new state will be:", !sidebarOpen);
+  }, [toggleSidebar, sidebarOpen]);
 
   // Close the sidebar on mobile when a navigation item is clicked
   const closeSidebarOnMobile = useCallback(() => {
@@ -56,13 +59,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const memoizedSidebar = useMemo(() => (
     <Sidebar 
       isOpen={sidebarOpen} 
-      onToggle={toggleSidebar} 
+      onToggle={handleSidebarToggle} 
       onNavItemClick={closeSidebarOnMobile} 
       toggleAiChat={toggleAiChat} 
       isMobile={isMobile}
       isTransitioning={false} // Never hide sidebar completely on transitions
     />
-  ), [sidebarOpen, toggleSidebar, closeSidebarOnMobile, toggleAiChat, isMobile]);
+  ), [sidebarOpen, handleSidebarToggle, closeSidebarOnMobile, toggleAiChat, isMobile]);
 
   return (
     <SidebarProvider>

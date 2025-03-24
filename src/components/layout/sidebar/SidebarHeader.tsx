@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface SidebarHeaderProps {
   isOpen: boolean;
@@ -15,6 +16,7 @@ const LOGO_URL = "/lovable-uploads/6d655b66-ad8d-445b-93e9-36d9917768dc.png";
 const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const imageRef = useRef<HTMLImageElement | null>(null);
+  const isMobile = useIsMobile();
   
   // Handle image loading
   useEffect(() => {
@@ -39,6 +41,20 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
     };
   }, []);
   
+  // Handle the toggle specifically for the header
+  const handleHeaderToggle = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Call the toggle function from props
+    onToggle();
+    
+    // On mobile, we want to ensure the sidebar stays open/closed based on toggle
+    if (isMobile) {
+      console.log("Mobile logo toggle activated");
+    }
+  };
+  
   return (
     <div className="mb-1">
       <div 
@@ -46,7 +62,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
           "flex items-center cursor-pointer h-10 text-sm font-medium",
           "pl-4 pr-3" // Adjusted padding to match NavItems
         )}
-        onClick={onToggle}
+        onClick={handleHeaderToggle}
       >
         <div className="flex items-center justify-center w-5 h-5 flex-shrink-0">
           <Avatar className="h-6 w-6">

@@ -1,8 +1,8 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface SidebarHeaderProps {
   isOpen: boolean;
@@ -15,6 +15,7 @@ const LOGO_URL = "/lovable-uploads/6d655b66-ad8d-445b-93e9-36d9917768dc.png";
 const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const imageRef = useRef<HTMLImageElement | null>(null);
+  const isMobile = useIsMobile();
   
   // Handle image loading
   useEffect(() => {
@@ -38,6 +39,22 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
       img.onload = null;
     };
   }, []);
+
+  // On mobile, clicking the logo should keep the sidebar open
+  const handleLogoClick = (e: React.MouseEvent) => {
+    if (isMobile) {
+      // Prevent the default toggle behavior on mobile
+      e.stopPropagation();
+      // If sidebar is closed, open it
+      if (!isOpen) {
+        onToggle();
+      }
+      // If sidebar is already open, do nothing
+    } else {
+      // On desktop, perform regular toggle
+      onToggle();
+    }
+  };
   
   return (
     <div className="mb-0">
@@ -46,7 +63,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
           "flex items-center cursor-pointer h-10 text-sm font-medium",
           "pl-4 pr-3" // Adjusted padding to match NavItems
         )}
-        onClick={onToggle}
+        onClick={handleLogoClick}
       >
         <div className="flex items-center justify-center w-5 h-5 flex-shrink-0">
           <Avatar className="h-6 w-6">
@@ -85,7 +102,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
   );
 };
 
-// Use React.memo with custom comparison to prevent unnecessary re-renders
+// Update the memo comparison to include the new isMobile dependency
 export default React.memo(SidebarHeader, (prevProps, nextProps) => {
   // Only re-render if isOpen changes
   return prevProps.isOpen === nextProps.isOpen;

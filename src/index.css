@@ -89,6 +89,9 @@
 
   body {
     @apply bg-background text-foreground;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
   }
   
   /* Remove focus outline across the entire app */
@@ -110,6 +113,8 @@
     width: 1.5px;
     height: 1.5px;
     display: block;
+    position: absolute;
+    right: 0;
   }
 
   *::-webkit-scrollbar-track,
@@ -138,9 +143,12 @@
     scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
   }
 
-  /* Make sure the body doesn't have overflow hidden */
+  /* Make sure the body and HTML don't have overflow hidden and are properly set */
   html, body {
     overflow: auto;
+    width: 100%;
+    height: 100%;
+    position: relative;
   }
 }
 

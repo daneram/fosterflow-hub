@@ -25,7 +25,10 @@ const ContentArea: React.FC<ContentAreaProps> = ({
     <div className={cn(
       "flex-1 overflow-hidden", 
       isTransitioning ? "opacity-90 transition-opacity duration-100" : "opacity-100",
-      isMobile && sidebarOpen ? "ml-14" : "" // Keep content aligned the same as when sidebar is closed
+      // When sidebar is open on mobile, add padding equal to collapsed sidebar width
+      // so the content stays in the same place visually
+      isMobile && sidebarOpen ? "ml-0" : "",
+      isMobile ? "pl-14" : ""  // Always add left padding on mobile equal to collapsed sidebar
     )}>
       <ResizablePanelGroup direction="horizontal" className="min-h-screen">
         {/* Main content panel */}
@@ -47,7 +50,6 @@ const ContentArea: React.FC<ContentAreaProps> = ({
               minSize={30}
               className="border-l"
             >
-              {/* Remove the toggleAiChat prop if AIChat doesn't accept it */}
               <AIChat />
             </ResizablePanel>
           </>

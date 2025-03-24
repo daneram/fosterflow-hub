@@ -31,15 +31,34 @@ const Sidebar: React.FC<SidebarProps> = ({
   isMobile,
   isTransitioning = false
 }) => {
+  // If mobile and transitioning, render a placeholder
+  if (isMobile && isTransitioning) {
+    return (
+      <div 
+        className={cn(
+          "h-screen flex flex-col bg-sidebar py-4 px-0",
+          !isOpen ? "w-14" : "w-52"
+        )} 
+        aria-hidden="true"
+      />
+    );
+  }
+
   return (
     <div 
       className={cn(
-        "h-screen py-4 px-0 bg-sidebar", // Base styles
-        isMobile ? "fixed top-0 left-0 z-50" : "relative", // Position fixed on mobile
+        "h-screen flex flex-col bg-sidebar py-4 px-0", // Base styles
         isOpen ? "w-52" : "w-14", // Width based on open state
         
-        // Add transition for smooth opening/closing
-        "transition-all duration-200 ease-in-out"
+        // Add transition for opacity and transform
+        "transition-all duration-200",
+        
+        // On mobile, position it absolutely when open and maintain layers
+        isMobile && isOpen ? "fixed left-0 top-0 z-50 shadow-lg" : "",
+        isMobile && !isOpen ? "relative" : "",
+        
+        // Never completely hide the sidebar
+        isMobile && isTransitioning ? "opacity-90" : "opacity-100"
       )}
     >
       <SidebarHeader isOpen={isOpen} onToggle={onToggle} />
@@ -67,7 +86,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   );
 };
 
-// Update memo comparison to include the new isTransitioning prop
+// Update memo comparison to include the new props
 export default React.memo(Sidebar, (prevProps, nextProps) => {
   return (
     prevProps.isOpen === nextProps.isOpen &&

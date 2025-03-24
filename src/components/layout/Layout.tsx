@@ -7,7 +7,6 @@ import { useLocation } from 'react-router-dom';
 import { useSidebarState } from './hooks/useSidebarState';
 import { useAIChatState } from './hooks/useAIChatState';
 import { SidebarProvider } from '@/components/ui/sidebar';
-import { cn } from '@/lib/utils';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -20,7 +19,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
   const isAIAssistantPage = location.pathname === '/ai-assistant';
   
-  // Tracking content transitions instead of sidebar transitions
+  // Tracking content transitions
   const [isContentTransitioning, setIsContentTransitioning] = useState(false);
 
   // Set initial AI chat state based on screen size
@@ -59,18 +58,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       isOpen={sidebarOpen} 
       onToggle={toggleSidebar} 
       onNavItemClick={closeSidebarOnMobile} 
-      toggleAiChat={toggleAiChat} 
       isMobile={isMobile}
       isTransitioning={false}
     />
-  ), [sidebarOpen, toggleSidebar, closeSidebarOnMobile, toggleAiChat, isMobile]);
+  ), [sidebarOpen, toggleSidebar, closeSidebarOnMobile, isMobile]);
 
   return (
     <SidebarProvider>
-      <div className={cn(
-        "h-screen flex bg-background overflow-hidden",
-        isMobile && sidebarOpen && "overflow-x-visible" // Allow horizontal overflow when sidebar is open on mobile
-      )}>
+      <div className="h-screen flex bg-background overflow-hidden">
         {/* Always render the sidebar */}
         {memoizedSidebar}
 

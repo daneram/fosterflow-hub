@@ -43,10 +43,18 @@
     visibility: hidden; /* Hide by default using visibility instead of opacity */
   }
   
-  /* Show scrollbar ONLY during actual scroll events, not just hover */
-  *:active::-webkit-scrollbar,
-  *:focus::-webkit-scrollbar,
-  *:hover:active::-webkit-scrollbar {
+  /* Show scrollbar ONLY during active scrolling, NOT on hover */
+  *:active::-webkit-scrollbar {
     visibility: visible; /* Show immediately when scrolling */
+  }
+  
+  /* Hide scrollbar on hover unless actively scrolling */
+  *:hover::-webkit-scrollbar {
+    visibility: hidden;
+  }
+  
+  /* Keep visible during scroll+hover combination */
+  *:hover:active::-webkit-scrollbar {
+    visibility: visible;
   }
 }

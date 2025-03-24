@@ -21,7 +21,7 @@ const ContentArea: React.FC<ContentAreaProps> = ({
 }) => {
   return (
     <div className={cn(
-      "flex-1 overflow-auto", // Changed from overflow-hidden to overflow-auto
+      "flex-1 overflow-auto",
       isTransitioning ? "opacity-90 transition-opacity duration-100" : "opacity-100"
     )}>
       <ResizablePanelGroup direction="horizontal" className="min-h-screen">
@@ -29,9 +29,9 @@ const ContentArea: React.FC<ContentAreaProps> = ({
         <ResizablePanel 
           defaultSize={100} 
           minSize={25}
-          className="overflow-auto" // Ensure the panel itself can scroll
+          className="overflow-auto"
         >
-          <div className="p-6 h-full overflow-auto"> {/* Added h-full and overflow-auto */}
+          <div className="p-6 h-full overflow-auto">
             {children}
           </div>
         </ResizablePanel>
@@ -42,9 +42,8 @@ const ContentArea: React.FC<ContentAreaProps> = ({
             <ResizablePanel 
               defaultSize={40} 
               minSize={30}
-              className="border-l overflow-auto" // Added overflow-auto
+              className="border-l overflow-auto"
             >
-              {/* Remove the toggleAiChat prop if AIChat doesn't accept it */}
               <AIChat />
             </ResizablePanel>
           </>

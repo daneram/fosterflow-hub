@@ -13,11 +13,13 @@ interface AIChatSectionProps {
 const AIChatSection: React.FC<AIChatSectionProps> = ({ isOpen, onNavItemClick }) => {
   const location = useLocation();
   const isMobile = useIsMobile();
-  const isAIAssistantPage = location.pathname === '/ai-assistant';
   
-  // Always show the sidebar item, regardless of whether we're on the AI Assistant page
-  // The actual chat panel visibility is handled elsewhere
+  // On desktop, don't show the AI assistant in the sidebar
+  if (!isMobile) {
+    return null;
+  }
   
+  // Only show the menu item on mobile
   return (
     <div className="py-1">
       <nav className="flex flex-col gap-1">

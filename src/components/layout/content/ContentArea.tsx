@@ -85,8 +85,8 @@ const ContentArea: React.FC<ContentAreaProps> = ({
           </div>
         </ResizablePanel>
 
-        {/* AI Assistant panel - only show on desktop and when open */}
-        {!isMobile && aiChatOpen && (
+        {/* AI Assistant panel - Only show when open, regardless of device */}
+        {aiChatOpen && (
           <>
             <ResizableHandle withHandle />
             <ResizablePanel 

@@ -46,7 +46,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     });
   }, [isOpen, isMobile, isTransitioning, openMobile]);
   
-  // For mobile: render both the collapsed sidebar and the sheet
+  // For mobile: render the collapsed sidebar and use Sheet for expanded view
   if (isMobile) {
     return (
       <>
@@ -77,7 +77,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           <SidebarFooter isOpen={false} />
         </div>
 
-        {/* Full sidebar in a sheet for mobile */}
+        {/* Sheet for expanded mobile sidebar view */}
         <Sheet open={openMobile} onOpenChange={setOpenMobile}>
           <SheetContent 
             side="left" 

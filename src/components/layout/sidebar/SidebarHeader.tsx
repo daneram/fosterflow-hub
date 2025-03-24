@@ -5,7 +5,6 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useSidebar } from '@/components/ui/sidebar';
-import { Menu } from 'lucide-react';
 
 interface SidebarHeaderProps {
   isOpen: boolean;
@@ -62,34 +61,30 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
         onClick={handleLogoClick}
       >
         <div className="flex items-center justify-center w-5 h-5 flex-shrink-0">
-          {isMobile && !isOpen ? (
-            <Menu className="h-5 w-5" />
-          ) : (
-            <Avatar className="h-6 w-6">
-              {imageLoaded ? (
-                <AvatarImage 
-                  ref={imageRef}
-                  src={LOGO_URL}
+          <Avatar className="h-6 w-6">
+            {imageLoaded ? (
+              <AvatarImage 
+                ref={imageRef}
+                src={LOGO_URL}
+                alt="Indigo Fostering"
+                loading="eager"
+                className="object-contain bg-white"
+                draggable={false}
+                onLoad={() => setImageLoaded(true)}
+              />
+            ) : (
+              <AvatarFallback className="bg-white">
+                <img 
+                  src={LOGO_URL} 
                   alt="Indigo Fostering"
-                  loading="eager"
-                  className="object-contain bg-white"
-                  draggable={false}
+                  className="h-full w-full object-contain"
+                  style={{ visibility: imageLoaded ? 'visible' : 'hidden' }}
                   onLoad={() => setImageLoaded(true)}
+                  draggable={false}
                 />
-              ) : (
-                <AvatarFallback className="bg-white">
-                  <img 
-                    src={LOGO_URL} 
-                    alt="Indigo Fostering"
-                    className="h-full w-full object-contain"
-                    style={{ visibility: imageLoaded ? 'visible' : 'hidden' }}
-                    onLoad={() => setImageLoaded(true)}
-                    draggable={false}
-                  />
-                </AvatarFallback>
-              )}
-            </Avatar>
-          )}
+              </AvatarFallback>
+            )}
+          </Avatar>
         </div>
         <div className={cn("ml-3 overflow-hidden transition-opacity duration-100", 
                          isOpen ? "opacity-100" : "opacity-0 w-0")}>

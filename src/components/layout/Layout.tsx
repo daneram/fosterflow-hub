@@ -1,3 +1,4 @@
+
 import React, { useEffect, useCallback, useMemo, useState } from 'react';
 import Sidebar from './Sidebar';
 import ContentArea from './content/ContentArea';
@@ -87,11 +88,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   ), [sidebarOpen, toggleSidebar, closeSidebarOnMobile, handleToggleAiChat, isMobile]);
 
   return (
-    <SidebarProvider defaultOpen={sidebarOpen} onOpenChange={setSidebarOpen}>
+    <SidebarProvider 
+      defaultOpen={sidebarOpen} 
+      onOpenChange={setSidebarOpen}
+    >
       <div className="h-screen flex bg-background overflow-hidden w-full">
-        {/* Use the Sidebar component connected to SidebarProvider */}
         {memoizedSidebar}
-
+        
         {/* Main content and AI assistant */}
         <ContentArea 
           aiChatOpen={aiChatOpen} 

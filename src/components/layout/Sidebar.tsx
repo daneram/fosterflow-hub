@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { cn } from '@/lib/utils';
 import SidebarHeader from './sidebar/SidebarHeader';
@@ -60,7 +59,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       <SidebarHeader isOpen={isOpen} onToggle={onToggle} />
 
       <ScrollManager isOpen={isOpen}>
-        <div className="flex flex-col space-y-0"> {/* Removed pr-0 as we're handling this in scroll-area.tsx */}
+        <div className="flex flex-col space-y-0">
           {isMobile && (
             <AIChatSection isOpen={isOpen} onNavItemClick={onNavItemClick} />
           )}

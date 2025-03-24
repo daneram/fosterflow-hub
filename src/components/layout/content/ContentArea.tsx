@@ -31,7 +31,7 @@ const ContentArea: React.FC<ContentAreaProps> = ({
           minSize={50}
           className="overflow-auto w-full"
         >
-          <div className="w-full h-full px-4 py-4 sm:px-6 sm:py-6 max-w-full">
+          <div className="w-full h-full max-w-7xl mx-auto px-4 py-4 sm:px-6 sm:py-6">
             {children}
           </div>
         </ResizablePanel>

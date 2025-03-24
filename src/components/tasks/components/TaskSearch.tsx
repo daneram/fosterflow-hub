@@ -7,9 +7,14 @@ import { Filter, Plus } from 'lucide-react';
 interface TaskSearchProps {
   searchQuery: string;
   onSearchChange: (value: string) => void;
+  onNewTask?: () => void;
 }
 
-const TaskSearch: React.FC<TaskSearchProps> = ({ searchQuery, onSearchChange }) => {
+const TaskSearch: React.FC<TaskSearchProps> = ({ 
+  searchQuery, 
+  onSearchChange, 
+  onNewTask 
+}) => {
   return (
     <div className="flex flex-col sm:flex-row gap-2 sm:items-center justify-between">
       <div className="relative w-full max-w-md">
@@ -22,7 +27,7 @@ const TaskSearch: React.FC<TaskSearchProps> = ({ searchQuery, onSearchChange }) 
         <Filter className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
       </div>
       
-      <Button size="sm" className="sm:self-end">
+      <Button size="sm" className="sm:self-end" onClick={onNewTask}>
         <Plus className="h-4 w-4 mr-1" />
         New Task
       </Button>

@@ -21,8 +21,13 @@ const TaskManager: React.FC = () => {
 
   const filteredTasks = filterTasks(tasks, filter, searchQuery);
 
+  const handleNewTask = () => {
+    // New task logic will be implemented here
+    console.log('New task button clicked');
+  };
+
   return (
-    <div className="w-full space-y-4 animate-fade-in">
+    <div className="w-full space-y-4 animate-fade-in max-w-full">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Tasks</h1>
         <p className="text-muted-foreground text-sm">Manage your tasks and to-dos</p>
@@ -31,6 +36,7 @@ const TaskManager: React.FC = () => {
       <TaskSearch 
         searchQuery={searchQuery} 
         onSearchChange={setSearchQuery} 
+        onNewTask={handleNewTask}
       />
 
       <Tabs defaultValue="all" onValueChange={(value) => setFilter(value as TaskFilter)}>

@@ -75,12 +75,23 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
             )}
           </Avatar>
         </div>
-        <div className={cn("ml-3 overflow-hidden transition-opacity duration-100", 
-                        isOpen ? "opacity-100" : "opacity-0 w-0")}>
+        
+        {/* Text container with consistent spacing */}
+        <div className={cn(
+          "ml-3 overflow-hidden transition-all duration-100",
+          isOpen ? "opacity-100 max-w-[120px]" : "opacity-0 max-w-0 w-0"
+        )}>
           <span className="truncate font-bold">Indigo Fostering</span>
         </div>
       </div>
-      {isOpen && <Separator className="my-2 bg-sidebar-border" />}
+      
+      {/* Only render separator when sidebar is open, but maintain consistent height */}
+      <div className={cn(
+        "transition-all duration-100 h-2", 
+        isOpen ? "opacity-100" : "opacity-0"
+      )}>
+        {isOpen && <Separator className="bg-sidebar-border" />}
+      </div>
     </div>
   );
 };

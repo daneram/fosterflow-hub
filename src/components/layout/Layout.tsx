@@ -89,10 +89,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const closeSidebarOnMobile = useCallback(() => {
     if (isMobile) {
       console.log('[Layout] Closing sidebar on mobile after nav item click');
-      // For mobile, we need to update the shadcn/ui mobile state
-      if (document.querySelector('[data-state="open"]')) {
-        console.log('[Layout] Found open sheet, closing it');
-      }
     }
   }, [isMobile]);
 
@@ -104,35 +100,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <SidebarProvider defaultOpen={sidebarOpen} onOpenChange={setSidebarOpen}>
       <div className="h-screen flex bg-background overflow-hidden w-full">
-        {/* Mobile view: Use ShadcnSidebar which renders a Sheet */}
-        {isMobile && (
-          <>
-            <ShadcnSidebar>
-              <Sidebar 
-                isOpen={true}
-                onToggle={toggleSidebar}
-                onNavItemClick={closeSidebarOnMobile}
-                isMobile={true}
-                isTransitioning={false}
-              />
-            </ShadcnSidebar>
-            {/* Add a visible trigger for mobile */}
-            <div className="absolute top-4 left-4 z-40 md:hidden">
-              <SidebarTrigger />
-            </div>
-          </>
-        )}
-        
-        {/* Desktop view: Render our custom Sidebar */}
-        {!isMobile && (
-          <Sidebar 
-            isOpen={sidebarOpen}
-            onToggle={toggleSidebar}
-            onNavItemClick={closeSidebarOnMobile}
-            isMobile={false}
-            isTransitioning={false}
-          />
-        )}
+        {/* For both mobile and desktop, render our custom Sidebar */}
+        <Sidebar 
+          isOpen={sidebarOpen}
+          onToggle={toggleSidebar}
+          onNavItemClick={closeSidebarOnMobile}
+          isMobile={isMobile}
+          isTransitioning={false}
+        />
 
         {/* Main content and AI assistant */}
         <ContentArea 

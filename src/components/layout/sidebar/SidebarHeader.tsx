@@ -19,7 +19,6 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const imageRef = useRef<HTMLImageElement | null>(null);
   const isMobile = useIsMobile();
-  const { openMobile, setOpenMobile, toggleSidebar } = useSidebar();
   
   // Handle image loading
   useEffect(() => {
@@ -49,13 +48,8 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
     e.preventDefault();
     e.stopPropagation();
     
-    console.log('[SidebarHeader] Logo clicked', { 
-      isMobile, 
-      currentOpenMobileState: openMobile 
-    });
-    
-    // Use the shared toggleSidebar function for consistency
-    toggleSidebar();
+    console.log('[SidebarHeader] Logo clicked, calling onToggle');
+    onToggle();
   };
   
   return (
@@ -68,7 +62,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
         onClick={handleLogoClick}
       >
         <div className="flex items-center justify-center w-5 h-5 flex-shrink-0">
-          {isMobile ? (
+          {isMobile && !isOpen ? (
             <Menu className="h-5 w-5" />
           ) : (
             <Avatar className="h-6 w-6">

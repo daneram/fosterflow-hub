@@ -1,13 +1,20 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Card, CardHeader, CardTitle } from '@/components/ui/card';
-import { Bot } from 'lucide-react';
-import { Message } from './types';
-import ChatMessageList from './ChatMessageList';
-import ChatInput from './ChatInput';
-import { generateAIResponse } from './aiUtils';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Bot, Send, User } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { ScrollArea } from '@/components/ui/scroll-area';
+
+interface Message {
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: Date;
+}
 
 const AIChat: React.FC = () => {
+  const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([{
     role: 'assistant',
     content: 'Hello! I\'m your AI assistant. How can I help you today?',
@@ -26,7 +33,8 @@ const AIChat: React.FC = () => {
     });
   };
 
-  const handleSendMessage = (input: string) => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
     if (!input.trim()) return;
 
     // Add user message
@@ -36,11 +44,12 @@ const AIChat: React.FC = () => {
       timestamp: new Date()
     };
     setMessages(prev => [...prev, userMessage]);
+    setInput('');
     setIsLoading(true);
 
     // Simulate AI response
     setTimeout(() => {
-      const response = generateAIResponse(input);
+      const response = "I'm your AI assistant. I can help you with questions about this application, your work, or any other questions you might have.";
       const assistantMessage: Message = {
         role: 'assistant',
         content: response,
@@ -60,13 +69,58 @@ const AIChat: React.FC = () => {
         </div>
       </CardHeader>
 
-      <ChatMessageList 
-        messages={messages}
-        isLoading={isLoading}
-        messagesEndRef={messagesEndRef}
-      />
+      <ScrollArea className="flex-1 p-3 w-full">
+        <div className="space-y-3 w-full">
+          {messages.map((message, index) => (
+            <div key={index} className={cn("flex w-full", message.role === 'assistant' ? "justify-start" : "justify-end")}>
+              <div className={cn(
+                "flex items-start gap-1.5 max-w-[85%] rounded-lg p-2", 
+                message.role === 'assistant' ? "bg-secondary text-secondary-foreground" : "bg-primary text-primary-foreground"
+              )}>
+                <div className="mt-0.5 flex-shrink-0">
+                  {message.role === 'assistant' ? <Bot className="h-3.5 w-3.5" /> : <User className="h-3.5 w-3.5" />}
+                </div>
+                <div>
+                  <p className="text-xs">{message.content}</p>
+                  <p className="text-[10px] opacity-70 mt-1">
+                    {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+          {isLoading && (
+            <div className="flex justify-start w-full">
+              <div className="bg-secondary rounded-lg p-2 flex items-center gap-1.5">
+                <Bot className="h-3.5 w-3.5" />
+                <div className="flex space-x-1">
+                  <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary"></div>
+                  <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary" style={{ animationDelay: '0.2s' }}></div>
+                  <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary" style={{ animationDelay: '0.4s' }}></div>
+                </div>
+              </div>
+            </div>
+          )}
+          <div ref={messagesEndRef} />
+        </div>
+      </ScrollArea>
 
-      <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} />
+      <form onSubmit={handleSubmit} className="border-t p-2 flex items-center gap-2 w-full">
+        <Input 
+          value={input} 
+          onChange={e => setInput(e.target.value)} 
+          placeholder="Ask a question..." 
+          className="h-8 text-xs flex-1" 
+        />
+        <Button 
+          type="submit" 
+          size="sm" 
+          className="h-8 w-8 p-0" 
+          disabled={!input.trim() || isLoading}
+        >
+          <Send className="h-3.5 w-3.5" />
+        </Button>
+      </form>
     </div>
   );
 };

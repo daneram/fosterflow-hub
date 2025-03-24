@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { cn } from '@/lib/utils';
 import SidebarHeader from './sidebar/SidebarHeader';
 import SidebarFooter from './sidebar/SidebarFooter';
@@ -7,7 +7,6 @@ import SidebarSection from './sidebar/SidebarSection';
 import ScrollManager from './sidebar/ScrollManager';
 import AIChatSection from './sidebar/AIChatSection';
 import { SidebarProps } from './sidebar/types';
-import { useSidebar } from '@/components/ui/sidebar';
 import {
   dashboardSection,
   coreSection,
@@ -32,81 +31,39 @@ const Sidebar: React.FC<SidebarProps> = ({
   isMobile,
   isTransitioning = false
 }) => {
-  // Get shadcn sidebar context - now this will work because we are properly wrapped with SidebarProvider
-  const { openMobile, setOpenMobile } = useSidebar();
-  
-  // Debug logging for Sidebar
-  useEffect(() => {
-    console.log('[Sidebar] Rendering with props:', { 
-      isOpen, 
-      isMobile, 
-      isTransitioning,
-      'shadcn.openMobile': openMobile
-    });
-  }, [isOpen, isMobile, isTransitioning, openMobile]);
-  
-  // For mobile: render a single sidebar that can be expanded/collapsed
-  if (isMobile) {
-    // Use openMobile as the expanded state for mobile
-    const mobileIsOpen = openMobile;
-    
+  // Render a fixed-width placeholder instead of not rendering at all
+  if (isMobile && isTransitioning) {
     return (
       <div 
         className={cn(
-          "h-screen flex flex-col bg-sidebar py-2 px-0", 
-          mobileIsOpen ? "w-52" : "w-14", 
-          "transition-all duration-200 ease-in-out"
-        )}
-      >
-        <SidebarHeader 
-          isOpen={mobileIsOpen} 
-          onToggle={() => {
-            console.log('[Sidebar] Mobile header clicked, toggling mobile sidebar');
-            setOpenMobile(!openMobile);
-          }} 
-        />
-
-        <ScrollManager isOpen={mobileIsOpen}>
-          <div className="flex flex-col space-y-0 mt-0.5">
-            {/* Always show AIChatSection on mobile, regardless of isOpen state */}
-            <AIChatSection isOpen={mobileIsOpen} onNavItemClick={onNavItemClick} />
-            
-            {sidebarSections.map(({ key, section }) => (
-              <SidebarSection 
-                key={key}
-                title={section.title} 
-                isOpen={mobileIsOpen} 
-                items={section.items} 
-                onNavItemClick={onNavItemClick} 
-              />
-            ))}
-          </div>
-        </ScrollManager>
-
-        <SidebarFooter isOpen={mobileIsOpen} />
-      </div>
+          "h-screen flex flex-col bg-sidebar py-4 px-0",
+          !isOpen ? "w-14" : "w-52"
+        )} 
+        aria-hidden="true"
+      />
     );
   }
 
-  // For desktop, we manage the visibility ourselves
   return (
     <div 
       className={cn(
-        "h-screen flex flex-col bg-sidebar py-2 px-0", 
-        isOpen ? "w-52" : "w-14", 
+        "h-screen flex flex-col bg-sidebar py-2 px-0", // Reduced top padding
+        isOpen ? "w-52" : "w-14", // Width based on open state
+        
+        // Add only opacity transition, keep width fixed during transitions
         "transition-opacity duration-200",
-        isTransitioning ? "opacity-90" : "opacity-100"
+        
+        // Never completely hide the sidebar
+        isMobile && isTransitioning ? "opacity-90" : "opacity-100"
       )}
     >
-      <SidebarHeader 
-        isOpen={isOpen} 
-        onToggle={onToggle} 
-      />
+      <SidebarHeader isOpen={isOpen} onToggle={onToggle} />
 
       <ScrollManager isOpen={isOpen}>
         <div className="flex flex-col space-y-0 mt-0.5">
-          {/* Always show AIChatSection on desktop, not just when expanded */}
-          <AIChatSection isOpen={isOpen} onNavItemClick={onNavItemClick} />
+          {isMobile && (
+            <AIChatSection isOpen={isOpen} onNavItemClick={onNavItemClick} />
+          )}
           
           {sidebarSections.map(({ key, section }) => (
             <SidebarSection 
@@ -125,7 +82,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   );
 };
 
-// Keep the memo comparison function
+// Update memo comparison to include the new isTransitioning prop
 export default React.memo(Sidebar, (prevProps, nextProps) => {
   return (
     prevProps.isOpen === nextProps.isOpen &&

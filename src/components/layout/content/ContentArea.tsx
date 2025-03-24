@@ -27,11 +27,6 @@ const ContentArea: React.FC<ContentAreaProps> = ({
   // Reference to track if panels have been initialized
   const panelsInitialized = useRef(false);
 
-  // Debug log when the aiChatOpen prop changes
-  useEffect(() => {
-    console.log('[ContentArea] aiChatOpen changed:', aiChatOpen);
-  }, [aiChatOpen]);
-
   // Load saved panel sizes from localStorage on component mount
   useEffect(() => {
     // Only try to restore panel sizes once
@@ -77,7 +72,7 @@ const ContentArea: React.FC<ContentAreaProps> = ({
         <ResizablePanel 
           defaultSize={mainPanelSize} 
           minSize={50}
-          maxSize={aiChatOpen ? 85 : 100}
+          maxSize={85}
           className="w-full overflow-auto"
         >
           <div className="px-4 py-4 sm:px-6 sm:py-6 w-full max-w-full h-full overflow-auto">
@@ -85,8 +80,8 @@ const ContentArea: React.FC<ContentAreaProps> = ({
           </div>
         </ResizablePanel>
 
-        {/* AI Assistant panel - Only show when open, regardless of device */}
-        {aiChatOpen && (
+        {/* AI Assistant panel - only show on desktop and when open */}
+        {!isMobile && aiChatOpen && (
           <>
             <ResizableHandle withHandle />
             <ResizablePanel 

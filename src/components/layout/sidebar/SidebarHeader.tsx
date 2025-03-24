@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useSidebar } from '@/components/ui/sidebar';
 
 interface SidebarHeaderProps {
   isOpen: boolean;
@@ -17,6 +18,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const imageRef = useRef<HTMLImageElement | null>(null);
   const isMobile = useIsMobile();
+  const { setOpenMobile } = useSidebar();
   
   // Handle image loading
   useEffect(() => {
@@ -41,13 +43,23 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
     };
   }, []);
 
-  // Clear and direct logo click handler
+  // Fixed logo click handler for mobile
   const handleLogoClick = (e: React.MouseEvent) => {
+    // Always prevent default and stop propagation
     e.preventDefault();
     e.stopPropagation();
     
-    console.log('[SidebarHeader] Logo clicked, calling onToggle');
-    onToggle();
+    // Add console logs for debugging
+    console.log('Logo clicked', { isMobile });
+    
+    if (isMobile) {
+      console.log('Mobile logo click, opening sidebar');
+      // Directly call setOpenMobile to ensure it opens
+      setOpenMobile(true);
+    } else {
+      // On desktop, perform regular toggle through props
+      onToggle();
+    }
   };
   
   return (
@@ -86,7 +98,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
           </Avatar>
         </div>
         <div className={cn("ml-3 overflow-hidden transition-opacity duration-100", 
-                         isOpen ? "opacity-100" : "opacity-0 w-0")}>
+                        isOpen ? "opacity-100" : "opacity-0 w-0")}>
           <span className="truncate font-bold">Indigo Fostering</span>
         </div>
       </div>
@@ -95,6 +107,8 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
   );
 };
 
+// Update the memo comparison to include both isOpen and isMobile dependencies
 export default React.memo(SidebarHeader, (prevProps, nextProps) => {
+  // Only re-render if isOpen changes - this is important for performance
   return prevProps.isOpen === nextProps.isOpen;
 });

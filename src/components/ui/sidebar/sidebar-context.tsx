@@ -1,4 +1,3 @@
-
 import * as React from "react"
 import { cn } from "@/lib/utils"
 import { useIsMobile } from "@/hooks/use-mobile"
@@ -17,7 +16,6 @@ const SidebarContextObject = React.createContext<SidebarContext | null>(null)
 export function useSidebar() {
   const context = React.useContext(SidebarContextObject)
   if (!context) {
-    console.warn('[useSidebar] SidebarContext not found. Make sure you are using SidebarProvider.')
     throw new Error("useSidebar must be used within a SidebarProvider.")
   }
 
@@ -47,16 +45,6 @@ export const SidebarProvider = React.forwardRef<
     const isMobile = useIsMobile()
     const [openMobile, setOpenMobile] = React.useState(false)
 
-    // Debug logging for initialize
-    React.useEffect(() => {
-      console.log('[SidebarProvider] Initialized with:', { 
-        defaultOpen, 
-        openProp, 
-        isMobile, 
-        openMobile 
-      });
-    }, [defaultOpen, openProp, isMobile]);
-
     // This is the internal state of the sidebar.
     // We use openProp and setOpenProp for control from outside the component.
     const [_open, _setOpen] = React.useState(defaultOpen)
@@ -64,16 +52,9 @@ export const SidebarProvider = React.forwardRef<
     const setOpen = React.useCallback(
       (value: boolean | ((value: boolean) => boolean)) => {
         const openState = typeof value === "function" ? value(open) : value
-        console.log('[SidebarProvider] setOpen called with:', { 
-          newOpenState: openState, 
-          previousState: open 
-        });
-        
         if (setOpenProp) {
-          console.log('[SidebarProvider] Using external setOpenProp');
           setOpenProp(openState)
         } else {
-          console.log('[SidebarProvider] Using internal _setOpen');
           _setOpen(openState)
         }
 
@@ -83,31 +64,12 @@ export const SidebarProvider = React.forwardRef<
       [setOpenProp, open]
     )
 
-    // Log all setOpenMobile calls
-    const wrappedSetOpenMobile = React.useCallback((newState: boolean) => {
-      console.log('[SidebarProvider] setOpenMobile called:', { 
-        newState, 
-        currentState: openMobile 
-      });
-      setOpenMobile(newState);
-    }, [openMobile]);
-
     // Helper to toggle the sidebar.
     const toggleSidebar = React.useCallback(() => {
-      console.log('[SidebarProvider] toggleSidebar called', { isMobile, openMobile, open });
-      if (isMobile) {
-        console.log('[SidebarProvider] On mobile, toggling openMobile from', openMobile, 'to', !openMobile);
-        wrappedSetOpenMobile(!openMobile);
-      } else {
-        console.log('[SidebarProvider] On desktop, toggling open from', open, 'to', !open);
-        setOpen(!open);
-      }
-    }, [isMobile, setOpen, openMobile, wrappedSetOpenMobile, open])
-
-    // Log openMobile changes
-    React.useEffect(() => {
-      console.log('[SidebarProvider] openMobile changed:', openMobile);
-    }, [openMobile]);
+      return isMobile
+        ? setOpenMobile((open) => !open)
+        : setOpen((open) => !open)
+    }, [isMobile, setOpen, setOpenMobile])
 
     // Adds a keyboard shortcut to toggle the sidebar.
     React.useEffect(() => {
@@ -116,7 +78,6 @@ export const SidebarProvider = React.forwardRef<
           event.key === SIDEBAR_KEYBOARD_SHORTCUT &&
           (event.metaKey || event.ctrlKey)
         ) {
-          console.log('[SidebarProvider] Keyboard shortcut triggered');
           event.preventDefault()
           toggleSidebar()
         }
@@ -137,10 +98,10 @@ export const SidebarProvider = React.forwardRef<
         setOpen,
         isMobile,
         openMobile,
-        setOpenMobile: wrappedSetOpenMobile,
+        setOpenMobile,
         toggleSidebar,
       }),
-      [state, open, setOpen, isMobile, openMobile, wrappedSetOpenMobile, toggleSidebar]
+      [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar]
     )
 
     return (

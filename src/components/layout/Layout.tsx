@@ -1,5 +1,5 @@
 
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback, useMemo, useState } from 'react';
 import Sidebar from './Sidebar';
 import ContentArea from './content/ContentArea';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -22,52 +22,38 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   // Tracking content transitions instead of sidebar transitions
   const [isContentTransitioning, setIsContentTransitioning] = useState(false);
 
-  // Debug initial state
+  // Set initial AI chat state based on screen size and don't change it during navigation
   useEffect(() => {
-    console.log('[Layout] Initial state:', {
-      isMobile,
-      sidebarOpen,
-      aiChatOpen,
-      isAIAssistantPage,
-      path: location.pathname
-    });
-  }, []);
-
-  // Set initial AI chat state based on screen size and page
-  useEffect(() => {
-    console.log('[Layout] Setting initial AI chat state');
     // Only set AI chat state on initial load, not during navigation
     const storedAiChatState = localStorage.getItem('aiChatOpen');
     if (storedAiChatState === null) {
-      // First time visit, set default based on device
-      const defaultState = !isMobile;
-      console.log('[Layout] First visit, setting aiChatOpen to:', defaultState);
+      // First time visit, set default based on device and page
+      const defaultState = !isMobile && !isAIAssistantPage;
       setAiChatOpen(defaultState);
       localStorage.setItem('aiChatOpen', String(defaultState));
-    } else if (isAIAssistantPage) {
-      // Always close the side chat when on the AI Assistant page
-      setAiChatOpen(false);
     } else {
-      // Return visit, use stored preference only if not on AI Assistant page
+      // Return visit, use stored preference unless on AI Assistant page
       const savedState = storedAiChatState === 'true';
-      console.log('[Layout] Return visit, setting aiChatOpen to:', savedState);
-      setAiChatOpen(savedState);
+      setAiChatOpen(isAIAssistantPage ? false : savedState);
     }
   }, [isMobile, isAIAssistantPage, setAiChatOpen]);
 
-  // Save AI chat state when it changes, but only if not on the AI Assistant page
+  // Save AI chat state when it changes
   useEffect(() => {
     if (!isAIAssistantPage) {
-      console.log('[Layout] Saving aiChatOpen state:', aiChatOpen);
       localStorage.setItem('aiChatOpen', String(aiChatOpen));
     }
   }, [aiChatOpen, isAIAssistantPage]);
 
   // Handle page transition effects for content area
   useEffect(() => {
-    console.log('[Layout] Page transition detected:', location.pathname);
     // Mark content as transitioning
     setIsContentTransitioning(true);
+    
+    // Close sidebar on mobile during navigation if needed
+    if (isMobile && sidebarOpen) {
+      setSidebarOpen(false);
+    }
     
     // Reset transition state after a shorter delay
     const timer = setTimeout(() => {
@@ -75,52 +61,42 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     }, 100);
     
     return () => clearTimeout(timer);
-  }, [location.pathname]);
+  }, [location.pathname, isMobile, sidebarOpen, setSidebarOpen]);
 
   // Custom toggle for AI chat that also stores the state
   const handleToggleAiChat = useCallback(() => {
-    console.log('[Layout] Toggling AI chat');
-    // Don't toggle AI chat when on the AI Assistant page
-    if (!isAIAssistantPage) {
-      toggleAiChat();
-    }
-  }, [toggleAiChat, isAIAssistantPage]);
+    toggleAiChat();
+  }, [toggleAiChat]);
 
   // Close the sidebar on mobile when a navigation item is clicked
   const closeSidebarOnMobile = useCallback(() => {
-    if (isMobile) {
-      console.log('[Layout] Closing sidebar on mobile after nav item click');
+    if (isMobile && sidebarOpen) {
+      setSidebarOpen(false);
     }
-  }, [isMobile]);
+  }, [isMobile, setSidebarOpen, sidebarOpen]);
 
-  // Log when sidebar state changes
-  useEffect(() => {
-    console.log('[Layout] Sidebar state changed:', { sidebarOpen });
-  }, [sidebarOpen]);
+  // Memoize the Sidebar component to prevent unnecessary re-renders
+  const memoizedSidebar = useMemo(() => (
+    <Sidebar 
+      isOpen={sidebarOpen} 
+      onToggle={toggleSidebar} 
+      onNavItemClick={closeSidebarOnMobile} 
+      toggleAiChat={handleToggleAiChat} 
+      isMobile={isMobile}
+      isTransitioning={false} // Never hide sidebar completely on transitions
+    />
+  ), [sidebarOpen, toggleSidebar, closeSidebarOnMobile, handleToggleAiChat, isMobile]);
 
-  // Setup a derived state for AI chat that's always false on the AI Assistant page
-  const showAiChat = aiChatOpen && !isAIAssistantPage;
-  useEffect(() => {
-    console.log('[Layout] showAiChat computed:', { aiChatOpen, isAIAssistantPage, showAiChat });
-  }, [aiChatOpen, isAIAssistantPage, showAiChat]);
-
-  // We need to provide the default state to the SidebarProvider
   return (
-    <SidebarProvider defaultOpen={sidebarOpen} onOpenChange={setSidebarOpen}>
+    <SidebarProvider>
       <div className="h-screen flex bg-background overflow-hidden w-full">
-        {/* For both mobile and desktop, render our custom Sidebar */}
-        <Sidebar 
-          isOpen={sidebarOpen}
-          onToggle={toggleSidebar}
-          onNavItemClick={closeSidebarOnMobile}
-          isMobile={isMobile}
-          isTransitioning={false}
-        />
+        {/* Always render the sidebar, never completely hide it during transitions */}
+        {memoizedSidebar}
 
         {/* Main content and AI assistant */}
         <ContentArea 
-          aiChatOpen={showAiChat}
-          toggleAiChat={handleToggleAiChat}
+          aiChatOpen={aiChatOpen} 
+          toggleAiChat={handleToggleAiChat} 
           isMobile={isMobile}
           isTransitioning={isContentTransitioning}
         >

@@ -15,6 +15,6 @@ export const generateAIResponse = (userInput: string): string => {
   } else if (lowercaseInput.includes('hello') || lowercaseInput.includes('hi')) {
     return "Hello! How can I assist you today with your case management needs?";
   } else {
-    return "I'm here to help with case management, policy questions, and documentation. Could you provide more details about what you need assistance with?";
+    return "I'm your AI assistant. I can help you with questions about this application, your work, or any other questions you might have.";
   }
 };

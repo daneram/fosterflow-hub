@@ -27,11 +27,11 @@ const ContentArea: React.FC<ContentAreaProps> = ({
       <ResizablePanelGroup direction="horizontal" className="min-h-screen w-full">
         {/* Main content panel */}
         <ResizablePanel 
-          defaultSize={100} 
-          minSize={25}
+          defaultSize={aiChatOpen && !isMobile ? 65 : 100} 
+          minSize={50}
           className="overflow-auto w-full"
         >
-          <div className="px-4 py-4 sm:px-6 sm:py-6 w-full max-w-full">
+          <div className="w-full h-full px-4 py-4 sm:px-6 sm:py-6 max-w-full">
             {children}
           </div>
         </ResizablePanel>
@@ -41,8 +41,9 @@ const ContentArea: React.FC<ContentAreaProps> = ({
           <>
             <ResizableHandle withHandle />
             <ResizablePanel 
-              defaultSize={40} 
-              minSize={30}
+              defaultSize={35} 
+              minSize={25}
+              maxSize={45}
               className="border-l"
             >
               <AIChat />

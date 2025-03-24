@@ -43,13 +43,15 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
   // On mobile, clicking the logo should keep the sidebar open
   const handleLogoClick = (e: React.MouseEvent) => {
     if (isMobile) {
-      // Prevent the default toggle behavior on mobile
+      // Ensure the event doesn't bubble up to other handlers
       e.stopPropagation();
-      // If sidebar is closed, open it
+      e.preventDefault();
+      
+      // Always force sidebar to open on mobile
       if (!isOpen) {
         onToggle();
       }
-      // If sidebar is already open, do nothing
+      // If already open, do nothing
     } else {
       // On desktop, perform regular toggle
       onToggle();
@@ -73,7 +75,6 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
                 src={LOGO_URL}
                 alt="Indigo Fostering"
                 loading="eager"
-                fetchPriority="high"
                 className="object-contain bg-white"
                 draggable={false}
                 onLoad={() => setImageLoaded(true)}
@@ -102,8 +103,8 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
   );
 };
 
-// Update the memo comparison to include the new isMobile dependency
+// Update the memo comparison to include both isOpen and isMobile dependencies
 export default React.memo(SidebarHeader, (prevProps, nextProps) => {
-  // Only re-render if isOpen changes
+  // Only re-render if isOpen changes - this is important for performance
   return prevProps.isOpen === nextProps.isOpen;
 });

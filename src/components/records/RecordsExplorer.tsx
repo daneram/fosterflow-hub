@@ -56,7 +56,7 @@ const RecordsExplorer: React.FC = () => {
 
   return (
     <Layout>
-      <div className="w-full space-y-4 max-w-full">
+      <div className="w-full space-y-4 max-w-full overflow-y-auto">
         <RecordsHeader />
         
         <div className="relative w-full max-w-md">

@@ -41,7 +41,6 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
     const viewportHeight = viewport.clientHeight;
     const lastItemHeight = (lastItem as HTMLElement).offsetHeight;
     const lastItemTop = (lastItem as HTMLElement).offsetTop;
-    const contentScrollHeight = content.scrollHeight;
     const currentPadding = parseInt(content.style.paddingBottom || '0', 10);
     
     // Calculate how much padding we need to add to push the last item to the bottom
@@ -145,7 +144,7 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
   return (
     <ScrollArea 
       ref={scrollAreaRef} 
-      className="flex-1 overflow-hidden"
+      className="flex-1 overflow-y-auto"
     >
       {children}
     </ScrollArea>

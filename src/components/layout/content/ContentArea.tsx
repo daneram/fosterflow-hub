@@ -72,7 +72,7 @@ const ContentArea: React.FC<ContentAreaProps> = ({
         <ResizablePanel 
           defaultSize={mainPanelSize} 
           minSize={50}
-          maxSize={85}
+          maxSize={aiChatOpen ? 85 : 100}
           className="w-full overflow-auto"
         >
           <div className="px-4 py-4 sm:px-6 sm:py-6 w-full max-w-full h-full overflow-auto">

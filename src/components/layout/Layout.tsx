@@ -44,11 +44,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       console.log('[Layout] First visit, setting aiChatOpen to:', defaultState);
       setAiChatOpen(defaultState);
       localStorage.setItem('aiChatOpen', String(defaultState));
+    } else if (isAIAssistantPage) {
+      // Always close the side chat when on the AI Assistant page
+      setAiChatOpen(false);
     } else {
-      // Return visit, use stored preference unless on AI Assistant page
+      // Return visit, use stored preference
       const savedState = storedAiChatState === 'true';
-      console.log('[Layout] Return visit, setting aiChatOpen to:', isAIAssistantPage ? false : savedState);
-      setAiChatOpen(isAIAssistantPage ? false : savedState);
+      console.log('[Layout] Return visit, setting aiChatOpen to:', savedState);
+      setAiChatOpen(savedState);
     }
   }, [isMobile, isAIAssistantPage, setAiChatOpen]);
 
@@ -107,7 +110,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
         {/* Main content and AI assistant */}
         <ContentArea 
-          aiChatOpen={aiChatOpen}
+          aiChatOpen={aiChatOpen && !isAIAssistantPage}
           toggleAiChat={handleToggleAiChat}
           isMobile={isMobile}
           isTransitioning={isContentTransitioning}

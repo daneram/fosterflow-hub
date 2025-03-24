@@ -105,7 +105,8 @@ const Sidebar: React.FC<SidebarProps> = ({
 
       <ScrollManager isOpen={isOpen}>
         <div className="flex flex-col space-y-0 mt-0.5">
-          {isOpen && <AIChatSection isOpen={isOpen} onNavItemClick={onNavItemClick} />}
+          {/* Always show AIChatSection on desktop, not just when expanded */}
+          <AIChatSection isOpen={isOpen} onNavItemClick={onNavItemClick} />
           
           {sidebarSections.map(({ key, section }) => (
             <SidebarSection 

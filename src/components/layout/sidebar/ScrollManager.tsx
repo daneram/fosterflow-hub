@@ -18,7 +18,6 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
   const viewportRef = useRef<HTMLElement | null>(null);
   const contentRef = useRef<HTMLElement | null>(null);
   const isMobile = useIsMobile();
-  const location = useLocation();
   const [isScrolling, setIsScrolling] = useState(false);
   
   // Position the last menu item at the bottom of the screen on mobile
@@ -41,15 +40,13 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
     const viewportHeight = viewport.clientHeight;
     const lastItemHeight = (lastItem as HTMLElement).offsetHeight;
     const lastItemTop = (lastItem as HTMLElement).offsetTop;
-    const contentScrollHeight = content.scrollHeight;
-    const currentPadding = parseInt(content.style.paddingBottom || '0', 10);
     
     // Calculate how much padding we need to add to push the last item to the bottom
     // This is: viewport height - (last item's position from top + its height)
     const desiredPadding = Math.max(0, viewportHeight - (lastItemTop + lastItemHeight));
     
     // Apply the padding if it's different from current padding
-    if (desiredPadding !== currentPadding) {
+    if (desiredPadding !== parseInt(content.style.paddingBottom || '0', 10)) {
       content.style.paddingBottom = `${desiredPadding}px`;
     }
   }, [isMobile]);
@@ -145,7 +142,7 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
   return (
     <ScrollArea 
       ref={scrollAreaRef} 
-      className="flex-1 overflow-hidden"
+      className="flex-1 overflow-auto" // Changed from overflow-hidden to overflow-auto
     >
       {children}
     </ScrollArea>

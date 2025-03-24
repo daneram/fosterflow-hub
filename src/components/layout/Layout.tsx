@@ -1,4 +1,3 @@
-
 import React, { useEffect, useCallback, useMemo, useState } from 'react';
 import Sidebar from './Sidebar';
 import ContentArea from './content/ContentArea';
@@ -6,7 +5,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { useLocation } from 'react-router-dom';
 import { useSidebarState } from './hooks/useSidebarState';
 import { useAIChatState } from './hooks/useAIChatState';
-import { SidebarProvider } from '@/components/ui/sidebar';
+import { SidebarProvider, useSidebar } from '@/components/ui/sidebar';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -88,9 +87,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   ), [sidebarOpen, toggleSidebar, closeSidebarOnMobile, handleToggleAiChat, isMobile]);
 
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={sidebarOpen} onOpenChange={setSidebarOpen}>
       <div className="h-screen flex bg-background overflow-hidden w-full">
-        {/* Always render the sidebar, never completely hide it during transitions */}
+        {/* Use the Sidebar component connected to SidebarProvider */}
         {memoizedSidebar}
 
         {/* Main content and AI assistant */}

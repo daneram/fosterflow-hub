@@ -1,9 +1,14 @@
 
 import React from 'react';
+import Layout from '@/components/layout/Layout';
 import Calendar from '@/components/calendar/Calendar';
 
 const CalendarPage = () => {
-  return <Calendar />;
+  return (
+    <Layout>
+      <Calendar />
+    </Layout>
+  );
 };
 
 export default CalendarPage;

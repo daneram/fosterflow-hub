@@ -130,16 +130,29 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
       setIsScrolling(true);
       saveScrollPosition();
       
+      // Explicitly add the active class to control scrollbar visibility
+      viewport.classList.add('scrolling-active');
+      
       // Reset scrolling state after scrolling stops
       clearTimeout((viewport as any)._scrollTimer);
       (viewport as any)._scrollTimer = setTimeout(() => {
         setIsScrolling(false);
-      }, 100); // Short timeout to detect end of scrolling
+        viewport.classList.remove('scrolling-active');
+      }, 150); // Short timeout to detect end of scrolling
     };
     
     viewport.addEventListener('scroll', handleScroll);
+    
+    // Also add a mouseleave handler to ensure scrollbar disappears on mouse exit
+    const handleMouseLeave = () => {
+      viewport.classList.remove('scrolling-active');
+    };
+    
+    viewport.addEventListener('mouseleave', handleMouseLeave);
+    
     return () => {
       viewport.removeEventListener('scroll', handleScroll);
+      viewport.removeEventListener('mouseleave', handleMouseLeave);
       clearTimeout((viewport as any)._scrollTimer);
     };
   }, [saveScrollPosition]);

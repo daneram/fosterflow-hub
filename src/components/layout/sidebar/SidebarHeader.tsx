@@ -18,7 +18,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const imageRef = useRef<HTMLImageElement | null>(null);
   const isMobile = useIsMobile();
-  const { setOpenMobile, openMobile } = useSidebar();
+  const { openMobile, setOpenMobile } = useSidebar();
   
   // Handle image loading
   useEffect(() => {
@@ -49,15 +49,9 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
     e.preventDefault();
     e.stopPropagation();
     
-    console.log('Logo clicked', { isMobile, openMobile });
-    
     if (isMobile) {
-      console.log('Mobile logo click, opening sidebar');
-      // Toggle the mobile sidebar open state
-      setTimeout(() => {
-        setOpenMobile(true);
-        console.log('Sidebar should be open now', { openMobile: true });
-      }, 10);
+      // Toggle the mobile sidebar open state directly without setTimeout
+      setOpenMobile(!openMobile);
     } else {
       // On desktop, perform regular toggle through props
       onToggle();

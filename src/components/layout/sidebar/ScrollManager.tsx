@@ -19,6 +19,7 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
   const contentRef = useRef<HTMLElement | null>(null);
   const isMobile = useIsMobile();
   const [isScrolling, setIsScrolling] = useState(false);
+  const scrollTimeoutRef = useRef<number | null>(null);
   
   // Position the last menu item at the bottom of the screen on mobile
   const positionLastItemAtBottom = useCallback(() => {
@@ -77,7 +78,8 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
   useEffect(() => {
     if (!scrollAreaRef.current) return;
     
-    const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+    // Find the viewport element using the data-attribute we added
+    const viewport = scrollAreaRef.current.querySelector('[data-scrollarea-viewport]');
     if (viewport instanceof HTMLElement) {
       viewportRef.current = viewport;
       
@@ -120,42 +122,55 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
     return () => resizeObserver.disconnect();
   }, [positionLastItemAtBottom]);
   
-  // Save scroll position to localStorage with no debounce for immediate effect
+  // Handle scroll events
   useEffect(() => {
     const viewport = viewportRef.current;
     if (!viewport) return;
     
-    const handleScroll = () => {
-      // Set scrolling state to true and save position immediately
-      setIsScrolling(true);
-      saveScrollPosition();
-      
-      // Explicitly add the active class to control scrollbar visibility
+    // Clear any existing scroll listeners to prevent duplicates
+    const scrollHandler = () => {
+      // Add the active class when scrolling starts
       viewport.classList.add('scrolling-active');
       
-      // Reset scrolling state after scrolling stops
-      clearTimeout((viewport as any)._scrollTimer);
-      (viewport as any)._scrollTimer = setTimeout(() => {
-        setIsScrolling(false);
+      // Track that we're scrolling
+      setIsScrolling(true);
+      
+      // Save position
+      saveScrollPosition();
+      
+      // Clear any existing timeout
+      if (scrollTimeoutRef.current) {
+        window.clearTimeout(scrollTimeoutRef.current);
+      }
+      
+      // Set a timeout to remove the active class after scrolling stops
+      scrollTimeoutRef.current = window.setTimeout(() => {
         viewport.classList.remove('scrolling-active');
-      }, 150); // Short timeout to detect end of scrolling
+        setIsScrolling(false);
+        scrollTimeoutRef.current = null;
+      }, 500); // Longer timeout for better user experience
     };
     
-    viewport.addEventListener('scroll', handleScroll);
-    
-    // Also add a mouseleave handler to ensure scrollbar disappears on mouse exit
-    const handleMouseLeave = () => {
-      viewport.classList.remove('scrolling-active');
+    // Handle mouse enter/leave to ensure scrollbar state is correct
+    const mouseLeaveHandler = () => {
+      if (!isScrolling) {
+        viewport.classList.remove('scrolling-active');
+      }
     };
     
-    viewport.addEventListener('mouseleave', handleMouseLeave);
+    viewport.addEventListener('scroll', scrollHandler, { passive: true });
+    viewport.addEventListener('mouseleave', mouseLeaveHandler);
     
     return () => {
-      viewport.removeEventListener('scroll', handleScroll);
-      viewport.removeEventListener('mouseleave', handleMouseLeave);
-      clearTimeout((viewport as any)._scrollTimer);
+      viewport.removeEventListener('scroll', scrollHandler);
+      viewport.removeEventListener('mouseleave', mouseLeaveHandler);
+      
+      // Clean up timeout on unmount
+      if (scrollTimeoutRef.current) {
+        window.clearTimeout(scrollTimeoutRef.current);
+      }
     };
-  }, [saveScrollPosition]);
+  }, [isScrolling, saveScrollPosition]);
 
   return (
     <ScrollArea 

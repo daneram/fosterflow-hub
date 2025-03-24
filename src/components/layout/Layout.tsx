@@ -43,7 +43,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     }, 100);
     
     return () => clearTimeout(timer);
-  }, [location.pathname, isMobile]);
+  }, [location.pathname, isMobile, sidebarOpen, setSidebarOpen]);
 
   // Close the sidebar on mobile when a navigation item is clicked
   const closeSidebarOnMobile = useCallback(() => {

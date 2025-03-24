@@ -1,17 +1,12 @@
 
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback, useMemo, useState } from 'react';
 import Sidebar from './Sidebar';
 import ContentArea from './content/ContentArea';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useLocation } from 'react-router-dom';
 import { useSidebarState } from './hooks/useSidebarState';
 import { useAIChatState } from './hooks/useAIChatState';
-import { 
-  SidebarProvider, 
-  useSidebar, 
-  Sidebar as ShadcnSidebar,
-  SidebarTrigger 
-} from '@/components/ui/sidebar';
+import { SidebarProvider, useSidebar, Sidebar as ShadcnSidebar } from '@/components/ui/sidebar';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -71,13 +66,19 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     // Mark content as transitioning
     setIsContentTransitioning(true);
     
+    // Close sidebar on mobile during navigation if needed
+    if (isMobile && sidebarOpen) {
+      console.log('[Layout] Closing sidebar on mobile during navigation');
+      setSidebarOpen(false);
+    }
+    
     // Reset transition state after a shorter delay
     const timer = setTimeout(() => {
       setIsContentTransitioning(false);
     }, 100);
     
     return () => clearTimeout(timer);
-  }, [location.pathname]);
+  }, [location.pathname, isMobile, sidebarOpen, setSidebarOpen]);
 
   // Custom toggle for AI chat that also stores the state
   const handleToggleAiChat = useCallback(() => {
@@ -87,57 +88,59 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   // Close the sidebar on mobile when a navigation item is clicked
   const closeSidebarOnMobile = useCallback(() => {
-    if (isMobile) {
+    if (isMobile && sidebarOpen) {
       console.log('[Layout] Closing sidebar on mobile after nav item click');
-      // For mobile, we need to update the shadcn/ui mobile state
-      if (document.querySelector('[data-state="open"]')) {
-        console.log('[Layout] Found open sheet, closing it');
-      }
+      setSidebarOpen(false);
     }
-  }, [isMobile]);
+  }, [isMobile, setSidebarOpen, sidebarOpen]);
 
   // Log when sidebar state changes
   useEffect(() => {
     console.log('[Layout] Sidebar state changed:', { sidebarOpen });
   }, [sidebarOpen]);
 
+  // Memoize the Sidebar component for desktop
+  const memoizedSidebar = useMemo(() => {
+    if (isMobile) {
+      console.log('[Layout] On mobile, using shadcn Sheet component');
+      return null; // On mobile, we'll use the shadcn Sheet component
+    }
+    
+    console.log('[Layout] On desktop, using custom Sidebar');
+    return (
+      <Sidebar 
+        isOpen={sidebarOpen} 
+        onToggle={toggleSidebar} 
+        onNavItemClick={closeSidebarOnMobile} 
+        isMobile={false}
+        isTransitioning={false}
+      />
+    );
+  }, [sidebarOpen, toggleSidebar, closeSidebarOnMobile, isMobile]);
+
   return (
     <SidebarProvider defaultOpen={sidebarOpen} onOpenChange={setSidebarOpen}>
       <div className="h-screen flex bg-background overflow-hidden w-full">
-        {/* Mobile view: Use ShadcnSidebar which renders a Sheet */}
+        {/* For mobile, use ShadcnSidebar which handles the Sheet */}
         {isMobile && (
-          <>
-            <ShadcnSidebar>
-              <Sidebar 
-                isOpen={true}
-                onToggle={toggleSidebar}
-                onNavItemClick={closeSidebarOnMobile}
-                isMobile={true}
-                isTransitioning={false}
-              />
-            </ShadcnSidebar>
-            {/* Add a visible trigger for mobile */}
-            <div className="absolute top-4 left-4 z-40 md:hidden">
-              <SidebarTrigger />
-            </div>
-          </>
+          <ShadcnSidebar>
+            <Sidebar 
+              isOpen={true} 
+              onToggle={toggleSidebar} 
+              onNavItemClick={closeSidebarOnMobile} 
+              isMobile={true}
+              isTransitioning={false}
+            />
+          </ShadcnSidebar>
         )}
         
-        {/* Desktop view: Render our custom Sidebar */}
-        {!isMobile && (
-          <Sidebar 
-            isOpen={sidebarOpen}
-            onToggle={toggleSidebar}
-            onNavItemClick={closeSidebarOnMobile}
-            isMobile={false}
-            isTransitioning={false}
-          />
-        )}
+        {/* For desktop, use our custom Sidebar */}
+        {!isMobile && memoizedSidebar}
 
         {/* Main content and AI assistant */}
         <ContentArea 
-          aiChatOpen={aiChatOpen}
-          toggleAiChat={handleToggleAiChat}
+          aiChatOpen={aiChatOpen} 
+          toggleAiChat={handleToggleAiChat} 
           isMobile={isMobile}
           isTransitioning={isContentTransitioning}
         >

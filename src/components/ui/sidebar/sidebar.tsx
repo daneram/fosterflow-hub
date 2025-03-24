@@ -25,14 +25,6 @@ export const Sidebar = React.forwardRef<
   ) => {
     const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
 
-    React.useEffect(() => {
-      console.log('[Sidebar] Rendering with:', { 
-        isMobile, 
-        state, 
-        openMobile 
-      });
-    }, [isMobile, state, openMobile]);
-
     if (collapsible === "none") {
       return (
         <div
@@ -48,15 +40,13 @@ export const Sidebar = React.forwardRef<
       )
     }
 
-    // Mobile view uses Sheet component
     if (isMobile) {
-      console.log('[Sidebar] Rendering mobile sidebar with Sheet, openMobile:', openMobile);
       return (
-        <Sheet open={openMobile} onOpenChange={setOpenMobile}>
+        <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
           <SheetContent
             data-sidebar="sidebar"
             data-mobile="true"
-            className="w-[--sidebar-width] bg-sidebar p-0 text-sidebar-foreground"
+            className="w-[--sidebar-width] bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
             style={
               {
                 "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
@@ -70,7 +60,6 @@ export const Sidebar = React.forwardRef<
       )
     }
 
-    // Desktop view
     return (
       <div
         ref={ref}

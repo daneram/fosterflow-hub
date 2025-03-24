@@ -1,19 +1,30 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 export const useAIChatState = () => {
   const location = useLocation();
+  const isMobile = useIsMobile();
   const isAIAssistantPage = location.pathname === '/ai-assistant';
   
-  // Initialize from localStorage, but don't show AI chat when on the dedicated AI page
+  // Initialize from localStorage, or use defaults based on device type
   const [aiChatOpen, setAiChatOpenInternal] = useState<boolean>(() => {
     // Try to get the saved state from localStorage when component mounts
     const savedState = localStorage.getItem('aiChatOpen');
-    const initialState = savedState === 'true';
     
     // If we're on the AI assistant page, always start with it closed
-    return isAIAssistantPage ? false : initialState;
+    if (isAIAssistantPage) {
+      return false;
+    }
+    
+    // If we have a saved state, use it
+    if (savedState !== null) {
+      return savedState === 'true';
+    }
+    
+    // Default behavior: open on desktop, closed on mobile
+    return !isMobile;
   });
 
   // Wrapper to persist state to localStorage
@@ -39,10 +50,11 @@ export const useAIChatState = () => {
   useEffect(() => {
     console.log('[useAIChatState] State updated:', { 
       aiChatOpen, 
-      isAIAssistantPage, 
+      isAIAssistantPage,
+      isMobile,
       path: location.pathname 
     });
-  }, [aiChatOpen, isAIAssistantPage, location.pathname]);
+  }, [aiChatOpen, isAIAssistantPage, isMobile, location.pathname]);
 
   return { aiChatOpen, setAiChatOpen, toggleAiChat };
 };

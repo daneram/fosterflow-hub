@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import SidebarHeader from './sidebar/SidebarHeader';
@@ -32,12 +31,12 @@ const Sidebar: React.FC<SidebarProps> = ({
   isMobile,
   isTransitioning = false
 }) => {
-  // Add shadcn sidebar context
-  const { openMobile, setOpenMobile } = useSidebar();
+  // Get shadcn sidebar context
+  const { openMobile } = useSidebar();
   
   // Debug logging for Sidebar
   useEffect(() => {
-    console.log('[Sidebar] Rendering Sidebar with props:', { 
+    console.log('[Sidebar] Rendering with props:', { 
       isOpen, 
       isMobile, 
       isTransitioning,
@@ -45,38 +44,46 @@ const Sidebar: React.FC<SidebarProps> = ({
     });
   }, [isOpen, isMobile, isTransitioning, openMobile]);
   
-  // Render a fixed-width placeholder instead of not rendering at all
-  if (isMobile && isTransitioning) {
-    console.log('[Sidebar] Rendering transitioning mobile sidebar placeholder');
+  // For mobile, we only render sidebar content that will be placed inside the shadcn Sheet
+  // The actual visibility is controlled by the shadcn Sheet component
+  if (isMobile) {
+    console.log('[Sidebar] On mobile, rendering content for sheet');
     return (
-      <div 
-        className={cn(
-          "h-screen flex flex-col bg-sidebar py-4 px-0",
-          !isOpen ? "w-14" : "w-52"
-        )} 
-        aria-hidden="true"
-      />
+      <div className="h-screen flex flex-col bg-sidebar py-2 px-0 w-52">
+        <SidebarHeader 
+          isOpen={true} 
+          onToggle={onToggle} 
+        />
+
+        <ScrollManager isOpen={true}>
+          <div className="flex flex-col space-y-0 mt-0.5">
+            <AIChatSection isOpen={true} onNavItemClick={onNavItemClick} />
+            
+            {sidebarSections.map(({ key, section }) => (
+              <SidebarSection 
+                key={key}
+                title={section.title} 
+                isOpen={true} 
+                items={section.items} 
+                onNavItemClick={onNavItemClick} 
+              />
+            ))}
+          </div>
+        </ScrollManager>
+
+        <SidebarFooter isOpen={true} />
+      </div>
     );
   }
 
-  // Check if we're on mobile and using the shadcn sidebar
-  if (isMobile) {
-    console.log('[Sidebar] We are on mobile, ShadCN sidebar should handle this');
-    // On mobile, we'll let the ShadCN Sidebar component handle the display
-    // But we'll still mount our content for it to use
-  }
-
+  // For desktop, we manage the visibility ourselves
   return (
     <div 
       className={cn(
-        "h-screen flex flex-col bg-sidebar py-2 px-0", // Reduced top padding
-        isOpen ? "w-52" : "w-14", // Width based on open state
-        
-        // Add only opacity transition, keep width fixed during transitions
+        "h-screen flex flex-col bg-sidebar py-2 px-0", 
+        isOpen ? "w-52" : "w-14", 
         "transition-opacity duration-200",
-        
-        // Never completely hide the sidebar
-        isMobile && isTransitioning ? "opacity-90" : "opacity-100"
+        isTransitioning ? "opacity-90" : "opacity-100"
       )}
     >
       <SidebarHeader 
@@ -86,10 +93,6 @@ const Sidebar: React.FC<SidebarProps> = ({
 
       <ScrollManager isOpen={isOpen}>
         <div className="flex flex-col space-y-0 mt-0.5">
-          {isMobile && (
-            <AIChatSection isOpen={isOpen} onNavItemClick={onNavItemClick} />
-          )}
-          
           {sidebarSections.map(({ key, section }) => (
             <SidebarSection 
               key={key}
@@ -107,7 +110,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   );
 };
 
-// Update memo comparison to include the new isTransitioning prop
+// Keep the memo comparison function
 export default React.memo(Sidebar, (prevProps, nextProps) => {
   return (
     prevProps.isOpen === nextProps.isOpen &&

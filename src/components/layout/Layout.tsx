@@ -6,7 +6,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { useLocation } from 'react-router-dom';
 import { useSidebarState } from './hooks/useSidebarState';
 import { useAIChatState } from './hooks/useAIChatState';
-import { SidebarProvider, useSidebar } from '@/components/ui/sidebar';
+import { SidebarProvider, useSidebar, Sidebar as ShadcnSidebar } from '@/components/ui/sidebar';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -99,34 +99,43 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     console.log('[Layout] Sidebar state changed:', { sidebarOpen });
   }, [sidebarOpen]);
 
-  // Memoize the Sidebar component to prevent unnecessary re-renders
+  // Memoize the Sidebar component for desktop
   const memoizedSidebar = useMemo(() => {
-    console.log('[Layout] Creating memoized Sidebar with:', { 
-      sidebarOpen, 
-      isMobile 
-    });
+    if (isMobile) {
+      console.log('[Layout] On mobile, using shadcn Sheet component');
+      return null; // On mobile, we'll use the shadcn Sheet component
+    }
     
+    console.log('[Layout] On desktop, using custom Sidebar');
     return (
       <Sidebar 
         isOpen={sidebarOpen} 
         onToggle={toggleSidebar} 
         onNavItemClick={closeSidebarOnMobile} 
-        toggleAiChat={handleToggleAiChat} 
-        isMobile={isMobile}
-        isTransitioning={false} // Never hide sidebar completely on transitions
+        isMobile={false}
+        isTransitioning={false}
       />
     );
-  }, [sidebarOpen, toggleSidebar, closeSidebarOnMobile, handleToggleAiChat, isMobile]);
-
-  useEffect(() => {
-    console.log('[Layout] SidebarProvider mounted');
-  }, []);
+  }, [sidebarOpen, toggleSidebar, closeSidebarOnMobile, isMobile]);
 
   return (
     <SidebarProvider defaultOpen={sidebarOpen} onOpenChange={setSidebarOpen}>
       <div className="h-screen flex bg-background overflow-hidden w-full">
-        {/* Use the Sidebar component connected to SidebarProvider */}
-        {memoizedSidebar}
+        {/* For mobile, use ShadcnSidebar which handles the Sheet */}
+        {isMobile && (
+          <ShadcnSidebar>
+            <Sidebar 
+              isOpen={true} 
+              onToggle={toggleSidebar} 
+              onNavItemClick={closeSidebarOnMobile} 
+              isMobile={true}
+              isTransitioning={false}
+            />
+          </ShadcnSidebar>
+        )}
+        
+        {/* For desktop, use our custom Sidebar */}
+        {!isMobile && memoizedSidebar}
 
         {/* Main content and AI assistant */}
         <ContentArea 

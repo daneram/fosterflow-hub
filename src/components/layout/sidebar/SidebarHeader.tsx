@@ -43,7 +43,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
     };
   }, []);
 
-  // Enhanced logo click handler with debugging
+  // Enhanced logo click handler
   const handleLogoClick = (e: React.MouseEvent) => {
     // Always prevent default and stop propagation
     e.preventDefault();
@@ -56,21 +56,14 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
     
     if (isMobile) {
       console.log('[SidebarHeader] On mobile, toggling mobile sidebar');
-      // Toggle the mobile sidebar open state directly
+      // Directly set the opposite state for mobile
       setOpenMobile(!openMobile);
-      // Log after state update attempt
-      console.log('[SidebarHeader] Mobile sidebar toggle requested', { newRequestedState: !openMobile });
     } else {
       console.log('[SidebarHeader] On desktop, performing regular toggle');
       // On desktop, perform regular toggle through props
       onToggle();
     }
   };
-  
-  // Add effect to monitor openMobile changes
-  useEffect(() => {
-    console.log('[SidebarHeader] openMobile state changed:', openMobile);
-  }, [openMobile]);
   
   return (
     <div className="mb-0">
@@ -108,7 +101,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
           </Avatar>
         </div>
         <div className={cn("ml-3 overflow-hidden transition-opacity duration-100", 
-                        isOpen ? "opacity-100" : "opacity-0 w-0")}>
+                         isOpen ? "opacity-100" : "opacity-0 w-0")}>
           <span className="truncate font-bold">Indigo Fostering</span>
         </div>
       </div>
@@ -117,8 +110,6 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
   );
 };
 
-// Update the memo comparison to include both isOpen and isMobile dependencies
 export default React.memo(SidebarHeader, (prevProps, nextProps) => {
-  // Only re-render if isOpen changes - this is important for performance
   return prevProps.isOpen === nextProps.isOpen;
 });

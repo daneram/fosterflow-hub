@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useMemo, memo, useCallback } from 'react';
 import { Record } from '../types';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { format } from 'date-fns';
@@ -11,7 +10,7 @@ interface RecordTableRowProps {
   onClick: () => void;
 }
 
-export const RecordTableRow: React.FC<RecordTableRowProps> = ({
+const RecordTableRow: React.FC<RecordTableRowProps> = ({
   record,
   isSelected,
   formatDate,
@@ -19,10 +18,13 @@ export const RecordTableRow: React.FC<RecordTableRowProps> = ({
 }) => {
   const isMobile = useIsMobile();
   
-  // Format date based on device type
-  const displayDate = isMobile 
-    ? format(record.updatedAt, 'dd/MM/yy')
-    : formatDate(record.updatedAt);
+  // Memoize date formatting
+  const displayDate = useMemo(() => 
+    isMobile 
+      ? format(record.updatedAt, 'dd/MM/yy')
+      : formatDate(record.updatedAt),
+    [isMobile, record.updatedAt, formatDate]
+  );
 
   return (
     <tr 
@@ -68,3 +70,6 @@ export const RecordTableRow: React.FC<RecordTableRowProps> = ({
     </tr>
   );
 };
+
+// Memoize the component to prevent unnecessary re-renders
+export const MemoizedRecordTableRow = memo(RecordTableRow);

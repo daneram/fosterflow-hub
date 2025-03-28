@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -186,7 +185,7 @@ const getStageProgress = (stage: number) => {
 const RecruitmentPipeline: React.FC = () => {
   return (
     <Layout>
-      <div className="space-y-4">
+      <div className="space-y-4 animate-fade-in">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Recruitment Pipeline</h1>
           <p className="text-muted-foreground text-sm">Prospective carer pipeline, marketing campaigns, and application tracking</p>

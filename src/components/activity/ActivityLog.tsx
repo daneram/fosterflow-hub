@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -197,7 +196,7 @@ const ActivityLog: React.FC = () => {
 
   return (
     <Layout>
-      <div className="space-y-4">
+      <div className="space-y-4 animate-fade-in">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Activity Log</h1>
           <p className="text-muted-foreground text-sm">Track all actions and updates across the system</p>
@@ -224,9 +223,9 @@ const ActivityLog: React.FC = () => {
             </CardTitle>
           </CardHeader>
           
-          <Tabs defaultValue="all">
+          <Tabs defaultValue="all" className="w-full">
             <div className="px-6">
-              <TabsList className="grid w-full max-w-md grid-cols-4 h-9">
+              <TabsList className="w-full grid grid-cols-4 h-9">
                 <TabsTrigger value="all">All</TabsTrigger>
                 <TabsTrigger value="documents">Documents</TabsTrigger>
                 <TabsTrigger value="communications">Communications</TabsTrigger>
@@ -237,15 +236,15 @@ const ActivityLog: React.FC = () => {
             <TabsContent value="all" className="p-0">
               <CardContent className="pt-4">
                 {Object.entries(groupedActivities).map(([date, activities]) => (
-                  <div key={date} className="mb-6">
-                    <div className="flex items-center mb-2">
+                  <div key={date} className="mb-6 w-full">
+                    <div className="flex items-center mb-2 w-full">
                       <div className="text-sm font-medium">{date}</div>
                       <div className="ml-2 h-px flex-1 bg-border"></div>
                     </div>
                     
-                    <div className="space-y-4">
+                    <div className="space-y-4 w-full">
                       {activities.map(activity => (
-                        <div key={activity.id} className="flex">
+                        <div key={activity.id} className="flex w-full">
                           <div className="mr-4 flex flex-col items-center">
                             <Avatar className="h-8 w-8">
                               <AvatarImage src={activity.user.avatar} />
@@ -254,7 +253,7 @@ const ActivityLog: React.FC = () => {
                             <div className="mt-1 h-full w-px bg-border"></div>
                           </div>
                           
-                          <div className="flex-1 space-y-1">
+                          <div className="flex-1 space-y-1 min-w-0">
                             <div className="flex items-center">
                               <div className="flex items-center text-sm font-medium">
                                 {getActivityIcon(activity.type)}

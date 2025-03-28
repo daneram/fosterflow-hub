@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Separator } from '@/components/ui/separator';
 
@@ -11,8 +10,8 @@ const SidebarFooter: React.FC<SidebarFooterProps> = ({ isOpen }) => {
   
   return (
     <div className="mt-auto">
-      <Separator className="mb-2 bg-sidebar-border" />
-      <div className="px-3 py-3">
+      <Separator className="mb-1 bg-sidebar-border" />
+      <div className="px-3 py-2">
         <div className="flex items-center gap-2">
           <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center">
             <span className="text-primary font-medium text-xs">SW</span>

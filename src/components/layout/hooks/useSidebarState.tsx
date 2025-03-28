@@ -1,11 +1,16 @@
-
 import { useCallback } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useSidebar } from '@/components/ui/sidebar';
 
 export const useSidebarState = () => {
   const isMobile = useIsMobile();
-  const { open: sidebarOpen, setOpen: setSidebarOpen, openMobile, setOpenMobile, toggleSidebar: contextToggleSidebar } = useSidebar();
+  const { 
+    open: sidebarOpen, 
+    setOpen: setSidebarOpen, 
+    openMobile, 
+    setOpenMobile, 
+    toggleSidebar: contextToggleSidebar 
+  } = useSidebar();
   
   // Toggle function that works on both mobile and desktop
   const toggleSidebar = useCallback(() => {
@@ -16,6 +21,10 @@ export const useSidebarState = () => {
     }
   }, [isMobile, openMobile, setOpenMobile, contextToggleSidebar]);
 
+  // The exposed sidebarOpen state should be either the mobile or desktop state
+  // depending on the current view
+  const effectiveSidebarOpen = isMobile ? openMobile : sidebarOpen;
+
   // Function to explicitly set sidebar state
   const setSidebarOpenState = useCallback((state: boolean) => {
     if (isMobile) {
@@ -25,13 +34,9 @@ export const useSidebarState = () => {
     }
   }, [isMobile, setSidebarOpen, setOpenMobile]);
 
-  // The exposed sidebarOpen state should be either the mobile or desktop state
-  // depending on the current view
-  const effectiveSidebarOpen = isMobile ? openMobile : sidebarOpen;
-
   return { 
     sidebarOpen: effectiveSidebarOpen, 
     setSidebarOpen: setSidebarOpenState, 
-    toggleSidebar 
+    toggleSidebar
   };
 };

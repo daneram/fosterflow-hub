@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
@@ -19,10 +18,6 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
   
   // Check if the logo is already cached on component mount
   useEffect(() => {
-    // Try to get the logo URL from localStorage first
-    const cachedLogoUrl = localStorage.getItem('app_logo_url') || LOGO_URL;
-    
-    // Check if image is already in browser cache
     const img = new Image();
     
     if (img.complete) {
@@ -32,8 +27,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
       img.onerror = () => console.warn("Failed to load logo image");
     }
     
-    // Set the source to trigger loading or cache check
-    img.src = cachedLogoUrl;
+    img.src = LOGO_URL;
     
     return () => {
       img.onload = null;
@@ -42,41 +36,42 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
   }, []);
   
   // Handle the toggle specifically for the header
-  const handleHeaderToggle = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const handleHeaderToggle = () => {
     onToggle();
-    
-    if (isMobile) {
-      console.log("Mobile logo toggle activated");
-    }
   };
   
   return (
-    <div className="mb-1">
+    <div className="mb-0.5">
       <div 
         className={cn(
-          "flex items-center cursor-pointer h-10 text-sm font-medium",
-          "pl-4 pr-3" // Adjusted padding to match NavItems
+          "flex items-center cursor-pointer font-medium",
+          "h-10 pl-3.5 pr-3",
+          "flex items-center",
+          "transition-opacity duration-100",
+          isMobile && !isOpen && "opacity-0"
         )}
         onClick={handleHeaderToggle}
       >
-        <div className="flex items-center justify-center w-5 h-5 flex-shrink-0">
-          <Avatar className="h-6 w-6">
+        <div className={cn(
+          "flex items-center justify-center h-9",
+          "transition-opacity duration-300",
+          isMobile && !isOpen && "opacity-0"
+        )}>
+          <Avatar className="h-6 w-6 flex items-center justify-center">
             {imageLoaded ? (
               <AvatarImage 
                 src={LOGO_URL}
                 alt="Indigo Fostering"
                 loading="eager"
-                className="object-contain bg-white"
+                className="object-contain bg-white p-0.5"
                 draggable={false}
               />
             ) : (
-              <AvatarFallback className="bg-white">
+              <AvatarFallback className="bg-white flex items-center justify-center">
                 <img 
                   src={LOGO_URL} 
                   alt="Indigo Fostering"
-                  className="h-full w-full object-contain"
+                  className="h-full w-full object-contain p-0.5"
                   style={{ visibility: imageLoaded ? 'visible' : 'hidden' }}
                   onLoad={() => setImageLoaded(true)}
                   draggable={false}
@@ -88,20 +83,19 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
         
         {/* Text container with consistent spacing */}
         <div className={cn(
-          "ml-3 overflow-hidden transition-all duration-100",
-          isOpen ? "opacity-100 max-w-[120px]" : "opacity-0 max-w-0 w-0"
+          "overflow-hidden transition-all duration-300",
+          isOpen 
+            ? "ml-3 opacity-100 w-auto" 
+            : "w-0 opacity-0 absolute pointer-events-none"
         )}>
-          <span className="truncate font-bold">Indigo Fostering</span>
+          <span className="text-sm font-medium truncate text-black">Indigo Fostering</span>
         </div>
       </div>
       
-      {/* Only render separator when sidebar is open, but maintain consistent height */}
-      <div className={cn(
-        "transition-all duration-100 h-2", 
-        isOpen ? "opacity-100" : "opacity-0"
-      )}>
-        {isOpen && <Separator className="bg-sidebar-border" />}
-      </div>
+      {/* Only show separator when sidebar is open */}
+      {isOpen && (
+        <Separator className="my-1" />
+      )}
     </div>
   );
 };

@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useMemo, useCallback, memo } from 'react';
 import { Card } from '@/components/ui/card';
 import { Record } from '../types';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -16,28 +15,31 @@ interface RecordListItemProps {
   getComplianceIcon: (compliance?: string) => React.ReactNode;
 }
 
-export const RecordListItem: React.FC<RecordListItemProps> = ({
+const RecordListItem: React.FC<RecordListItemProps> = ({
   record,
   isSelected,
   onSelectRecord,
   formatDate,
 }) => {
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     onSelectRecord(record.id, !isSelected);
-  };
+  }, [record.id, isSelected, onSelectRecord]);
   
   const isMobile = useIsMobile();
+  
   // Derive linked status from record's relatedRecords property
   const isLinked = record.relatedRecords && record.relatedRecords.length > 0;
 
-  // Format date based on device type
-  const displayDate = isMobile 
-    ? format(record.updatedAt, 'dd/MM/yy')
-    : formatDate(record.updatedAt);
+  // Memoize date formatting
+  const displayDate = useMemo(() => 
+    isMobile 
+      ? format(record.updatedAt, 'dd/MM/yy')
+      : formatDate(record.updatedAt),
+    [isMobile, record.updatedAt, formatDate]
+  );
 
   return (
     <Card 
-      key={record.id} 
       className={`overflow-hidden cursor-pointer ${isSelected ? 'bg-muted/50' : ''}`}
       onClick={handleClick}
     >
@@ -57,3 +59,6 @@ export const RecordListItem: React.FC<RecordListItemProps> = ({
     </Card>
   );
 };
+
+// Memoize the component to prevent unnecessary re-renders
+export const MemoizedRecordListItem = memo(RecordListItem);

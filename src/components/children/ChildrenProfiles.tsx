@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -138,7 +137,7 @@ const getStatusBadge = (status: Child['status']) => {
 const ChildrenProfiles: React.FC = () => {
   return (
     <Layout>
-      <div className="space-y-4">
+      <div className="space-y-4 animate-fade-in">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Children Profiles</h1>
           <p className="text-muted-foreground text-sm">Profiles, placements, and care plans for children in fostering arrangements</p>

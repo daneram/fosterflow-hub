@@ -1,4 +1,3 @@
-
 import { LucideIcon } from 'lucide-react';
 
 export interface NavItemProps {
@@ -34,5 +33,4 @@ export interface SidebarProps {
   onNavItemClick?: () => void;
   toggleAiChat?: () => void;
   isMobile: boolean;
-  isTransitioning?: boolean;
 }

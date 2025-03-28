@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '@/components/layout/Layout';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -133,8 +132,8 @@ const ComplianceTracker: React.FC = () => {
 
   return (
     <Layout>
-      <div className="space-y-3">
-        <h1 className="text-2xl font-semibold">Compliance Tracker</h1>
+      <div className="space-y-3 animate-fade-in">
+        <h1 className="text-2xl font-bold tracking-tight">Compliance Tracker</h1>
 
         <div className="flex flex-col md:flex-row gap-3">
           <Card className="md:w-1/3">

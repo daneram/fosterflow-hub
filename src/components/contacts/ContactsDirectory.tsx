@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -182,7 +181,7 @@ const mockContacts: ContactItem[] = [
 const ContactsDirectory: React.FC = () => {
   return (
     <Layout>
-      <div className="space-y-4">
+      <div className="space-y-4 animate-fade-in">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Contacts Directory</h1>
           <p className="text-muted-foreground text-sm">Directory of external stakeholders, professionals, and service providers</p>

@@ -1,6 +1,5 @@
-
-import React from 'react';
-import { RecordListView } from './RecordListView';
+import React, { useMemo } from 'react';
+import { RecordList } from './list/RecordList';
 import { RecordTableView } from './RecordTableView';
 import { Record } from './types';
 import { 
@@ -32,34 +31,44 @@ export const RecordContent: React.FC<RecordContentProps> = ({
   toggleSort
 }) => {
   const isMobile = useIsMobile();
+  
+  // Memoize the selected records lookup for better performance
+  const selectedRecordsSet = useMemo(
+    () => new Set(selectedRecords),
+    [selectedRecords]
+  );
+
+  // Memoize utility functions to prevent unnecessary re-renders
+  const utils = useMemo(() => ({
+    formatDate,
+    getTypeIcon,
+    getStatusBadge,
+    getPriorityBadge,
+    getComplianceIcon
+  }), []);
 
   return (
     <div className="w-full">
       {isMobile ? (
-        <RecordListView
+        <RecordList
           records={filteredRecords}
           selectedRecords={selectedRecords}
+          selectedRecordsSet={selectedRecordsSet}
           handleSelectRecord={handleSelectRecord}
           handleSelectAll={handleSelectAll}
-          formatDate={formatDate}
-          getTypeIcon={getTypeIcon}
-          getStatusBadge={getStatusBadge}
-          getPriorityBadge={getPriorityBadge}
-          getComplianceIcon={getComplianceIcon}
+          {...utils}
         />
       ) : (
         <RecordTableView
           records={filteredRecords}
           selectedRecords={selectedRecords}
+          selectedRecordsSet={selectedRecordsSet}
           handleSelectRecord={handleSelectRecord}
           handleSelectAll={handleSelectAll}
-          formatDate={formatDate}
-          getTypeIcon={getTypeIcon}
-          getStatusBadge={getStatusBadge}
-          getComplianceIcon={getComplianceIcon}
           sortField={sortField}
           sortDirection={sortDirection}
           toggleSort={toggleSort}
+          {...utils}
         />
       )}
     </div>

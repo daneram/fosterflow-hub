@@ -224,7 +224,7 @@ const getPaymentTypeBadge = (type: Payment['type']) => {
 const FinanceManager: React.FC = () => {
   return (
     <Layout>
-      <div className="space-y-4">
+      <div className="space-y-4 animate-fade-in">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Finance Manager</h1>
           <p className="text-muted-foreground text-sm">Budgeting, allowance management, expense tracking, and financial reporting</p>

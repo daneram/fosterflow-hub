@@ -1,4 +1,3 @@
-
 @layer base {
   /* Hide all scrollbars by default with maximum specificity */
   *::-webkit-scrollbar,
@@ -82,5 +81,24 @@
   ::-webkit-scrollbar-track,
   ::-webkit-scrollbar-thumb {
     transition: none !important;
+  }
+  
+  /* Mobile touch scrolling enhancements */
+  .touch-action-auto {
+    touch-action: auto !important;
+    -ms-touch-action: auto !important;
+  }
+  
+  .webkit-touch-scroll {
+    -webkit-overflow-scrolling: touch !important;
+  }
+  
+  /* Enhanced mobile scrolling for the sidebar specifically */
+  .mobile-scroll-area [data-scrollarea-viewport] {
+    touch-action: pan-y !important;
+    -ms-touch-action: pan-y !important;
+    overflow-y: auto !important;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch !important;
   }
 }

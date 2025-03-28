@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -149,7 +148,7 @@ const getStatusBadge = (status: FormTemplate['status']) => {
 const FormsLibrary: React.FC = () => {
   return (
     <Layout>
-      <div className="space-y-4">
+      <div className="space-y-4 animate-fade-in">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Forms Library</h1>
           <p className="text-muted-foreground text-sm">Templates and standardized documentation for agency processes</p>

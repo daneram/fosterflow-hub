@@ -43,36 +43,68 @@ export const SidebarProvider = React.forwardRef<
     ref
   ) => {
     const isMobile = useIsMobile()
+    
+    // Initialize mobile state as closed
     const [openMobile, setOpenMobile] = React.useState(false)
-
-    // This is the internal state of the sidebar.
-    // We use openProp and setOpenProp for control from outside the component.
-    const [_open, _setOpen] = React.useState(defaultOpen)
+    
+    // Initialize desktop state based on defaultOpen prop
+    const [_open, _setOpen] = React.useState(() => {
+      // On mobile, always start closed regardless of defaultOpen
+      if (isMobile) return false;
+      
+      // On desktop, try to get saved state from cookie
+      const savedState = document.cookie
+        .split('; ')
+        .find(row => row.startsWith(SIDEBAR_COOKIE_NAME))
+        ?.split('=')[1]
+      
+      return savedState ? savedState === 'true' : defaultOpen
+    })
+    
+    // Use controlled state if provided
     const open = openProp ?? _open
+    
     const setOpen = React.useCallback(
       (value: boolean | ((value: boolean) => boolean)) => {
         const openState = typeof value === "function" ? value(open) : value
+        
+        // Don't allow opening on mobile through this method
+        if (isMobile && openState) return;
+
         if (setOpenProp) {
           setOpenProp(openState)
         } else {
           _setOpen(openState)
         }
 
-        // This sets the cookie to keep the sidebar state.
-        document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
+        // Save state in cookie only for desktop
+        if (!isMobile) {
+          document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
+        }
       },
-      [setOpenProp, open]
+      [setOpenProp, open, isMobile]
     )
 
-    // Helper to toggle the sidebar.
+    // Helper to toggle the sidebar
     const toggleSidebar = React.useCallback(() => {
       return isMobile
-        ? setOpenMobile((open) => !open)
-        : setOpen((open) => !open)
-    }, [isMobile, setOpen, setOpenMobile])
+        ? setOpenMobile(prev => !prev)
+        : setOpen(prev => !prev)
+    }, [isMobile, setOpen])
 
-    // Adds a keyboard shortcut to toggle the sidebar.
+    // Close mobile sidebar on navigation
     React.useEffect(() => {
+      if (isMobile && openMobile) {
+        const handleNavigation = () => setOpenMobile(false)
+        window.addEventListener('popstate', handleNavigation)
+        return () => window.removeEventListener('popstate', handleNavigation)
+      }
+    }, [isMobile, openMobile])
+
+    // Add keyboard shortcut (only for desktop)
+    React.useEffect(() => {
+      if (isMobile) return;
+      
       const handleKeyDown = (event: KeyboardEvent) => {
         if (
           event.key === SIDEBAR_KEYBOARD_SHORTCUT &&
@@ -85,10 +117,16 @@ export const SidebarProvider = React.forwardRef<
 
       window.addEventListener("keydown", handleKeyDown)
       return () => window.removeEventListener("keydown", handleKeyDown)
-    }, [toggleSidebar])
+    }, [toggleSidebar, isMobile])
 
-    // We add a state so that we can do data-state="expanded" or "collapsed".
-    // This makes it easier to style the sidebar with Tailwind classes.
+    // Close mobile sidebar on resize to desktop
+    React.useEffect(() => {
+      if (!isMobile) {
+        setOpenMobile(false)
+      }
+    }, [isMobile])
+
+    // We add a state so that we can do data-state="expanded" or "collapsed"
     const state = open ? "expanded" : "collapsed"
 
     const contextValue = React.useMemo<SidebarContext>(
@@ -99,7 +137,7 @@ export const SidebarProvider = React.forwardRef<
         isMobile,
         openMobile,
         setOpenMobile,
-        toggleSidebar,
+        toggleSidebar
       }),
       [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar]
     )

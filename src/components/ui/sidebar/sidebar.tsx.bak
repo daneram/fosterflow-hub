@@ -1,9 +1,9 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
-import { Sheet, SheetContent } from "@/components/ui/sheet"
+import { X } from "lucide-react"
 import { useSidebar } from "./sidebar-context"
 
-// Add the missing constant
+// Constants
 const SIDEBAR_WIDTH_MOBILE = "18rem"
 
 // Flag to track if navigation is in progress 
@@ -32,6 +32,9 @@ export const Sidebar = React.forwardRef<
     
     // Track location changes to detect navigation
     const [currentPath, setCurrentPath] = React.useState("");
+    
+    // Create a ref for the custom mobile sidebar
+    const mobileSidebarRef = React.useRef<HTMLDivElement>(null);
     
     React.useEffect(() => {
       // Update current path and set navigation flag
@@ -72,6 +75,16 @@ export const Sidebar = React.forwardRef<
       };
     }, [currentPath]);
 
+    // Handle close button click
+    const handleCloseClick = React.useCallback(() => {
+      setOpenMobile(false);
+    }, [setOpenMobile]);
+    
+    // Handle backdrop click (close sidebar)
+    const handleBackdropClick = React.useCallback(() => {
+      setOpenMobile(false);
+    }, [setOpenMobile]);
+
     if (collapsible === "none") {
       return (
         <div
@@ -87,6 +100,7 @@ export const Sidebar = React.forwardRef<
       )
     }
 
+    // Custom mobile sidebar implementation
     if (isMobile) {
       // Skip rendering Sheet entirely during navigation
       if (isNavigating && !openMobile) {
@@ -94,27 +108,41 @@ export const Sidebar = React.forwardRef<
       }
       
       return (
-        <Sheet 
-          open={openMobile} 
-          onOpenChange={(open) => {
-            // Prevent opening during navigation
-            if (isNavigating && open) return;
-            setOpenMobile(open);
-          }}
-          {...props}
-        >
-          <SheetContent
-            data-sidebar="sidebar"
-            data-mobile="true"
-            className="w-[--sidebar-width] bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
-            style={{
-              "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
-            } as React.CSSProperties}
-            side={side}
-          >
-            <div className="flex h-full w-full flex-col">{children}</div>
-          </SheetContent>
-        </Sheet>
+        <>
+          {/* Custom mobile sidebar with direct DOM control */}
+          {openMobile && (
+            // Backdrop - fixed position covering whole screen
+            <div 
+              className="fixed inset-0 z-50 bg-black/80"
+              onClick={handleBackdropClick}
+              aria-hidden="true"
+            >
+              {/* Sidebar content - prevent clicks from propagating to backdrop */}
+              <div
+                ref={mobileSidebarRef}
+                className="fixed inset-y-0 left-0 z-50 w-72 max-w-[80%] bg-sidebar p-0 text-sidebar-foreground shadow-lg"
+                onClick={(e) => e.stopPropagation()}
+                data-sidebar="sidebar"
+                data-mobile="true"
+              >
+                {/* Close button */}
+                <button 
+                  onClick={handleCloseClick}
+                  className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                  aria-label="Close"
+                >
+                  <X className="h-4 w-4" />
+                  <span className="sr-only">Close</span>
+                </button>
+                
+                {/* Sidebar content */}
+                <div className="flex h-full w-full flex-col">
+                  {children}
+                </div>
+              </div>
+            </div>
+          )}
+        </>
       )
     }
 

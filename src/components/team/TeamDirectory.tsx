@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -228,7 +227,7 @@ const getWorkloadColor = (workload: number) => {
 const TeamDirectory: React.FC = () => {
   return (
     <Layout>
-      <div className="space-y-4">
+      <div className="space-y-4 animate-fade-in">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Team Directory</h1>
           <p className="text-muted-foreground text-sm">Staff directory, roles, caseloads, and performance management</p>

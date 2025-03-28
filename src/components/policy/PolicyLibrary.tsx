@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Layout from '@/components/layout/Layout';
 import { Card, CardContent } from '@/components/ui/card';
@@ -19,7 +18,7 @@ const PolicyLibrary: React.FC = () => {
 
   return (
     <Layout>
-      <div className="space-y-4">
+      <div className="space-y-4 animate-fade-in">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Policy Library</h1>
           <p className="text-muted-foreground text-sm">Access current agency policies and procedures</p>

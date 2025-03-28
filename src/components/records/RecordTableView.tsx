@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Record } from './types';
 import {
   Table,
@@ -8,11 +7,12 @@ import {
 } from '@/components/ui/table';
 import { RecordTableHeader } from './table/RecordTableHeader';
 import { RecordTableEmpty } from './table/RecordTableEmpty';
-import { RecordTableRow } from './table/RecordTableRow';
+import { MemoizedRecordTableRow } from './table/RecordTableRow';
 
 interface RecordTableViewProps {
   records: Record[];
   selectedRecords: string[];
+  selectedRecordsSet: Set<string>;
   handleSelectAll: (checked: boolean) => void;
   handleSelectRecord: (id: string, checked: boolean) => void;
   formatDate: (date: Date) => string;
@@ -26,18 +26,18 @@ interface RecordTableViewProps {
 
 export const RecordTableView: React.FC<RecordTableViewProps> = ({
   records,
-  selectedRecords,
+  selectedRecordsSet,
   handleSelectRecord,
   formatDate,
   sortField,
   sortDirection,
   toggleSort
 }) => {
-  const handleRowClick = (id: string) => {
-    // If already selected, deselect it
-    const isSelected = selectedRecords.includes(id);
+  // Memoize the row click handler creator
+  const createHandleRowClick = useCallback((id: string) => () => {
+    const isSelected = selectedRecordsSet.has(id);
     handleSelectRecord(id, !isSelected);
-  };
+  }, [selectedRecordsSet, handleSelectRecord]);
 
   return (
     <div className="w-full">
@@ -55,12 +55,12 @@ export const RecordTableView: React.FC<RecordTableViewProps> = ({
               <RecordTableEmpty />
             ) : (
               records.map((record) => (
-                <RecordTableRow
+                <MemoizedRecordTableRow
                   key={record.id}
                   record={record}
-                  isSelected={selectedRecords.includes(record.id)}
+                  isSelected={selectedRecordsSet.has(record.id)}
                   formatDate={formatDate}
-                  onClick={() => handleRowClick(record.id)}
+                  onClick={createHandleRowClick(record.id)}
                 />
               ))
             )}

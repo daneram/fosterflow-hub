@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -218,7 +217,7 @@ const getRatingStars = (rating: number) => {
 const CarersDirectory: React.FC = () => {
   return (
     <Layout>
-      <div className="space-y-4">
+      <div className="space-y-4 animate-fade-in">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Carers Directory</h1>
           <p className="text-muted-foreground text-sm">Foster carer profiles, availability, specialties, and supervision records</p>

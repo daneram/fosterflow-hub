@@ -1,12 +1,12 @@
-
 import React from 'react';
 import { Record } from '../types';
-import { RecordListItem } from './RecordListItem';
+import { MemoizedRecordListItem } from './RecordListItem';
 import { EmptyRecordList } from './EmptyRecordList';
 
 interface RecordListProps {
   records: Record[];
   selectedRecords: string[];
+  selectedRecordsSet: Set<string>;
   handleSelectRecord: (id: string, checked: boolean) => void;
   handleSelectAll: (checked: boolean) => void;
   formatDate: (date: Date) => string;
@@ -18,7 +18,7 @@ interface RecordListProps {
 
 export const RecordList: React.FC<RecordListProps> = ({
   records,
-  selectedRecords,
+  selectedRecordsSet,
   handleSelectRecord,
   formatDate,
   getTypeIcon,
@@ -33,10 +33,10 @@ export const RecordList: React.FC<RecordListProps> = ({
   return (
     <div className="space-y-2.5">
       {records.map((record) => (
-        <RecordListItem
+        <MemoizedRecordListItem
           key={record.id}
           record={record}
-          isSelected={selectedRecords.includes(record.id)}
+          isSelected={selectedRecordsSet.has(record.id)}
           onSelectRecord={handleSelectRecord}
           formatDate={formatDate}
           getTypeIcon={getTypeIcon}

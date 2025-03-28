@@ -1,4 +1,3 @@
-
 import React, { useRef, useEffect } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -33,11 +32,6 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
   useEffect(() => {
     if (!scrollAreaRef.current) return;
     
-    // Always force hide scrollbar initially
-    const initialForceHideTimer = setTimeout(() => {
-      forceHideScrollbar(viewportRef.current);
-    }, 50);
-    
     // Find the viewport element using the data-attribute we added
     const viewport = scrollAreaRef.current.querySelector('[data-scrollarea-viewport]');
     if (viewport instanceof HTMLElement) {
@@ -46,6 +40,13 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
       // Store content element reference
       if (viewport.firstElementChild instanceof HTMLElement) {
         contentRef.current = viewport.firstElementChild;
+      }
+      
+      // For mobile, ensure touch scrolling works immediately by adding and removing a CSS class
+      if (isMobile) {
+        viewport.classList.add('touch-action-auto');
+        // Force a reflow to ensure the touch-action property is applied
+        void viewport.offsetHeight;
       }
       
       // Make sure we remove any active scrolling class initially
@@ -62,8 +63,10 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
     
     // Cleanup function to ensure we remove the class when unmounting
     return () => {
-      clearTimeout(initialForceHideTimer);
-      forceHideScrollbar(viewportRef.current);
+      if (viewportRef.current) {
+        viewportRef.current.classList.remove('touch-action-auto');
+        forceHideScrollbar(viewportRef.current);
+      }
     };
   }, [isMobile, positionLastItemAtBottom, restoreScrollPosition, forceHideScrollbar]);
   
@@ -73,10 +76,17 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
     const timeoutId = setTimeout(() => {
       positionLastItemAtBottom(viewportRef.current, contentRef.current);
       forceHideScrollbar(viewportRef.current);
+      
+      // For mobile, ensure scrollable area is properly initialized when sidebar opens
+      if (isMobile && isOpen && viewportRef.current) {
+        viewportRef.current.style.overflowY = 'scroll';
+        // Apply webkit-overflow-scrolling through CSS className instead
+        viewportRef.current.classList.add('webkit-touch-scroll');
+      }
     }, 200);
     
     return () => clearTimeout(timeoutId);
-  }, [children, isOpen, positionLastItemAtBottom, forceHideScrollbar]);
+  }, [children, isOpen, isMobile, positionLastItemAtBottom, forceHideScrollbar]);
   
   // Set up resize observer
   useEffect(() => {
@@ -118,7 +128,8 @@ const ScrollManager: React.FC<ScrollManagerProps> = ({ children, isOpen }) => {
   return (
     <ScrollArea 
       ref={scrollAreaRef} 
-      className="flex-1 overflow-auto"
+      className={`flex-1 overflow-auto ${isMobile ? 'mobile-scroll-area' : ''}`}
+      data-mobile={isMobile ? 'true' : 'false'}
     >
       {children}
     </ScrollArea>

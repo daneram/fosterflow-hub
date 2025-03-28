@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Layout from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card';
@@ -56,10 +55,10 @@ const RecordsExplorer: React.FC = () => {
 
   return (
     <Layout>
-      <div className="space-y-2">
+      <div className="space-y-2 animate-fade-in">
         <RecordsHeader />
         
-        <div className="relative w-full max-w-md">
+        <div className="relative w-full">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             type="text"

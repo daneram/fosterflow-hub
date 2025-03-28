@@ -1,61 +1,47 @@
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { useSidebar } from './sidebar-context';
+import { cn } from '@/lib/utils';
+import { ChevronLeft } from 'lucide-react';
 
-import * as React from "react"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { PanelLeft } from "lucide-react"
-import { useSidebar } from "./sidebar-context"
+interface SidebarTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  hideOnMobile?: boolean;
+}
 
-export const SidebarTrigger = React.forwardRef<
-  React.ElementRef<typeof Button>,
-  React.ComponentProps<typeof Button>
->(({ className, onClick, ...props }, ref) => {
-  const { toggleSidebar } = useSidebar()
+export const SidebarTrigger: React.FC<SidebarTriggerProps> = ({
+  className,
+  hideOnMobile = false,
+  ...props
+}) => {
+  const { 
+    isOpen, 
+    viewport, 
+    toggle,
+    isTransitioning 
+  } = useSidebar();
+
+  // Don't render on mobile if hideOnMobile is true
+  if (viewport === 'mobile' && hideOnMobile) {
+    return null;
+  }
 
   return (
     <Button
-      ref={ref}
-      data-sidebar="trigger"
       variant="ghost"
       size="icon"
-      className={cn("h-7 w-7", className)}
-      onClick={(event) => {
-        onClick?.(event)
-        toggleSidebar()
-      }}
-      {...props}
-    >
-      <PanelLeft />
-      <span className="sr-only">Toggle Sidebar</span>
-    </Button>
-  )
-})
-SidebarTrigger.displayName = "SidebarTrigger"
-
-export const SidebarRail = React.forwardRef<
-  HTMLButtonElement,
-  React.ComponentProps<"button">
->(({ className, ...props }, ref) => {
-  const { toggleSidebar } = useSidebar()
-
-  return (
-    <button
-      ref={ref}
-      data-sidebar="rail"
-      aria-label="Toggle Sidebar"
-      tabIndex={-1}
-      onClick={toggleSidebar}
-      title="Toggle Sidebar"
       className={cn(
-        "absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] hover:after:bg-sidebar-border group-data-[side=left]:-right-4 group-data-[side=right]:left-0 sm:flex",
-        "[[data-side=left]_&]:cursor-w-resize [[data-side=right]_&]:cursor-e-resize",
-        "[[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-state=collapsed]_&]:cursor-w-resize",
-        "group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full group-data-[collapsible=offcanvas]:hover:bg-sidebar",
-        "[[data-side=left][data-collapsible=offcanvas]_&]:-right-2",
-        "[[data-side=right][data-collapsible=offcanvas]_&]:-left-2",
+        'h-9 w-9 shrink-0 cursor-pointer transition-transform duration-300',
+        isOpen && 'rotate-180',
+        isTransitioning && 'pointer-events-none',
+        viewport === 'mobile' && 'absolute right-4 top-4 z-50',
         className
       )}
+      onClick={toggle}
+      disabled={isTransitioning}
       {...props}
-    />
-  )
-})
-SidebarRail.displayName = "SidebarRail"
+    >
+      <ChevronLeft className="h-4 w-4" />
+      <span className="sr-only">Toggle sidebar</span>
+    </Button>
+  );
+}; 

@@ -4,6 +4,16 @@
 
 **URL**: https://lovable.dev/projects/eb27061b-933a-45a3-9e21-e193e9df6b1b
 
+## Automated Backups
+
+This project is configured with automated GitHub backups:
+
+- **Daily Backup**: Every day at midnight, all changes are automatically committed and pushed.
+- **Hourly Change Detection**: Every hour, the system checks for changes and backs them up if detected.
+- **Weekly Releases**: Every Monday, a new GitHub release is automatically created to mark significant points in development.
+
+These automations ensure that your work is always backed up and versioned properly.
+
 ## How can I edit this code?
 
 There are several ways of editing your application.

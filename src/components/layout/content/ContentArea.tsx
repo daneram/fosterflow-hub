@@ -81,7 +81,7 @@ const ContentArea: React.FC<ContentAreaProps> = ({
       {isMobile && (
         <div className="fixed top-0 left-0 right-0 h-12 z-30 bg-background/80 backdrop-blur-sm flex">
           <div className="flex-1 flex">
-            <h1 className="text-base mt-0.3 pr-6 ml-auto leading-[48px] text-sidebar-foreground/100">FosterNotes</h1>
+            <h1 className="text-base mt-0.3 pr-6 ml-auto leading-[48px] text-sidebar-foreground/100 font-bold">FosterNotes</h1>
           </div>
         </div>
       )}

@@ -11,7 +11,14 @@ const AIChatSection: React.FC<AIChatSectionProps> = ({ isOpen, onNavItemClick })
   return (
     <div className="py-0.5">
       <nav className="flex flex-col">
-        <BotItem to="/ai-assistant" icon={Bot} label="FosterNotes AI" isOpen={isOpen} onClick={onNavItemClick} />
+        <BotItem 
+          to="/ai-assistant" 
+          icon={Bot} 
+          label="FosterNotes AI" 
+          isOpen={isOpen} 
+          onClick={onNavItemClick}
+          fontBold={true}
+        />
       </nav>
     </div>
   );

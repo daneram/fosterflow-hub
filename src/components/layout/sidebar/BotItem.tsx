@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import { BotItemProps } from './types';
 import { useIsMobile } from '@/hooks/use-mobile';
 
-const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClick }) => {
+const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClick, fontBold }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const isActive = location.pathname === to;
@@ -68,7 +68,8 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
       )}>
         <span className={cn(
           "truncate",
-          isMobile ? "text-sm" : "text-xs" // Larger text on mobile
+          isMobile ? "text-sm" : "text-xs", // Larger text on mobile
+          fontBold && "font-bold" // Apply bold font if fontBold prop is true
         )}>{label}</span>
       </div>
     </Link>

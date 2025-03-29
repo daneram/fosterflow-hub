@@ -14,6 +14,7 @@ export interface BotItemProps {
   label: string;
   isOpen: boolean;
   onClick?: () => void;
+  fontBold?: boolean;
 }
 
 export interface SidebarSectionProps {

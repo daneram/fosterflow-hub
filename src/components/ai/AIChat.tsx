@@ -64,7 +64,7 @@ const AIChat: React.FC = () => {
       <CardHeader className="pb-2 border-b px-3 py-[12px]">
         <div className="flex items-center py-0">
           <Bot className="mr-2 h-5 w-5 text-primary" />
-          <CardTitle className="text-sm">FosterNotes AI</CardTitle>
+          <CardTitle className="text-sm font-bold">FosterNotes AI</CardTitle>
         </div>
       </CardHeader>
 

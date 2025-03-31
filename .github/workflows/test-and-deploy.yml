@@ -108,7 +108,7 @@ jobs:
       run: |
         export PATH=$PATH:$HOME/.local/bin
         if [ ! -d .elasticbeanstalk ]; then
-          eb init --platform "node.js-18" --region "eu-west-1" --application-name "fosterflow-hub" --no-verify-ssl
+          eb init fosterflow-hub --platform "node.js-18" --region "eu-west-1" --no-verify-ssl
         fi
       
     - name: Deploy to AWS Elastic Beanstalk

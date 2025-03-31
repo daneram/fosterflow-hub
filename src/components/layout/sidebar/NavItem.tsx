@@ -37,13 +37,16 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon: Icon, label, isOpen, onClic
         
         // If item is partially visible at the bottom
         if (linkRect.bottom > viewportRect.bottom) {
-          // Add padding to ensure it's not right at the edge
-          targetScroll = currentScroll + (linkRect.bottom - viewportRect.bottom) + 8;
+          // Calculate exactly how much we need to scroll to align the bottom of the item 
+          // with the top of the footer section (or bottom of viewport)
+          const footerHeight = 0; // Adjust if there's a specific footer height to account for
+          targetScroll = currentScroll + (linkRect.bottom - viewportRect.bottom) + footerHeight;
         }
         // If item is partially visible or near the top
-        else if (itemOffset < currentScroll + 8) {
-          // Scroll to show the item at the top with padding
-          targetScroll = Math.max(0, itemOffset - 8);
+        else if (linkRect.top < viewportRect.top) {
+          // Calculate exactly how much we need to scroll to show the entire button
+          // This aligns the top of the button with the top of the viewport
+          targetScroll = Math.max(0, currentScroll - (viewportRect.top - linkRect.top));
         }
         
         // For mobile, save the calculated position

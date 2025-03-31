@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { BotItemProps } from './types';
@@ -9,6 +9,7 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
   const isActive = location.pathname === to;
   const isMobile = useIsMobile();
   const [isClicking, setIsClicking] = useState(false);
+  const linkRef = useRef<HTMLAnchorElement>(null);
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -16,6 +17,43 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
     if (isActive) return;
 
     setIsClicking(true);
+    
+    if (linkRef.current) {
+      const link = linkRef.current;
+      const viewport = link.closest('[data-scrollarea-viewport]');
+      
+      if (viewport instanceof HTMLElement) {
+        const linkRect = link.getBoundingClientRect();
+        const viewportRect = viewport.getBoundingClientRect();
+        const currentScroll = viewport.scrollTop;
+        
+        let targetScroll = currentScroll;
+        
+        // If item is partially visible at the bottom
+        if (linkRect.bottom > viewportRect.bottom) {
+          // Calculate exactly how much we need to scroll to align the bottom of the item 
+          // with the top of the footer section (or bottom of viewport)
+          const footerHeight = 0; // Adjust if there's a specific footer height to account for
+          targetScroll = currentScroll + (linkRect.bottom - viewportRect.bottom) + footerHeight;
+        }
+        // If item is partially visible or near the top
+        else if (linkRect.top < viewportRect.top) {
+          // Calculate exactly how much we need to scroll to show the entire button
+          // This aligns the top of the button with the top of the viewport
+          targetScroll = Math.max(0, currentScroll - (viewportRect.top - linkRect.top));
+        }
+        
+        // For mobile, save the calculated position
+        if (isMobile) {
+          localStorage.setItem('sidebar-mobile-scroll-position', targetScroll.toString());
+        } else {
+          // For desktop, scroll immediately
+          viewport.scrollTop = targetScroll;
+          localStorage.setItem('sidebar-scroll-position', targetScroll.toString());
+        }
+      }
+    }
+
     // Call the onClick handler with the target path
     onClick?.(to);
   };
@@ -32,6 +70,7 @@ const BotItem: React.FC<BotItemProps> = ({ to, icon: Icon, label, isOpen, onClic
 
   return (
     <Link
+      ref={linkRef}
       to={to}
       className={cn(
         "flex items-center font-medium",

@@ -41,11 +41,12 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
   };
   
   return (
-    <div className="mb-0.5">
+    <div className="mb-0">
       <div 
         className={cn(
           "flex items-center cursor-pointer font-medium",
-          "h-10 pl-3.5 pr-3",
+          isMobile ? "h-11" : "h-12", // Slightly smaller height on mobile
+          "pl-3.5 pr-3",
           "flex items-center",
           // Remove transition for mobile
           !isMobile && "transition-opacity duration-100"
@@ -53,11 +54,15 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
         onClick={handleHeaderToggle}
       >
         <div className={cn(
-          "flex items-center justify-center h-9",
+          "flex items-center justify-center",
+          isMobile ? "h-9" : "h-10", // Slightly smaller height on mobile
           // Remove transition for mobile
           !isMobile && "transition-opacity duration-300"
         )}>
-          <Avatar className="h-6 w-6 flex items-center justify-center">
+          <Avatar className={cn(
+            "flex items-center justify-center", 
+            isMobile ? "h-6 w-6" : "h-7 w-7" // Slightly smaller avatar on mobile
+          )}>
             {imageLoaded ? (
               <AvatarImage 
                 src={LOGO_URL}
@@ -99,7 +104,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
       </div>
       
       {/* Always show separator */}
-      <Separator className="my-1" />
+      <Separator className="mt-1 mb-0" />
     </div>
   );
 };

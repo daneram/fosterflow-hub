@@ -80,6 +80,11 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: eu-west-1
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
         
     - name: Install AWS CLI
       run: |
@@ -92,21 +97,23 @@ jobs:
     
     - name: Install EB CLI
       run: |
-        sudo apt-get update
-        sudo apt-get install -y python3-pip
         pip3 install awsebcli --upgrade --user || echo "Failed to install EB CLI, but proceeding anyway"
     
     - name: Verify EB CLI
-      run: eb --version || echo "EB CLI not found, but proceeding to deployment step"
+      run: |
+        export PATH=$PATH:$HOME/.local/bin
+        eb --version || echo "EB CLI not found, but proceeding to deployment step"
     
     - name: Initialize EB (if needed)
       run: |
+        export PATH=$PATH:$HOME/.local/bin
         if [ ! -d .elasticbeanstalk ]; then
           eb init --platform "node.js-18" --region "eu-west-1" --application-name "fosterflow-hub" --no-verify-ssl
         fi
       
     - name: Deploy to AWS Elastic Beanstalk
       run: |
+        export PATH=$PATH:$HOME/.local/bin
         environment_name="fosterflow-preview"
         
         # Check if environment exists

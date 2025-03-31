@@ -20,11 +20,54 @@
     --sidebar-mobile-preload: none;
   }
   
+  /* Prevent any layout shifts during initial load */
+  html.js-loading {
+    /* Prevent scrollbar jumps */
+    overflow-y: scroll !important;
+  }
+  
+  /* Prevent content shifting on mobile during sidebar transitions */
+  html.js-loading body {
+    /* Lock the page width to prevent shifting */
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    /* Ensure content doesn't reflow horizontally */
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  
+  /* Hide ALL sidebar elements during initial page load */
+  html.js-loading [data-sidebar="sidebar"],
+  html.js-loading [data-mobile="true"],
+  html.js-loading .group[data-state],
+  html.js-loading .peer[data-state] {
+    display: none !important;
+    width: 0 !important; 
+    position: absolute !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    transform: translateX(-101%) !important;
+    pointer-events: none !important;
+    transition: none !important;
+  }
+  
   /* Sidebar is initially completely hidden before hydration */
   html.js-loading [data-mobile="true"] {
     display: var(--sidebar-mobile-preload) !important;
     visibility: hidden !important;
     opacity: 0 !important;
     transform: translateX(-101%) !important;
+  }
+  
+  /* Class to ensure mobile sidebar is hidden during initial render */
+  .sidebar-initially-hidden {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    transform: translateX(-101%) !important;
+    pointer-events: none !important;
   }
 }

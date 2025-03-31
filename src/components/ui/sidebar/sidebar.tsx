@@ -242,7 +242,7 @@ export const Sidebar = React.forwardRef<
 
           {/* Mobile sidebar - only render if mounted */}
           {isMounted && (
-            <div
+            <aside
               ref={ref}
               className={cn(
                 "fixed inset-y-0 left-0 z-50 flex h-full w-[--sidebar-width] flex-col bg-sidebar text-sidebar-foreground",
@@ -258,16 +258,27 @@ export const Sidebar = React.forwardRef<
                 "will-change-transform backface-visibility-hidden",
                 // Ensure content position is preserved during transition
                 "overflow-hidden",
+                // Add a class that ensures the sidebar is initially hidden until fully mounted
+                (!isMounted || !openMobile) && "sidebar-initially-hidden",
                 className
               )}
               style={{ 
                 "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
                 // Preserve the scroll position during collapse
                 contain: "paint size layout",
-                // Ensure it's initially hidden
+                // Ensure it's initially hidden - force it to be hidden when not open
                 visibility: !openMobile ? "hidden" : "visible", 
-                // Apply immediate transform to prevent flash
-                transform: openMobile ? "translateX(0)" : "translateX(-101%)"
+                // Apply immediate transform to prevent flash - ensure -101% for closed state
+                transform: openMobile ? "translateX(0)" : "translateX(-101%)",
+                // Add opacity control to prevent flashing during load
+                opacity: !isMounted || !openMobile ? 0 : 1,
+                // Add position fixed to ensure it doesn't affect layout
+                position: "fixed",
+                top: 0,
+                left: 0,
+                // Ensure it's fully contained and doesn't affect layout
+                width: !openMobile ? "0" : SIDEBAR_WIDTH_MOBILE,
+                pointerEvents: !openMobile ? "none" : "auto"
               } as React.CSSProperties}
               data-state={openMobile ? "open" : "closed"}
               data-mobile="true"
@@ -300,7 +311,7 @@ export const Sidebar = React.forwardRef<
               <div className="flex h-full w-full flex-col">
                 {children}
               </div>
-            </div>
+            </aside>
           )}
         </>
       )
@@ -323,7 +334,9 @@ export const Sidebar = React.forwardRef<
             "group-data-[side=right]:rotate-180",
             variant === "floating" || variant === "inset"
               ? "group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4))]"
-              : "group-data-[collapsible=icon]:w-[--sidebar-width-icon]"
+              : "group-data-[collapsible=icon]:w-[--sidebar-width-icon]",
+            // Prevent layout shift during initial page load
+            !isMounted && "w-0 invisible opacity-0"
           )}
         />
         <div
@@ -336,6 +349,8 @@ export const Sidebar = React.forwardRef<
             variant === "floating" || variant === "inset"
               ? "p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4)_+2px)]"
               : "group-data-[collapsible=icon]:w-[--sidebar-width-icon] group-data-[side=left]:border-r group-data-[side=right]:border-l",
+            // Don't display until fully mounted
+            !isMounted && "invisible opacity-0",
             className
           )}
           {...props}

@@ -15,7 +15,8 @@ import {
   HardDrive,
   LayoutGrid,
   Save,
-  RefreshCw
+  RefreshCw,
+  Flag
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -23,6 +24,7 @@ import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { FeatureFlags } from './FeatureFlags';
 
 const SettingsPanel: React.FC = () => {
   return (
@@ -43,12 +45,13 @@ const SettingsPanel: React.FC = () => {
           
           <Tabs defaultValue="account">
             <div className="px-6">
-              <TabsList className="grid w-full max-w-2xl grid-cols-5 h-9">
+              <TabsList className="grid w-full max-w-2xl grid-cols-6 h-9">
                 <TabsTrigger value="account">Account</TabsTrigger>
                 <TabsTrigger value="appearance">Appearance</TabsTrigger>
                 <TabsTrigger value="notifications">Notifications</TabsTrigger>
                 <TabsTrigger value="security">Security</TabsTrigger>
                 <TabsTrigger value="system">System</TabsTrigger>
+                <TabsTrigger value="features">Features</TabsTrigger>
               </TabsList>
             </div>
 
@@ -582,6 +585,21 @@ const SettingsPanel: React.FC = () => {
                       Save Changes
                     </Button>
                   </div>
+                </div>
+              </CardContent>
+            </TabsContent>
+
+            <TabsContent value="features" className="p-0">
+              <CardContent className="pt-6">
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-lg font-medium">Feature Management</h3>
+                    <p className="text-sm text-muted-foreground">Control feature flags and gradual feature rollouts.</p>
+                  </div>
+                  
+                  <Separator />
+                  
+                  <FeatureFlags />
                 </div>
               </CardContent>
             </TabsContent>

@@ -51,12 +51,40 @@ export const SidebarProvider = React.forwardRef<
     React.useLayoutEffect(() => {
       if (typeof window !== 'undefined') {
         // Make absolutely sure no mobile sidebar is shown during initial render
-        const el = document.querySelector('[data-mobile="true"]');
-        if (el) {
-          el.setAttribute('style', 'transform: translateX(-101%) !important; visibility: hidden !important; opacity: 0 !important;');
+        const mobileSidebar = document.querySelector('[data-mobile="true"]');
+        if (mobileSidebar) {
+          mobileSidebar.setAttribute('style', 'transform: translateX(-101%) !important; visibility: hidden !important; opacity: 0 !important; display: none !important; pointer-events: none !important;');
         }
+        
+        // Also hide any desktop sidebar that might be causing content shifting
+        const desktopSidebars = document.querySelectorAll('[data-sidebar="sidebar"], .peer, .group');
+        desktopSidebars.forEach(sidebar => {
+          if (sidebar instanceof HTMLElement) {
+            const originalDisplay = sidebar.style.display;
+            // Force all sidebars to be hidden and not affect layout initially
+            sidebar.style.cssText += 'position: absolute !important; width: 0 !important; overflow: hidden !important; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important;';
+            // Store original display for restoration
+            sidebar.dataset.originalDisplay = originalDisplay;
+          }
+        });
+        
+        // Add a class to the html element during initial load to help with CSS targeting
+        document.documentElement.classList.add('js-loading');
+        
+        // Remove loading class and restore sidebars after a delay
+        setTimeout(() => {
+          document.documentElement.classList.remove('js-loading');
+          // Restore desktop sidebars to their original display state
+          desktopSidebars.forEach(sidebar => {
+            if (sidebar instanceof HTMLElement && !isMobile) {
+              const originalDisplay = sidebar.dataset.originalDisplay || '';
+              sidebar.style.cssText = originalDisplay;
+              delete sidebar.dataset.originalDisplay;
+            }
+          });
+        }, 500);
       }
-    }, []);
+    }, [isMobile]);
     
     // Initialize mobile state as closed
     // Force it to be closed with explicit false to avoid any auto-expansion

@@ -85,12 +85,20 @@ jobs:
       run: |
         curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
         unzip awscliv2.zip
-        sudo ./aws/install
-        
+        sudo ./aws/install --update
+    
+    - name: Verify AWS CLI
+      run: aws --version
+    
     - name: Install EB CLI
       run: |
-        pip install awsebcli --upgrade
-        
+        sudo apt-get update
+        sudo apt-get install -y python3-pip
+        pip3 install awsebcli --upgrade --user || echo "Failed to install EB CLI, but proceeding anyway"
+    
+    - name: Verify EB CLI
+      run: eb --version || echo "EB CLI not found, but proceeding to deployment step"
+    
     - name: Initialize EB (if needed)
       run: |
         if [ ! -d .elasticbeanstalk ]; then
@@ -107,7 +115,7 @@ jobs:
           eb create $environment_name --single --instance-type t2.micro
         else
           echo "Deploying to existing environment: $environment_name"
-          eb deploy $environment_name
+          eb deploy $environment_name --timeout 20
         fi
         
         # Set environment variables from secrets

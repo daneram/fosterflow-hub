@@ -47,12 +47,29 @@ const RecordListItem: React.FC<RecordListItemProps> = ({
         <div className="flex flex-col flex-1 p-3">
           <div className="flex justify-between items-center mb-1">
             <div className="text-sm font-medium">{record.title}</div>
-            <div className="text-xs text-muted-foreground">{displayDate}</div>
+            <div className="text-[11px] text-muted-foreground">{displayDate}</div>
           </div>
           
-          <div className="flex justify-between items-center text-xs text-muted-foreground">
-            <span>{record.client}</span>
-            <span>{record.owner || 'Unassigned'}</span>
+          <div className="flex justify-between items-center">
+            {record.client && (
+              <div className="flex flex-wrap items-center gap-1">
+                {record.client.split(',').map((person, index) => (
+                  <React.Fragment key={index}>
+                    <span 
+                      className="text-[11px] text-primary hover:underline cursor-pointer"
+                    >
+                      {person.trim()}
+                    </span>
+                    {index < record.client.split(',').length - 1 && (
+                      <span className="text-[11px] text-muted-foreground">-</span>
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
+            )}
+            <span className="text-[11px] text-primary hover:underline cursor-pointer">
+              {record.owner || 'Unassigned'}
+            </span>
           </div>
         </div>
       </div>

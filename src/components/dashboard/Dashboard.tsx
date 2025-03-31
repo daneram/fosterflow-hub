@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -66,7 +65,7 @@ const Dashboard: React.FC = () => {
     <div className="space-y-5 animate-fade-in">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
+          <h1 className="text-xl font-bold tracking-tight">Dashboard</h1>
           <p className="text-muted-foreground text-sm">Welcome back, here's your overview for today.</p>
         </div>
         <div className="flex items-center gap-2 mt-2 md:mt-0">

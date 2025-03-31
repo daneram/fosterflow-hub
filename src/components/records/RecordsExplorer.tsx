@@ -55,7 +55,7 @@ const RecordsExplorer: React.FC = () => {
 
   return (
     <Layout>
-      <div className="space-y-2 animate-fade-in">
+      <div className="space-y-3 animate-fade-in">
         <RecordsHeader />
         
         <div className="relative w-full">

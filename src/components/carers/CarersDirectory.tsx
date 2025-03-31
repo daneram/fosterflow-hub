@@ -219,8 +219,8 @@ const CarersDirectory: React.FC = () => {
     <Layout>
       <div className="space-y-4 animate-fade-in">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Carers Directory</h1>
-          <p className="text-muted-foreground text-sm">Foster carer profiles, availability, specialties, and supervision records</p>
+          <h1 className="text-xl font-bold tracking-tight">Carers Directory</h1>
+          <p className="text-muted-foreground text-sm">Manage carer profiles, approvals, and support arrangements</p>
         </div>
 
         <div className="flex flex-col sm:flex-row justify-between items-center gap-3">

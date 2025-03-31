@@ -44,7 +44,22 @@ export const SidebarProvider = React.forwardRef<
   ) => {
     const isMobile = useIsMobile()
     
+    // Track if component is mounted to prevent hydration flashing
+    const [isMounted, setIsMounted] = React.useState(false)
+    
+    // Force initial state to ensure mobile is always closed before hydration
+    React.useLayoutEffect(() => {
+      if (typeof window !== 'undefined') {
+        // Make absolutely sure no mobile sidebar is shown during initial render
+        const el = document.querySelector('[data-mobile="true"]');
+        if (el) {
+          el.setAttribute('style', 'transform: translateX(-101%) !important; visibility: hidden !important; opacity: 0 !important;');
+        }
+      }
+    }, []);
+    
     // Initialize mobile state as closed
+    // Force it to be closed with explicit false to avoid any auto-expansion
     const [openMobile, setOpenMobile] = React.useState(false)
     
     // Initialize desktop state based on defaultOpen prop
@@ -61,8 +76,18 @@ export const SidebarProvider = React.forwardRef<
       return savedState ? savedState === 'true' : defaultOpen
     })
     
-    // Use controlled state if provided
-    const open = openProp ?? _open
+    // Use controlled state if provided, but ensure mobile stays closed
+    const open = isMobile ? false : (openProp ?? _open)
+    
+    // Set mounted state after hydration with a small delay
+    // to ensure all DOM operations are complete
+    React.useEffect(() => {
+      const timer = setTimeout(() => {
+        setIsMounted(true)
+      }, 50) // Small delay to ensure DOM is fully loaded
+      
+      return () => clearTimeout(timer)
+    }, [])
     
     const setOpen = React.useCallback(
       (value: boolean | ((value: boolean) => boolean)) => {
@@ -137,9 +162,10 @@ export const SidebarProvider = React.forwardRef<
         isMobile,
         openMobile,
         setOpenMobile,
-        toggleSidebar
+        toggleSidebar,
+        isMounted
       }),
-      [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar]
+      [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar, isMounted]
     )
 
     return (

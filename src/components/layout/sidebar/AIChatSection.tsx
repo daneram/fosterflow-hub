@@ -4,7 +4,7 @@ import { Bot } from 'lucide-react';
 
 interface AIChatSectionProps {
   isOpen: boolean;
-  onNavItemClick?: () => void;
+  onNavItemClick?: (to: string) => void;
 }
 
 const AIChatSection: React.FC<AIChatSectionProps> = ({ isOpen, onNavItemClick }) => {

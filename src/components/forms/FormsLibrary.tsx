@@ -150,7 +150,7 @@ const FormsLibrary: React.FC = () => {
     <Layout>
       <div className="space-y-4 animate-fade-in">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Forms Library</h1>
+          <h1 className="text-xl font-bold tracking-tight">Forms Library</h1>
           <p className="text-muted-foreground text-sm">Templates and standardized documentation for agency processes</p>
         </div>
 

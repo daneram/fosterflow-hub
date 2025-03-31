@@ -139,7 +139,7 @@ const TrainingPlatform: React.FC = () => {
   return (
     <Layout>
       <div className="space-y-4 animate-fade-in">
-        <h1 className="text-2xl font-bold tracking-tight">Training Platform</h1>
+        <h1 className="text-xl font-bold tracking-tight">Training Platform</h1>
 
         <div className="flex justify-between items-center">
           <div className="flex items-center space-x-2">

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Folder, FileEdit, FileText, CheckCircle, AlertCircle, XCircle } from 'lucide-react';
@@ -6,10 +5,10 @@ import { Record } from './types';
 
 export const formatDate = (date: Date) => {
   return new Intl.DateTimeFormat('en-GB', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  }).format(date);
+    year: '2-digit',
+    month: '2-digit',
+    day: '2-digit'
+  }).format(date).replace(/\//g, '-');
 };
 
 export const getTypeIcon = (type: string) => {

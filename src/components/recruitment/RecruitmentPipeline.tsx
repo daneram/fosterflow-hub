@@ -187,7 +187,7 @@ const RecruitmentPipeline: React.FC = () => {
     <Layout>
       <div className="space-y-4 animate-fade-in">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Recruitment Pipeline</h1>
+          <h1 className="text-xl font-bold tracking-tight">Recruitment Pipeline</h1>
           <p className="text-muted-foreground text-sm">Prospective carer pipeline, marketing campaigns, and application tracking</p>
         </div>
 

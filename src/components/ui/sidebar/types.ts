@@ -13,4 +13,5 @@ export interface SidebarContext {
   openMobile: boolean
   setOpenMobile: (open: boolean | ((open: boolean) => boolean)) => void
   toggleSidebar: () => void
+  isMounted: boolean
 }

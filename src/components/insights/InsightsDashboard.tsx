@@ -68,7 +68,7 @@ const InsightsDashboard: React.FC = () => {
     <Layout>
       <div className="space-y-4 animate-fade-in">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Insights Dashboard</h1>
+          <h1 className="text-xl font-bold tracking-tight">Insights Dashboard</h1>
           <p className="text-muted-foreground text-sm">Data analytics and performance indicators for agency operations</p>
         </div>
 

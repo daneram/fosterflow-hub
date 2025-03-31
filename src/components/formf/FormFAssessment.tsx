@@ -166,7 +166,7 @@ const FormFAssessment: React.FC = () => {
     <Layout>
       <div className="space-y-4 animate-fade-in">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Form F Assessment</h1>
+          <h1 className="text-xl font-bold tracking-tight">Form F Assessment</h1>
           <p className="text-muted-foreground text-sm">Assessment documentation for prospective foster carers</p>
         </div>
 

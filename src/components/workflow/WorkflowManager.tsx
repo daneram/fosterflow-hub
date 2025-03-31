@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Layout from '@/components/layout/Layout';
 import WorkflowHeader from './WorkflowHeader';
@@ -14,7 +13,7 @@ const WorkflowManager: React.FC = () => {
     <Layout>
       <div className="space-y-5 animate-fade-in">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Workflow Manager</h1>
+          <h1 className="text-xl font-bold tracking-tight">Workflow Manager</h1>
           <p className="text-muted-foreground text-sm">Track and manage case workflows and processes</p>
         </div>
 

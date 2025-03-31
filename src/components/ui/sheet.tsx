@@ -20,6 +20,9 @@ const SheetOverlay = React.forwardRef<
   <SheetPrimitive.Overlay
     className={cn(
       "fixed inset-0 z-50 bg-black/80",
+      "animate-none data-[state=open]:animate-none data-[state=closed]:animate-none",
+      "transition-opacity duration-300",
+      "data-[state=open]:opacity-100 data-[state=closed]:opacity-0",
       className
     )}
     {...props}
@@ -64,6 +67,13 @@ const SheetContent = React.forwardRef<
         side === "left" && "inset-y-0 left-0 border-r",
         side === "top" && "inset-x-0 top-0 border-b",
         side === "bottom" && "inset-x-0 bottom-0 border-t",
+        "animate-none data-[state=open]:animate-none data-[state=closed]:animate-none",
+        "transform-gpu transition-transform duration-300 ease-in-out",
+        "data-[state=open]:translate-x-0 data-[state=open]:translate-y-0",
+        side === "left" && "data-[state=closed]:translate-x-[-100%]",
+        side === "right" && "data-[state=closed]:translate-x-[100%]",
+        side === "top" && "data-[state=closed]:translate-y-[-100%]",
+        side === "bottom" && "data-[state=closed]:translate-y-[100%]",
         className
       )}
       {...props}

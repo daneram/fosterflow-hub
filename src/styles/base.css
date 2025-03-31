@@ -1,4 +1,3 @@
-
 @tailwind base;
 
 @layer base {
@@ -99,6 +98,9 @@
   }
   
   /* Remove focus outline across the entire app */
+  *,
+  *::before,
+  *::after,
   input:focus-visible, 
   select:focus-visible, 
   textarea:focus-visible,
@@ -106,8 +108,14 @@
   [tabindex]:focus-visible,
   *:focus,
   *:focus-visible,
-  *:focus-within {
-    @apply ring-0 outline-none;
+  *:focus-within,
+  a:focus,
+  a:focus-visible,
+  div:focus,
+  div:focus-visible {
+    @apply ring-0 outline-none !important;
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent;
   }
 
   /* Make sure the body and HTML don't have overflow hidden and are properly set */

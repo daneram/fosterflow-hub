@@ -51,7 +51,7 @@ const CalendarPage: React.FC = () => {
       <div className="space-y-5 animate-fade-in">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">Calendar</h1>
+            <h1 className="text-xl font-bold tracking-tight">Calendar</h1>
             <p className="text-muted-foreground text-sm">Manage your schedule and appointments</p>
           </div>
           <div className="flex items-center gap-2 mt-2 md:mt-0">

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -28,7 +27,7 @@ const DatePickerButton: React.FC<DatePickerButtonProps> = ({
   // Format date based on device type
   const formatDateDisplay = (date: Date) => {
     if (isMobile) {
-      return format(date, "dd/MM/yy");
+      return format(date, "dd-MM-yy");
     }
     return format(date, "dd MMMM yyyy");
   };
@@ -46,11 +45,11 @@ const DatePickerButton: React.FC<DatePickerButtonProps> = ({
         <Button
           variant={date ? "default" : "outline"}
           className={cn(
-            "w-full h-9 justify-start text-left font-normal relative focus:outline-none",
+            "w-full h-9 pl-8 justify-start text-left font-normal relative focus:outline-none",
             !date && "text-muted-foreground"
           )}
         >
-          <CalendarIcon className={cn("mr-2 h-4 w-4", date ? "text-primary-foreground" : "opacity-70")} />
+          <CalendarIcon className={cn("absolute left-2.5 top-2.5 h-4 w-4", date ? "text-primary-foreground" : "opacity-70")} />
           {date ? (
             <span>{formatDateDisplay(date)}</span>
           ) : (

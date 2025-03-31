@@ -47,15 +47,15 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
           "flex items-center cursor-pointer font-medium",
           "h-10 pl-3.5 pr-3",
           "flex items-center",
-          "transition-opacity duration-100",
-          isMobile && !isOpen && "opacity-0"
+          // Remove transition for mobile
+          !isMobile && "transition-opacity duration-100"
         )}
         onClick={handleHeaderToggle}
       >
         <div className={cn(
           "flex items-center justify-center h-9",
-          "transition-opacity duration-300",
-          isMobile && !isOpen && "opacity-0"
+          // Remove transition for mobile
+          !isMobile && "transition-opacity duration-300"
         )}>
           <Avatar className="h-6 w-6 flex items-center justify-center">
             {imageLoaded ? (
@@ -81,21 +81,25 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({ isOpen, onToggle }) => {
           </Avatar>
         </div>
         
-        {/* Text container with consistent spacing */}
+        {/* Text container - no transitions on mobile */}
         <div className={cn(
-          "overflow-hidden transition-all duration-300",
+          "overflow-hidden",
+          // Only apply transitions on desktop
+          !isMobile && "transition-all duration-300",
           isOpen 
-            ? "ml-3 opacity-100 w-auto" 
-            : "w-0 opacity-0 absolute pointer-events-none"
+            ? isMobile 
+              ? "ml-3.5 w-auto" // Mobile: no transitions
+              : "ml-[10px] opacity-100 w-auto" // Desktop: keep transitions
+            : isMobile
+              ? "w-0 absolute" // Mobile: no transitions or opacity
+              : "w-0 opacity-0 absolute pointer-events-none" // Desktop: keep transitions
         )}>
           <span className="text-sm font-medium truncate text-black">Indigo Fostering</span>
         </div>
       </div>
       
-      {/* Only show separator when sidebar is open */}
-      {isOpen && (
-        <Separator className="my-1" />
-      )}
+      {/* Always show separator */}
+      <Separator className="my-1" />
     </div>
   );
 };

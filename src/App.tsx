@@ -7,9 +7,9 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import AIAssistantPage from "./pages/AIAssistantPage";
+import RecordsPage from "./app/records/page";
 
 // Import components
-import RecordsExplorer from "./components/records/RecordsExplorer";
 import ActivityLog from "./components/activity/ActivityLog";
 import ComplianceTracker from "./components/compliance/ComplianceTracker";
 import InsightsDashboard from "./components/insights/InsightsDashboard";
@@ -43,7 +43,7 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/ai-assistant" element={<AIAssistantPage />} />
-              <Route path="/records" element={<RecordsExplorer />} />
+              <Route path="/records" element={<RecordsPage />} />
               <Route path="/activity" element={<ActivityLog />} />
               <Route path="/compliance" element={<ComplianceTracker />} />
               <Route path="/insights" element={<InsightsDashboard />} />

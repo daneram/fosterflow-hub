@@ -44,7 +44,7 @@ export const RecordGridView: React.FC<RecordGridViewProps> = ({
   if (records.length === 0) {
     return (
       <div className="col-span-full flex flex-col items-center justify-center h-40 text-muted-foreground">
-        <FileText className="h-8 w-8 mb-2" />
+        <FileText className="h-8 w-8" />
         <p>No records found</p>
       </div>
     );

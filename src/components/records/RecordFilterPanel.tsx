@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { TypeFilter } from './filter/TypeFilter';
@@ -46,12 +45,15 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
     if (selectedAssignee) {
       setSelectedAssignee(null);
     }
+    if (selectedType) {
+      setSelectedType(null);
+    }
   };
   
   return (
     <Card className="shadow-sm border border-border/60">
-      <CardContent className={isMobile ? "px-3 pb-3 pt-4" : "px-3 py-3"}>
-        <div className="flex flex-col space-y-4">
+      <CardContent className={isMobile ? "px-3 pb-5 pt-4" : `px-3 ${isAdvancedSearchOpen ? 'py-3' : 'pt-3 pb-5'}`}>
+        <div className="flex flex-col space-y-2.5 sm:space-y-2">
           {/* Top row with type filters */}
           <div className={isMobile ? "flex flex-col justify-center space-y-4" : "flex items-center justify-between gap-3"}>
             {/* Type filter */}
@@ -85,7 +87,7 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
           
           {/* Advanced toggle for mobile - placed after date pickers */}
           {isMobile && (
-            <div className="w-full mt-2">
+            <div className="w-full mt-0">
               <AdvancedFiltersToggle 
                 isAdvancedSearchOpen={isAdvancedSearchOpen} 
                 setIsAdvancedSearchOpen={setIsAdvancedSearchOpen}
@@ -96,13 +98,15 @@ export const RecordFilterPanel: React.FC<RecordFilterPanelProps> = ({
         </div>
         
         {/* Advanced Filters Panel */}
-        <div className={`${isAdvancedSearchOpen ? 'mt-4 animate-fade-in' : 'mt-0'}`}>
+        <div className={`${isAdvancedSearchOpen ? 'mt-0 sm:mt-0 animate-fade-in' : 'mt-0'}`}>
           <AdvancedFilters 
             isOpen={isAdvancedSearchOpen} 
             selectedStatus={selectedStatus} 
             setSelectedStatus={setSelectedStatus}
             selectedAssignee={selectedAssignee}
             setSelectedAssignee={setSelectedAssignee}
+            selectedType={selectedType}
+            setSelectedType={setSelectedType}
           />
         </div>
       </CardContent>

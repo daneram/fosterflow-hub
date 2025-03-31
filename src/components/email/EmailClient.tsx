@@ -236,7 +236,7 @@ const EmailClient: React.FC = () => {
   return (
     <Layout>
       <div className="h-[calc(100vh-100px)] flex flex-col animate-fade-in">
-        <h1 className="text-2xl font-bold tracking-tight mb-4">Email</h1>
+        <h1 className="text-xl font-bold tracking-tight mb-4">Email</h1>
         
         <div className="flex flex-col md:flex-row h-full gap-4">
           {/* Email sidebar */}

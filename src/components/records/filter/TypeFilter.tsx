@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 
@@ -17,6 +16,7 @@ export const TypeFilter: React.FC<TypeFilterProps> = ({
         variant={selectedType === null ? 'default' : 'outline'} 
         size="sm"
         onClick={() => setSelectedType(null)}
+        className={selectedType === null ? 'text-primary-foreground' : ''}
       >
         All
       </Button>
@@ -24,6 +24,7 @@ export const TypeFilter: React.FC<TypeFilterProps> = ({
         variant={selectedType === 'children' ? 'default' : 'outline'} 
         size="sm"
         onClick={() => setSelectedType('children')}
+        className={selectedType === 'children' ? 'text-primary-foreground' : ''}
       >
         Children
       </Button>
@@ -31,6 +32,7 @@ export const TypeFilter: React.FC<TypeFilterProps> = ({
         variant={selectedType === 'carers' ? 'default' : 'outline'} 
         size="sm"
         onClick={() => setSelectedType('carers')}
+        className={selectedType === 'carers' ? 'text-primary-foreground' : ''}
       >
         Carers
       </Button>

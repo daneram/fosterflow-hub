@@ -5,7 +5,7 @@ export interface NavItemProps {
   icon: LucideIcon;
   label: string;
   isOpen: boolean;
-  onClick?: () => void;
+  onClick?: (to: string) => void;
 }
 
 export interface BotItemProps {
@@ -13,7 +13,7 @@ export interface BotItemProps {
   icon: LucideIcon;
   label: string;
   isOpen: boolean;
-  onClick?: () => void;
+  onClick?: (to: string) => void;
   fontBold?: boolean;
 }
 
@@ -25,13 +25,13 @@ export interface SidebarSectionProps {
     label: string;
   }[];
   isOpen: boolean;
-  onNavItemClick?: () => void;
+  onNavItemClick?: (to: string) => void;
 }
 
 export interface SidebarProps {
   isOpen: boolean;
   onToggle: () => void;
-  onNavItemClick?: () => void;
+  onNavItemClick?: (to: string) => void;
   toggleAiChat?: () => void;
   isMobile: boolean;
 }

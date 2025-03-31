@@ -133,7 +133,7 @@ const ComplianceTracker: React.FC = () => {
   return (
     <Layout>
       <div className="space-y-3 animate-fade-in">
-        <h1 className="text-2xl font-bold tracking-tight">Compliance Tracker</h1>
+        <h1 className="text-xl font-bold tracking-tight">Compliance Tracker</h1>
 
         <div className="flex flex-col md:flex-row gap-3">
           <Card className="md:w-1/3">

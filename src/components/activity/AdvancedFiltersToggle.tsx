@@ -26,12 +26,12 @@ export const AdvancedFiltersToggle: React.FC<AdvancedFiltersToggleProps> = ({
     <Button 
       variant={isAdvancedSearchOpen ? "default" : "outline"}
       size="sm" 
-      className="h-8 w-full justify-between py-1 pl-8 relative"
+      className="h-8 w-full justify-between py-1"
       onClick={handleToggleClick}
     >
       <div className="flex items-center">
-        <Filter className="h-3.5 w-3.5 absolute left-2.5 top-1/2 -translate-y-1/2" />
-        <span className="pl-0 mt-[1px]">Management Filters</span>
+        <Filter className="h-3.5 w-3.5 mr-1" />
+        Advanced Filters
       </div>
       {isAdvancedSearchOpen ? (
         <X className="h-3.5 w-3.5" />
@@ -40,4 +40,4 @@ export const AdvancedFiltersToggle: React.FC<AdvancedFiltersToggleProps> = ({
       )}
     </Button>
   );
-};
+}; 

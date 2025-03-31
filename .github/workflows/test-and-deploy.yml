@@ -1,0 +1,125 @@
+name: Test and Deploy
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Install Jest
+      run: npm install --save-dev jest @types/jest jest-environment-jsdom ts-jest
+      
+    - name: Update package.json with Jest configuration
+      run: |
+        node -e "
+        const fs = require('fs');
+        const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
+        if (!packageJson.scripts.test) {
+          packageJson.scripts.test = 'jest';
+          fs.writeFileSync('./package.json', JSON.stringify(packageJson, null, 2));
+        }
+        "
+        
+    - name: Create Jest config if not exists
+      run: |
+        if [ ! -f jest.config.js ]; then
+          echo "module.exports = {
+            preset: 'ts-jest',
+            testEnvironment: 'jsdom',
+            transform: {
+              '^.+\\.(ts|tsx)$': 'ts-jest',
+            },
+            moduleNameMapper: {
+              '^@/(.*)$': '<rootDir>/src/$1',
+            },
+          };" > jest.config.js
+        fi
+        
+    - name: Run tests
+      run: npm test
+      
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-results
+        path: coverage/
+        
+  deploy-to-aws:
+    needs: test
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Build application
+      run: npm run build
+      
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: eu-west-1
+        
+    - name: Install AWS CLI
+      run: |
+        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+        unzip awscliv2.zip
+        sudo ./aws/install
+        
+    - name: Install EB CLI
+      run: |
+        pip install awsebcli --upgrade
+        
+    - name: Initialize EB (if needed)
+      run: |
+        if [ ! -d .elasticbeanstalk ]; then
+          eb init --platform "node.js-18" --region "eu-west-1"
+        fi
+      
+    - name: Deploy to AWS Elastic Beanstalk
+      run: |
+        environment_name="fosterflow-testing"
+        
+        # Check if environment exists
+        if ! eb status $environment_name 2>/dev/null; then
+          echo "Creating new environment: $environment_name"
+          eb create $environment_name --single --instance-type t2.micro
+        else
+          echo "Deploying to existing environment: $environment_name"
+          eb deploy $environment_name
+        fi
+        
+        # Set environment variables from secrets
+        eb setenv \
+          VITE_API_ENDPOINT=${{ secrets.VITE_API_ENDPOINT }} \
+          VITE_S3_BUCKET=${{ secrets.VITE_S3_BUCKET }} \
+          VITE_COGNITO_USER_POOL_ID=${{ secrets.VITE_COGNITO_USER_POOL_ID }} \
+          VITE_COGNITO_CLIENT_ID=${{ secrets.VITE_COGNITO_CLIENT_ID }} \
+          VITE_AWS_REGION=${{ secrets.VITE_AWS_REGION }} 

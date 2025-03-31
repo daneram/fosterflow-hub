@@ -1,79 +1,46 @@
-# Welcome to your Lovable project
+# Welcome to FosterFlow Hub
 
-## Project info
+## Project Info
+A private case management system built with React and AWS, vibe-coded with Cursor.
 
-**URL**: https://lovable.dev/projects/eb27061b-933a-45a3-9e21-e193e9df6b1b
+**Repo**: Private GitHub repository (authenticated access required).
+
+## Development Guidelines
+- Focus on UI design—Cursor handles backend and deployment automatically.
+- See [CONTRIBUTING.md](./CONTRIBUTING.md) for details (if exists).
+
+## Setup
+1. **Clone the Repo**: Use SSH or authenticated HTTPS (configured in Cursor or your IDE).  
+   - Example: `git clone git@github.com:daneram/fosterflow-hub.git` (if SSH setup).  
+2. **Install Dependencies**: `cd fosterflow-hub && npm i`  
+3. **Run Locally**: `npm run dev` (starts Vite dev server)  
+- Requires Node.js (LTS) - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+
+## Workflow
+- **Vibe Code UI**: Edit React components with Tailwind CSS in Cursor.
+- **Backend Automation**: Cursor prompts for backend needs (e.g., "Add API?")—approve with yes/no.
+- **Task Tracking**: See `TASKS.md` (UI) and `backendtasks.md` (backend)—updated automatically.
+- **Testing**: Jest tests run automatically on code changes and via GitHub Actions.
+- **CI/CD**: GitHub Actions runs tests and deploys to AWS testing environment on push.
+
+## Tech Stack
+- **Frontend**: Vite, TypeScript, React, shadcn-ui, Tailwind CSS
+- **Backend**: AWS Lambda, RDS PostgreSQL, S3, Cognito
+- **Tools**: Cursor (AI assistant), MCP (automation), GitHub Actions (CI/CD)
+
+## Deployment
+- **Testing**: Automatically deployed to AWS Elastic Beanstalk testing environment on push to main/develop branches.
+- **Production**: When UI is ready, Cursor prompts: "Deploy to AWS?"—run `npm run deploy`.
+- **Rollback**: Blue-green deployments ensure safe updates.
 
 ## Automated Backups
+- **GitHub**: Daily commits, hourly change detection, weekly releases (via existing automation).
+- **Cursor**: Adds backup branches before major changes (e.g., 'backup-before-vibe-plan').
 
-This project is configured with automated GitHub backups:
+## GitHub Actions
+- **Test**: Runs Jest tests on every push and pull request to main/develop branches.
+- **Deploy**: Deploys to AWS testing environment after successful tests on push to main/develop.
+- **Secrets**: Required AWS credentials and environment variables must be configured in GitHub repository secrets.
 
-- **Daily Backup**: Every day at midnight, all changes are automatically committed and pushed.
-- **Hourly Change Detection**: Every hour, the system checks for changes and backs them up if detected.
-- **Weekly Releases**: Every Monday, a new GitHub release is automatically created to mark significant points in development.
-
-These automations ensure that your work is always backed up and versioned properly.
-
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/eb27061b-933a-45a3-9e21-e193e9df6b1b) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with .
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/eb27061b-933a-45a3-9e21-e193e9df6b1b) and click on Share -> Publish.
-
-## I want to use a custom domain - is that possible?
-
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+## Custom Domains
+- Use AWS Route 53 after deployment—Cursor can guide setup when ready.

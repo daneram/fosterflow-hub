@@ -2,9 +2,9 @@ name: Test and Deploy
 
 on:
   push:
-    branches: [ main, develop, backup-before-vibe-plan ]  # Added backup-before-vibe-plan
+    branches: [ main, develop, backup-before-vibe-plan ]
   pull_request:
-    branches: [ main, develop, backup-before-vibe-plan ]  # Added backup-before-vibe-plan
+    branches: [ main, develop, backup-before-vibe-plan ]
 
 jobs:
   test:
@@ -52,18 +52,11 @@ jobs:
         fi
         
     - name: Run tests
-      run: npm test || echo "No tests found, proceeding with deployment"  # Allow test step to pass if no tests exist
+      run: npm test || echo "No tests found, proceeding with deployment"
       
-    - name: Upload test results
-      if: success() || failure()  # Upload even if tests fail
-      uses: actions/upload-artifact@v3
-      with:
-        name: test-results
-        path: coverage/
-        
   deploy-to-aws:
     needs: test
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/backup-before-vibe-plan')  # Added backup-before-vibe-plan
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/backup-before-vibe-plan')
     runs-on: ubuntu-latest
     
     steps:
@@ -106,7 +99,7 @@ jobs:
       
     - name: Deploy to AWS Elastic Beanstalk
       run: |
-        environment_name="fosterflow-preview"  # Changed to match your environment
+        environment_name="fosterflow-preview"
         
         # Check if environment exists
         if ! eb status $environment_name 2>/dev/null; then
